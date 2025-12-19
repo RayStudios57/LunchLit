@@ -1,9 +1,9 @@
 📚 LunchLit
 
-LunchLit is an all-in-one student planner app designed to make school life easier, smoother, and way less chaotic. Instead of juggling five different apps and your brain melting by 3rd period, LunchLit puts everything students need in one place.
+LunchLit is an all-in-one student planner app designed to make school life easier, smoother, and way less chaotic. Instead of juggling five different (probably inefficent) apps , LunchLit puts everything students need in one place.
 
 🔗 Live App Preview:
-https://id-preview--27bdc76b-b174-4a78-9d5e-b3664a243a26.lovable.app/
+[Coming Soon]
 
 🔗 GitHub Repository:
 https://github.com/RayStudios57/LunchLit
