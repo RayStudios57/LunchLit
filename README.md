@@ -1,73 +1,69 @@
-# Welcome to your Lovable project
+📚 LunchLit
 
-## Project info
+LunchLit is an all-in-one student planner app designed to make school life easier, smoother, and way less chaotic. Instead of juggling five different apps and your brain melting by 3rd period, LunchLit puts everything students need in one place.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+🔗 Live App Preview:
+https://id-preview--27bdc76b-b174-4a78-9d5e-b3664a243a26.lovable.app/
 
-## How can I edit this code?
+🔗 GitHub Repository:
+https://github.com/RayStudios57/LunchLit
 
-There are several ways of editing your application.
+🚀 What LunchLit Does
 
-**Use Lovable**
+LunchLit helps students stay organized and focused throughout the school day by offering:
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+🕒 Class Schedule Viewer – See class times and stay on track
 
-Changes made via Lovable will be committed automatically to this repo.
+🍎 School Meal Info – Check what’s for breakfast or lunch
 
-**Use your preferred IDE**
+🧠 Study Help Tools – Get support when homework hits hard
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+🗓️ Daily Planning – Plan your day so nothing slips through
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+🏫 Study Hall Finder – Find available study halls or quiet spaces
 
-Follow these steps:
+📖 Student-Friendly Design – Built with students in mind, not admins
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+Basically: less stress, more control.
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+This along with Personalization by school.
 
-# Step 3: Install the necessary dependencies.
-npm i
+🧑‍🎓 Who It’s For
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+Middle school & high school students
 
-**Edit a file directly in GitHub**
+Students who want one app instead of five
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+Anyone tired of forgetting schedules, assignments, study halls, or lunch menus
 
-**Use GitHub Codespaces**
+🛠️ Tech Stack
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+This project was built using modern web tools:
 
-## What technologies are used for this project?
+Frontend: React (via Lovable)
 
-This project is built with:
+Hosting: Lovable App Platform
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+Version Control: Git & GitHub
 
-## How can I deploy this project?
+💡 Future Plans
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+Planned or possible features:
 
-## Can I connect a custom domain to my Lovable project?
+Assignment reminders
 
-Yes, you can!
+Notifications for schedule changes
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+Teacher-specific resources
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Dark mode (because obviously)
+
+🤝 Contributing
+
+Contributions are currently not welcome.
+
+However if you have an idea to add something, please message one of us.
+
+📜 License
+
+This project is open-source. License details can be added here.
