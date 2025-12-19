@@ -10,10 +10,20 @@ interface MenuCardProps {
 export function MenuCard({ item, index }: MenuCardProps) {
   return (
     <div 
-      className="card-interactive p-5 opacity-0 animate-fade-up"
+      className="card-interactive overflow-hidden opacity-0 animate-fade-up"
       style={{ animationDelay: `${index * 0.1}s` }}
     >
-      <div className="flex flex-col gap-3">
+      {item.image && (
+        <div className="relative h-40 overflow-hidden">
+          <img 
+            src={item.image} 
+            alt={item.name}
+            className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-background/60 to-transparent" />
+        </div>
+      )}
+      <div className="p-5 flex flex-col gap-3">
         <div className="flex items-start justify-between gap-3">
           <h3 className="font-display font-semibold text-lg text-foreground leading-tight">
             {item.name}

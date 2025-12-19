@@ -3,16 +3,17 @@ import { Header } from '@/components/Header';
 import { TodayView } from '@/components/TodayView';
 import { MenuView } from '@/components/MenuView';
 import { StudyHallView } from '@/components/StudyHallView';
+import { TutorSection } from '@/components/TutorSection';
 import { Helmet } from 'react-helmet';
 
 const Index = () => {
-  const [activeTab, setActiveTab] = useState<'home' | 'menu' | 'study'>('home');
+  const [activeTab, setActiveTab] = useState<'home' | 'menu' | 'study' | 'tutor'>('home');
 
   return (
     <>
       <Helmet>
-        <title>SchoolHub - Your Daily School Companion</title>
-        <meta name="description" content="Check today's lunch menu, find study halls, and plan your school day with SchoolHub. Dietary labels, real-time availability, and more." />
+        <title>LunchLit - Your Daily Lunch Companion</title>
+        <meta name="description" content="Check today's lunch menu, find study halls, tutoring, and plan your school day with LunchLit. Dietary labels, real-time availability, and more." />
       </Helmet>
       
       <div className="min-h-screen bg-background">
@@ -27,6 +28,7 @@ const Index = () => {
           )}
           {activeTab === 'menu' && <MenuView />}
           {activeTab === 'study' && <StudyHallView />}
+          {activeTab === 'tutor' && <TutorSection />}
         </main>
       </div>
     </>
