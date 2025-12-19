@@ -1,15 +1,16 @@
-import { Utensils, BookOpen, Calendar } from 'lucide-react';
+import { Utensils, BookOpen, Calendar, GraduationCap } from 'lucide-react';
 
 interface HeaderProps {
-  activeTab: 'home' | 'menu' | 'study';
-  onTabChange: (tab: 'home' | 'menu' | 'study') => void;
+  activeTab: 'home' | 'menu' | 'study' | 'tutor';
+  onTabChange: (tab: 'home' | 'menu' | 'study' | 'tutor') => void;
 }
 
 export function Header({ activeTab, onTabChange }: HeaderProps) {
   const tabs = [
     { id: 'home' as const, label: 'Today', icon: Calendar },
     { id: 'menu' as const, label: 'Menu', icon: Utensils },
-    { id: 'study' as const, label: 'Study Halls', icon: BookOpen },
+    { id: 'study' as const, label: 'Study', icon: BookOpen },
+    { id: 'tutor' as const, label: 'Tutors', icon: GraduationCap },
   ];
 
   return (
@@ -17,12 +18,12 @@ export function Header({ activeTab, onTabChange }: HeaderProps) {
       <div className="container py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center shadow-glow">
-              <span className="text-xl">📚</span>
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-glow">
+              <span className="text-xl">🍴</span>
             </div>
             <div>
-              <h1 className="font-display font-bold text-xl text-foreground">SchoolHub</h1>
-              <p className="text-xs text-muted-foreground">Your daily companion</p>
+              <h1 className="font-display font-bold text-xl text-foreground">LunchLit</h1>
+              <p className="text-xs text-muted-foreground">Your daily lunch companion</p>
             </div>
           </div>
         </div>
