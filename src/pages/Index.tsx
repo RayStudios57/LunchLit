@@ -4,10 +4,12 @@ import { TodayView } from '@/components/TodayView';
 import { MenuView } from '@/components/MenuView';
 import { StudyHallView } from '@/components/StudyHallView';
 import { TutorSection } from '@/components/TutorSection';
+import { PlannerView } from '@/components/planner/PlannerView';
+import { ChatBot } from '@/components/chat/ChatBot';
 import { Helmet } from 'react-helmet';
 
 const Index = () => {
-  const [activeTab, setActiveTab] = useState<'home' | 'menu' | 'study' | 'tutor'>('home');
+  const [activeTab, setActiveTab] = useState<'home' | 'menu' | 'study' | 'tutor' | 'planner' | 'chat'>('home');
 
   return (
     <>
@@ -29,6 +31,8 @@ const Index = () => {
           {activeTab === 'menu' && <MenuView />}
           {activeTab === 'study' && <StudyHallView />}
           {activeTab === 'tutor' && <TutorSection />}
+          {activeTab === 'planner' && <PlannerView />}
+          {activeTab === 'chat' && <ChatBot />}
         </main>
       </div>
     </>
