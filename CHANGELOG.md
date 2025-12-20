@@ -1,5 +1,5 @@
-🚀 Changelog
-✨ Added
+
+✨ Added - v0.2
 
 Introduced a Today dashboard widget displaying upcoming classes and tasks for the logged-in user, ordered chronologically for quick at-a-glance planning.
 
