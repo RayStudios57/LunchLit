@@ -19,13 +19,13 @@ Introduced profile customization, allowing users to upload and update profile pi
 
 Added a discussion/community tab enabling user communication, designed with scalability in mind for future features such as school-based or class-based channels.
 
-🧭 UI / UX Improvements
+UI / UX Improvements -
 
 Improved overall usability with a focus on fast load times, compact layouts, and student-friendly workflows.
 
 Ensured consistent application of themes and profile data across all views.
 
-🧱 Architecture
+Architecture - 
 
 Refactored components to be modular and reusable.
 
