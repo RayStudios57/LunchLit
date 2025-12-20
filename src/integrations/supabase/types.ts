@@ -14,7 +14,144 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      chat_messages: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          role: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          role: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          role?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      class_schedules: {
+        Row: {
+          class_name: string
+          color: string | null
+          created_at: string
+          day_of_week: number
+          end_time: string
+          id: string
+          room_number: string | null
+          start_time: string
+          teacher_name: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          class_name: string
+          color?: string | null
+          created_at?: string
+          day_of_week: number
+          end_time: string
+          id?: string
+          room_number?: string | null
+          start_time: string
+          teacher_name?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          class_name?: string
+          color?: string | null
+          created_at?: string
+          day_of_week?: number
+          end_time?: string
+          id?: string
+          room_number?: string | null
+          start_time?: string
+          teacher_name?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          full_name: string | null
+          id: string
+          school_name: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          school_name?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          school_name?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      tasks: {
+        Row: {
+          category: string | null
+          created_at: string
+          description: string | null
+          due_date: string | null
+          due_time: string | null
+          id: string
+          is_completed: boolean | null
+          priority: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          due_time?: string | null
+          id?: string
+          is_completed?: boolean | null
+          priority?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          due_time?: string | null
+          id?: string
+          is_completed?: boolean | null
+          priority?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
