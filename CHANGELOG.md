@@ -32,6 +32,7 @@ Refactored components to be modular and reusable.
 Designed all new systems to scale across multiple schools and a growing user base.
 
 Built integrations with future extensibility in mind (e.g., additional calendar providers).
+
 -------------------------------------------------------------------------------------------------------------------------------------------
 📦 v0.1
 ✨ Added
