@@ -80,33 +80,169 @@ export type Database = {
         }
         Relationships: []
       }
+      discussions: {
+        Row: {
+          category: string | null
+          content: string
+          created_at: string
+          id: string
+          is_pinned: boolean | null
+          parent_id: string | null
+          school_id: string | null
+          title: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category?: string | null
+          content: string
+          created_at?: string
+          id?: string
+          is_pinned?: boolean | null
+          parent_id?: string | null
+          school_id?: string | null
+          title?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          category?: string | null
+          content?: string
+          created_at?: string
+          id?: string
+          is_pinned?: boolean | null
+          parent_id?: string | null
+          school_id?: string | null
+          title?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "discussions_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "discussions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "discussions_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      meal_schedules: {
+        Row: {
+          created_at: string
+          id: string
+          meal_date: string
+          meal_type: string
+          menu_items: Json
+          school_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          meal_date: string
+          meal_type?: string
+          menu_items?: Json
+          school_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          meal_date?: string
+          meal_type?: string
+          menu_items?: Json
+          school_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "meal_schedules_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
+          calendar_sync_enabled: boolean | null
           created_at: string
           full_name: string | null
+          grade_level: string | null
           id: string
+          school_id: string | null
           school_name: string | null
+          theme: string | null
           updated_at: string
           user_id: string
         }
         Insert: {
           avatar_url?: string | null
+          calendar_sync_enabled?: boolean | null
           created_at?: string
           full_name?: string | null
+          grade_level?: string | null
           id?: string
+          school_id?: string | null
           school_name?: string | null
+          theme?: string | null
           updated_at?: string
           user_id: string
         }
         Update: {
           avatar_url?: string | null
+          calendar_sync_enabled?: boolean | null
           created_at?: string
           full_name?: string | null
+          grade_level?: string | null
           id?: string
+          school_id?: string | null
           school_name?: string | null
+          theme?: string | null
           updated_at?: string
           user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profiles_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      schools: {
+        Row: {
+          address: string | null
+          created_at: string
+          id: string
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          created_at?: string
+          id?: string
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -147,6 +283,36 @@ export type Database = {
           is_completed?: boolean | null
           priority?: string | null
           title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_preferences: {
+        Row: {
+          calendar_sync_enabled: boolean | null
+          color_mode: string | null
+          created_at: string
+          id: string
+          theme: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          calendar_sync_enabled?: boolean | null
+          color_mode?: string | null
+          created_at?: string
+          id?: string
+          theme?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          calendar_sync_enabled?: boolean | null
+          color_mode?: string | null
+          created_at?: string
+          id?: string
+          theme?: string | null
           updated_at?: string
           user_id?: string
         }
