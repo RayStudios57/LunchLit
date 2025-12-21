@@ -1,15 +1,20 @@
-import { Utensils, BookOpen, Calendar, GraduationCap, ClipboardList, MessageCircle, LogOut, LogIn } from 'lucide-react';
+import { Utensils, BookOpen, Calendar, GraduationCap, ClipboardList, MessageCircle, LogOut, LogIn, Settings, Users, Download } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import { useProfile } from '@/hooks/useProfile';
 import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Link } from 'react-router-dom';
+import type { TabType } from '@/pages/Index';
 
 interface HeaderProps {
-  activeTab: 'home' | 'menu' | 'study' | 'tutor' | 'planner' | 'chat';
-  onTabChange: (tab: 'home' | 'menu' | 'study' | 'tutor' | 'planner' | 'chat') => void;
+  activeTab: TabType;
+  onTabChange: (tab: TabType) => void;
 }
 
 export function Header({ activeTab, onTabChange }: HeaderProps) {
   const { user, signOut } = useAuth();
+  const { profile } = useProfile();
   
   const tabs = [
     { id: 'home' as const, label: 'Today', icon: Calendar },
@@ -18,6 +23,7 @@ export function Header({ activeTab, onTabChange }: HeaderProps) {
     { id: 'tutor' as const, label: 'Tutors', icon: GraduationCap },
     { id: 'planner' as const, label: 'Planner', icon: ClipboardList },
     { id: 'chat' as const, label: 'AI Chat', icon: MessageCircle },
+    { id: 'discuss' as const, label: 'Community', icon: Users },
   ];
 
   return (
@@ -36,10 +42,34 @@ export function Header({ activeTab, onTabChange }: HeaderProps) {
           
           <div className="flex items-center gap-2">
             {user ? (
-              <Button variant="ghost" size="sm" onClick={signOut}>
-                <LogOut className="h-4 w-4 mr-1" />
-                <span className="hidden sm:inline">Sign Out</span>
-              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="sm" className="gap-2">
+                    <Avatar className="w-7 h-7">
+                      <AvatarImage src={profile?.avatar_url || undefined} />
+                      <AvatarFallback className="text-xs">
+                        {profile?.full_name?.charAt(0) || user.email?.charAt(0) || '?'}
+                      </AvatarFallback>
+                    </Avatar>
+                    <span className="hidden sm:inline">{profile?.full_name || 'Account'}</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuItem onClick={() => onTabChange('settings')}>
+                    <Settings className="w-4 h-4 mr-2" />
+                    Settings
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => onTabChange('import-export')}>
+                    <Download className="w-4 h-4 mr-2" />
+                    Import/Export
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={signOut} className="text-destructive">
+                    <LogOut className="w-4 h-4 mr-2" />
+                    Sign Out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             ) : (
               <Button variant="ghost" size="sm" asChild>
                 <Link to="/auth">
