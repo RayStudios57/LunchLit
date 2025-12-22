@@ -134,26 +134,34 @@ export function SettingsView() {
   const handleDeleteAccount = async () => {
     setIsDeleting(true);
     try {
-      // Delete user data
-      if (user) {
-        await supabase.from('tasks').delete().eq('user_id', user.id);
-        await supabase.from('class_schedules').delete().eq('user_id', user.id);
-        await supabase.from('chat_messages').delete().eq('user_id', user.id);
-        await supabase.from('discussions').delete().eq('user_id', user.id);
-        await supabase.from('profiles').delete().eq('user_id', user.id);
-        await supabase.from('user_preferences').delete().eq('user_id', user.id);
+      if (!user) throw new Error('Not authenticated');
+      
+      // Get the current session for auth header
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.access_token) {
+        throw new Error('No active session');
       }
+      
+      // Call the delete-account edge function to properly delete the auth user
+      const { error } = await supabase.functions.invoke('delete-account', {
+        headers: {
+          Authorization: `Bearer ${session.access_token}`,
+        },
+      });
+      
+      if (error) throw error;
 
-      // Sign out
+      // Sign out locally
       await signOut();
       toast({
         title: 'Account deleted',
         description: 'Your account and all data have been removed.'
       });
-    } catch (error) {
+    } catch (error: any) {
+      console.error('Delete account error:', error);
       toast({
         title: 'Error deleting account',
-        description: 'Please try again or contact support.',
+        description: error.message || 'Please try again or contact support.',
         variant: 'destructive'
       });
     } finally {

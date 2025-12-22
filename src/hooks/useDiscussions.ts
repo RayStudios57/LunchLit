@@ -3,6 +3,26 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { useEffect } from 'react';
+import { z } from 'zod';
+
+// Validation schemas for discussion content
+const discussionSchema = z.object({
+  title: z.string().max(100, 'Title must be 100 characters or less').optional(),
+  content: z.string()
+    .min(1, 'Content is required')
+    .max(2000, 'Content must be 2000 characters or less')
+    .refine(val => !/<script\b[^>]*>[\s\S]*?<\/script>/gi.test(val), 'Invalid content'),
+  category: z.string().max(50).optional(),
+  parent_id: z.string().uuid().optional(),
+});
+
+const replySchema = z.object({
+  content: z.string()
+    .min(1, 'Reply is required')
+    .max(1000, 'Reply must be 1000 characters or less')
+    .refine(val => !/<script\b[^>]*>[\s\S]*?<\/script>/gi.test(val), 'Invalid content'),
+  parent_id: z.string().uuid(),
+});
 
 export interface Discussion {
   id: string;
@@ -91,12 +111,22 @@ export function useDiscussions(category?: string) {
   const createDiscussion = useMutation({
     mutationFn: async (data: { title?: string; content: string; category?: string; parent_id?: string }) => {
       if (!user) throw new Error('Not authenticated');
+      
+      // Validate input based on whether it's a reply or new discussion
+      const validationResult = data.parent_id 
+        ? replySchema.safeParse({ content: data.content, parent_id: data.parent_id })
+        : discussionSchema.safeParse(data);
+      
+      if (!validationResult.success) {
+        throw new Error(validationResult.error.errors[0]?.message || 'Invalid input');
+      }
+      
       const { data: result, error } = await supabase
         .from('discussions')
         .insert({
           user_id: user.id,
-          title: data.title,
-          content: data.content,
+          title: data.title?.trim(),
+          content: data.content.trim(),
           category: data.category || 'general',
           parent_id: data.parent_id,
         })
