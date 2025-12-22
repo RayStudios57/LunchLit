@@ -3,6 +3,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/hooks/useProfile';
 import { useSchools } from '@/hooks/useSchools';
 import { useTheme, ThemeName, ColorMode } from '@/contexts/ThemeContext';
+import { useGoogleCalendar } from '@/hooks/useGoogleCalendar';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -10,8 +11,11 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
-import { Camera, Sun, Moon, Monitor, Check, Palette, School, GraduationCap, User } from 'lucide-react';
+import { Switch } from '@/components/ui/switch';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
+import { Camera, Sun, Moon, Monitor, Check, Palette, School, GraduationCap, User, Calendar, Trash2, Download, AlertTriangle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 const GRADE_LEVELS = [
   { value: 'under_5th', label: 'Under 5th Grade' },
@@ -23,15 +27,18 @@ const GRADE_LEVELS = [
 ];
 
 export function SettingsView() {
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
   const { profile, updateProfile, uploadAvatar } = useProfile();
   const { schools } = useSchools();
   const { theme, colorMode, setTheme, setColorMode, themes } = useTheme();
+  const { exportToCalendar, isExporting, hasEvents } = useGoogleCalendar();
   const { toast } = useToast();
   
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [fullName, setFullName] = useState(profile?.full_name || '');
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [calendarSyncEnabled, setCalendarSyncEnabled] = useState(profile?.calendar_sync_enabled || false);
 
   const handleAvatarClick = () => {
     fileInputRef.current?.click();
@@ -41,13 +48,11 @@ export function SettingsView() {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Validate file type
     if (!file.type.startsWith('image/')) {
       toast({ title: 'Invalid file', description: 'Please upload an image file', variant: 'destructive' });
       return;
     }
 
-    // Validate file size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
       toast({ title: 'File too large', description: 'Please upload an image under 5MB', variant: 'destructive' });
       return;
@@ -74,6 +79,46 @@ export function SettingsView() {
 
   const handleGradeChange = async (grade: string) => {
     await updateProfile.mutateAsync({ grade_level: grade });
+  };
+
+  const handleCalendarSyncToggle = async (enabled: boolean) => {
+    setCalendarSyncEnabled(enabled);
+    await updateProfile.mutateAsync({ calendar_sync_enabled: enabled });
+    toast({
+      title: enabled ? 'Calendar sync enabled' : 'Calendar sync disabled',
+      description: enabled ? 'Export your schedule to import into Google Calendar' : 'Calendar sync has been turned off',
+    });
+  };
+
+  const handleDeleteAccount = async () => {
+    setIsDeleting(true);
+    try {
+      // Delete user data
+      if (user) {
+        await supabase.from('tasks').delete().eq('user_id', user.id);
+        await supabase.from('class_schedules').delete().eq('user_id', user.id);
+        await supabase.from('chat_messages').delete().eq('user_id', user.id);
+        await supabase.from('discussions').delete().eq('user_id', user.id);
+        await supabase.from('profiles').delete().eq('user_id', user.id);
+        await supabase.from('user_preferences').delete().eq('user_id', user.id);
+      }
+      
+      // Sign out
+      await signOut();
+      
+      toast({
+        title: 'Account deleted',
+        description: 'Your account and all data have been removed.',
+      });
+    } catch (error) {
+      toast({
+        title: 'Error deleting account',
+        description: 'Please try again or contact support.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   if (!user) {
@@ -224,7 +269,7 @@ export function SettingsView() {
           {/* Theme Selection */}
           <div className="space-y-3">
             <Label>Theme</Label>
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               {themes.map(t => (
                 <button
                   key={t.id}
@@ -245,7 +290,7 @@ export function SettingsView() {
                       style={{ backgroundColor: `hsl(${t.colors.accent})` }}
                     />
                   </div>
-                  <p className="text-xs font-medium">{t.name}</p>
+                  <p className="text-xs font-medium text-left">{t.name}</p>
                   {theme === t.id && (
                     <Check className="absolute top-2 right-2 w-4 h-4 text-primary" />
                   )}
@@ -253,6 +298,88 @@ export function SettingsView() {
               ))}
             </div>
           </div>
+        </CardContent>
+      </Card>
+
+      {/* Calendar Sync Section */}
+      <Card className="card-elevated">
+        <CardHeader>
+          <CardTitle className="font-display flex items-center gap-2">
+            <Calendar className="w-5 h-5" />
+            Calendar Integration
+          </CardTitle>
+          <CardDescription>Sync your schedule with external calendars</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="space-y-0.5">
+              <Label>Enable Calendar Export</Label>
+              <p className="text-sm text-muted-foreground">
+                Export your classes and tasks to import into Google Calendar
+              </p>
+            </div>
+            <Switch
+              checked={calendarSyncEnabled}
+              onCheckedChange={handleCalendarSyncToggle}
+            />
+          </div>
+
+          {calendarSyncEnabled && (
+            <div className="pt-2">
+              <Button
+                onClick={exportToCalendar}
+                disabled={isExporting || !hasEvents}
+                variant="outline"
+                className="w-full"
+              >
+                <Download className="w-4 h-4 mr-2" />
+                {isExporting ? 'Exporting...' : 'Export Calendar (.ics)'}
+              </Button>
+              <p className="text-xs text-muted-foreground mt-2 text-center">
+                Download and import into Google Calendar, Apple Calendar, or Outlook
+              </p>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Danger Zone */}
+      <Card className="card-elevated border-destructive/30">
+        <CardHeader>
+          <CardTitle className="font-display flex items-center gap-2 text-destructive">
+            <AlertTriangle className="w-5 h-5" />
+            Danger Zone
+          </CardTitle>
+          <CardDescription>Irreversible actions for your account</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="destructive" className="w-full">
+                <Trash2 className="w-4 h-4 mr-2" />
+                Delete Account
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action cannot be undone. This will permanently delete your account
+                  and remove all your data including tasks, schedules, and preferences.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={handleDeleteAccount}
+                  disabled={isDeleting}
+                  className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                >
+                  {isDeleting ? 'Deleting...' : 'Delete Account'}
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </CardContent>
       </Card>
     </div>

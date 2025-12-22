@@ -5,6 +5,8 @@ import { MenuView } from '@/components/MenuView';
 import { StudyHallView } from '@/components/StudyHallView';
 import { TutorSection } from '@/components/TutorSection';
 import { PlannerView } from '@/components/planner/PlannerView';
+import { TasksView } from '@/components/tasks/TasksView';
+import { ClassSchedule } from '@/components/planner/ClassSchedule';
 import { ChatBot } from '@/components/chat/ChatBot';
 import { SettingsView } from '@/components/settings/SettingsView';
 import { ImportExportView } from '@/components/import-export/ImportExportView';
@@ -15,7 +17,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/hooks/useProfile';
 import { Helmet } from 'react-helmet';
 
-export type TabType = 'home' | 'menu' | 'study' | 'tutor' | 'planner' | 'chat' | 'discuss' | 'settings' | 'import-export';
+export type TabType = 'home' | 'menu' | 'study' | 'tutor' | 'planner' | 'chat' | 'discuss' | 'settings' | 'import-export' | 'tasks' | 'classes';
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState<TabType>('home');
@@ -23,7 +25,6 @@ const Index = () => {
   const { profile } = useProfile();
   const [showGradeModal, setShowGradeModal] = useState(false);
 
-  // Show grade selection for new users without grade level
   useEffect(() => {
     if (user && profile && !profile.grade_level) {
       setShowGradeModal(true);
@@ -33,8 +34,8 @@ const Index = () => {
   return (
     <>
       <Helmet>
-        <title>LunchLit - Your Daily Lunch Companion</title>
-        <meta name="description" content="Check today's lunch menu, find study halls, tutoring, and plan your school day with LunchLit. Dietary labels, real-time availability, and more." />
+        <title>LunchLit - Your Daily School Companion</title>
+        <meta name="description" content="Check today's lunch menu, manage tasks, track classes, and plan your school day with LunchLit." />
       </Helmet>
       
       <div className="min-h-screen bg-background">
@@ -50,6 +51,8 @@ const Index = () => {
               />
             </div>
           )}
+          {activeTab === 'tasks' && <TasksView />}
+          {activeTab === 'classes' && <ClassSchedule />}
           {activeTab === 'menu' && <MenuView />}
           {activeTab === 'study' && <StudyHallView />}
           {activeTab === 'tutor' && <TutorSection />}

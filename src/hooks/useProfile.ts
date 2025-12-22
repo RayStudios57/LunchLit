@@ -11,6 +11,7 @@ export interface Profile {
   school_name: string | null;
   school_id: string | null;
   grade_level: string | null;
+  calendar_sync_enabled: boolean | null;
   created_at: string;
   updated_at: string;
 }
