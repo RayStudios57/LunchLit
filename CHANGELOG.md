@@ -1,3 +1,29 @@
+📦 v0.4
+✨ Added
+
+Introduced a real-time Brag Sheet system for tracking student achievements across their academic career, including volunteering, jobs, awards, internships, leadership roles, clubs, and extracurricular activities.
+
+Linked Brag Sheet entries to grade level progression, automatically organizing accomplishments by school year while preserving a complete historical record.
+
+Added manual Brag Sheet entry management, allowing users to create, edit, and delete entries with structured fields such as category, dates, description, and impact.
+
+Implemented auto-suggested Brag Sheet entries based on completed tasks and long-term activities, with user confirmation required before saving.
+
+Designed the Brag Sheet system with future counselor/teacher verification support in mind, enabling later approval workflows without requiring data restructuring.
+
+Added Google Sign-In authentication using Google OAuth to streamline account access.
+
+🧭Updated
+
+Updated grade level selection in onboarding and settings:
+
+Removed the “Under 5th grade” option.
+
+Replaced the “Middle School” option with individual grade selections for 5th through 8th grade.
+
+Improved data structures to support multi-year student records tied to grade progression.
+
+-------------------------------------------------------------------------------------------------------------------------------------------
 📦 v0.3
 ✨ Added
 
