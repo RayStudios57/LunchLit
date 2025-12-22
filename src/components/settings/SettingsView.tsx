@@ -4,6 +4,8 @@ import { useProfile } from '@/hooks/useProfile';
 import { useSchools } from '@/hooks/useSchools';
 import { useTheme, ThemeName, ColorMode } from '@/contexts/ThemeContext';
 import { useGoogleCalendar } from '@/hooks/useGoogleCalendar';
+import { useGradeProgression } from '@/hooks/useGradeProgression';
+import { GRADE_OPTIONS, GRADE_DISPLAY } from '@/config/grades';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -13,28 +15,10 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
-import { Camera, Sun, Moon, Monitor, Check, Palette, School, GraduationCap, User, Calendar, Trash2, Download, AlertTriangle } from 'lucide-react';
+import { Camera, Sun, Moon, Monitor, Check, Palette, School, GraduationCap, User, Calendar, Trash2, Download, AlertTriangle, ChevronUp, ChevronDown, RotateCcw } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-const GRADE_LEVELS = [{
-  value: 'under_5th',
-  label: 'Under 5th Grade'
-}, {
-  value: 'middle_school',
-  label: 'Middle School'
-}, {
-  value: 'freshman',
-  label: 'Freshman (9th)'
-}, {
-  value: 'sophomore',
-  label: 'Sophomore (10th)'
-}, {
-  value: 'junior',
-  label: 'Junior (11th)'
-}, {
-  value: 'senior',
-  label: 'Senior (12th)'
-}];
+import { Link } from 'react-router-dom';
 export function SettingsView() {
   const {
     user,
@@ -60,6 +44,13 @@ export function SettingsView() {
     isExporting,
     hasEvents
   } = useGoogleCalendar();
+  const {
+    nextGrade,
+    previousGrade,
+    progressGrade,
+    revertGrade,
+    undoGraduation,
+  } = useGradeProgression();
   const {
     toast
   } = useToast();
@@ -217,22 +208,75 @@ export function SettingsView() {
 
           <Separator />
 
-          {/* Grade Level */}
-          <div className="space-y-2">
+          {/* Grade Level with Manual Controls */}
+          <div className="space-y-3">
             <Label className="flex items-center gap-2">
               <GraduationCap className="w-4 h-4" />
               Grade Level
             </Label>
-            <Select value={profile?.grade_level || ''} onValueChange={handleGradeChange}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select your grade" />
-              </SelectTrigger>
-              <SelectContent>
-                {GRADE_LEVELS.map(grade => <SelectItem key={grade.value} value={grade.value}>
-                    {grade.label}
-                  </SelectItem>)}
-              </SelectContent>
-            </Select>
+            
+            {profile?.is_graduated ? (
+              <div className="p-4 rounded-lg bg-gradient-to-r from-primary/10 to-accent/10 border border-primary/20">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="font-medium flex items-center gap-2">
+                      🎓 Graduated
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      Congratulations on completing high school!
+                    </p>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button variant="outline" size="sm" asChild>
+                      <Link to="/graduation">View Summary</Link>
+                    </Button>
+                    <Button variant="ghost" size="sm" onClick={undoGraduation}>
+                      <RotateCcw className="w-4 h-4 mr-1" />
+                      Undo
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <>
+                <Select value={profile?.grade_level || ''} onValueChange={handleGradeChange}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select your grade" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {GRADE_OPTIONS.map(grade => (
+                      <SelectItem key={grade.value} value={grade.value}>
+                        {grade.emoji} {grade.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                
+                {/* Manual Grade Progression Controls */}
+                {profile?.grade_level && (
+                  <div className="flex items-center gap-2 pt-2">
+                    <span className="text-sm text-muted-foreground">Manual control:</span>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      onClick={revertGrade}
+                      disabled={!previousGrade}
+                    >
+                      <ChevronDown className="w-4 h-4 mr-1" />
+                      Previous Grade
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      onClick={progressGrade}
+                    >
+                      <ChevronUp className="w-4 h-4 mr-1" />
+                      {nextGrade ? 'Next Grade' : 'Graduate'}
+                    </Button>
+                  </div>
+                )}
+              </>
+            )}
           </div>
 
           {/* School Selection */}

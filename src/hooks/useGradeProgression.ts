@@ -1,20 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useProfile } from '@/hooks/useProfile';
 import { useToast } from '@/hooks/use-toast';
-
-const GRADE_PROGRESSION: Record<string, string | null> = {
-  'Freshman (9th)': 'Sophomore (10th)',
-  'Sophomore (10th)': 'Junior (11th)',
-  'Junior (11th)': 'Senior (12th)',
-  'Senior (12th)': null, // Graduation
-};
-
-const GRADE_DISPLAY: Record<string, string> = {
-  'Freshman (9th)': 'Freshman',
-  'Sophomore (10th)': 'Sophomore',
-  'Junior (11th)': 'Junior',
-  'Senior (12th)': 'Senior',
-};
+import { useAuth } from '@/contexts/AuthContext';
+import { supabase } from '@/integrations/supabase/client';
+import { GRADE_PROGRESSION, GRADE_DISPLAY, GRADE_REVERSION } from '@/config/grades';
 
 // Get the current school year start date (August 1st)
 const getSchoolYearStart = (year: number) => new Date(year, 7, 1); // August 1st
@@ -42,6 +31,7 @@ const shouldProgress = (lastProgression: string | null): boolean => {
 };
 
 export function useGradeProgression() {
+  const { user } = useAuth();
   const { profile, updateProfile } = useProfile();
   const { toast } = useToast();
   const [hasChecked, setHasChecked] = useState(false);
@@ -74,6 +64,9 @@ export function useGradeProgression() {
               title: `🎉 Welcome to ${GRADE_DISPLAY[nextGrade] || nextGrade}!`,
               description: 'Your grade level has been updated for the new school year.',
             });
+
+            // Send email notification
+            sendGradeChangeEmail(user?.email, currentGrade, nextGrade);
           } catch (error) {
             // Silent fail - user can update manually
             console.error('Failed to update grade level:', error);
@@ -90,6 +83,9 @@ export function useGradeProgression() {
               title: '🎓 Congratulations, Graduate!',
               description: 'You\'ve completed high school! Your Brag Sheet is ready for college applications.',
             });
+
+            // Send graduation email
+            sendGradeChangeEmail(user?.email, currentGrade, null, true);
           } catch (error) {
             console.error('Failed to update graduation status:', error);
           }
@@ -100,11 +96,98 @@ export function useGradeProgression() {
     };
 
     checkAndProgressGrade();
-  }, [profile, hasChecked, updateProfile, toast]);
+  }, [profile, hasChecked, updateProfile, toast, user?.email]);
+
+  // Manual grade progression
+  const progressGrade = async () => {
+    if (!profile?.grade_level) return;
+    const nextGrade = GRADE_PROGRESSION[profile.grade_level];
+    
+    if (nextGrade) {
+      await updateProfile.mutateAsync({
+        grade_level: nextGrade,
+        last_grade_progression: new Date().toISOString(),
+      });
+      toast({
+        title: `Advanced to ${GRADE_DISPLAY[nextGrade] || nextGrade}!`,
+      });
+    } else {
+      // Graduate
+      await updateProfile.mutateAsync({
+        is_graduated: true,
+        last_grade_progression: new Date().toISOString(),
+      });
+      toast({
+        title: '🎓 Congratulations, Graduate!',
+      });
+    }
+  };
+
+  // Revert to previous grade
+  const revertGrade = async () => {
+    if (!profile?.grade_level) return;
+    const previousGrade = GRADE_REVERSION[profile.grade_level];
+    
+    if (previousGrade) {
+      await updateProfile.mutateAsync({
+        grade_level: previousGrade,
+        is_graduated: false,
+      });
+      toast({
+        title: `Reverted to ${GRADE_DISPLAY[previousGrade] || previousGrade}`,
+      });
+    } else {
+      toast({
+        title: 'Cannot revert',
+        description: 'You are already at the earliest grade level.',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  // Undo graduation
+  const undoGraduation = async () => {
+    await updateProfile.mutateAsync({
+      is_graduated: false,
+      grade_level: 'Senior (12th)',
+    });
+    toast({
+      title: 'Graduation undone',
+      description: 'You are now a Senior again.',
+    });
+  };
 
   return {
     currentGrade: profile?.grade_level,
     isGraduated: profile?.is_graduated,
     nextGrade: profile?.grade_level ? GRADE_PROGRESSION[profile.grade_level] : null,
+    previousGrade: profile?.grade_level ? GRADE_REVERSION[profile.grade_level] : null,
+    progressGrade,
+    revertGrade,
+    undoGraduation,
   };
+}
+
+// Helper function to send grade change email
+async function sendGradeChangeEmail(
+  email: string | undefined, 
+  fromGrade: string, 
+  toGrade: string | null,
+  isGraduation: boolean = false
+) {
+  if (!email) return;
+  
+  try {
+    await supabase.functions.invoke('send-grade-notification', {
+      body: { 
+        email, 
+        fromGrade, 
+        toGrade, 
+        isGraduation 
+      },
+    });
+  } catch (error) {
+    // Silent fail - email is not critical
+    console.error('Failed to send grade change email:', error);
+  }
 }
