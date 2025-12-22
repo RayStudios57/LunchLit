@@ -4,7 +4,7 @@ import { useTheme } from '@/contexts/ThemeContext';
 // Favicon paths matching the theme logos
 const faviconMap: Record<string, string> = {
   'default': '/logos/logo-default-v2.png',
-  'ocean': '/logos/logo-ocean-v2.png',
+  'ocean': '/logos/logo-ocean-new.png',
   'sunset': '/logos/logo-sunset-v2.png',
   'forest': '/logos/logo-forest-v2.png',
   'lavender': '/logos/logo-lavender.png',
