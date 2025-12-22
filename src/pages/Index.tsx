@@ -13,11 +13,12 @@ import { ImportExportView } from '@/components/import-export/ImportExportView';
 import { DiscussionView } from '@/components/discussion/DiscussionView';
 import { TodayWidget } from '@/components/dashboard/TodayWidget';
 import { GradeSelectionModal } from '@/components/onboarding/GradeSelectionModal';
+import { BragSheetView } from '@/components/bragsheet/BragSheetView';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/hooks/useProfile';
 import { Helmet } from 'react-helmet';
 
-export type TabType = 'home' | 'menu' | 'study' | 'tutor' | 'planner' | 'chat' | 'discuss' | 'settings' | 'import-export' | 'tasks' | 'classes';
+export type TabType = 'home' | 'menu' | 'study' | 'tutor' | 'planner' | 'chat' | 'discuss' | 'settings' | 'import-export' | 'tasks' | 'classes' | 'bragsheet';
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState<TabType>('home');
@@ -59,6 +60,7 @@ const Index = () => {
           {activeTab === 'planner' && <PlannerView />}
           {activeTab === 'chat' && <ChatBot />}
           {activeTab === 'discuss' && <DiscussionView />}
+          {activeTab === 'bragsheet' && <BragSheetView />}
           {activeTab === 'settings' && <SettingsView />}
           {activeTab === 'import-export' && <ImportExportView />}
         </main>

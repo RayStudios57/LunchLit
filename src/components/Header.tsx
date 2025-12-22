@@ -1,4 +1,4 @@
-import { Calendar, CheckSquare, Book, Utensils, BookOpen, GraduationCap, MessageCircle, Users, Settings, Download } from 'lucide-react';
+import { Calendar, CheckSquare, Book, Utensils, BookOpen, GraduationCap, MessageCircle, Users, Settings, Download, Trophy } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/hooks/useProfile';
 import { Button } from '@/components/ui/button';
@@ -45,6 +45,10 @@ export function Header({
 
   // Secondary tabs
   const secondaryTabs = [{
+    id: 'bragsheet' as const,
+    label: 'Brag Sheet',
+    icon: Trophy
+  }, {
     id: 'study' as const,
     label: 'Study',
     icon: BookOpen
