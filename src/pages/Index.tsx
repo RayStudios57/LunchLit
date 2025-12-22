@@ -16,6 +16,7 @@ import { GradeSelectionModal } from '@/components/onboarding/GradeSelectionModal
 import { BragSheetView } from '@/components/bragsheet/BragSheetView';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/hooks/useProfile';
+import { useGradeProgression } from '@/hooks/useGradeProgression';
 import { Helmet } from 'react-helmet';
 
 export type TabType = 'home' | 'menu' | 'study' | 'tutor' | 'planner' | 'chat' | 'discuss' | 'settings' | 'import-export' | 'tasks' | 'classes' | 'bragsheet';
@@ -24,6 +25,7 @@ const Index = () => {
   const [activeTab, setActiveTab] = useState<TabType>('home');
   const { user } = useAuth();
   const { profile } = useProfile();
+  const { isGraduated } = useGradeProgression(); // Auto-checks and progresses grade
   const [showGradeModal, setShowGradeModal] = useState(false);
 
   useEffect(() => {

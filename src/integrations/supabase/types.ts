@@ -255,6 +255,8 @@ export type Database = {
           full_name: string | null
           grade_level: string | null
           id: string
+          is_graduated: boolean | null
+          last_grade_progression: string | null
           school_id: string | null
           school_name: string | null
           theme: string | null
@@ -268,6 +270,8 @@ export type Database = {
           full_name?: string | null
           grade_level?: string | null
           id?: string
+          is_graduated?: boolean | null
+          last_grade_progression?: string | null
           school_id?: string | null
           school_name?: string | null
           theme?: string | null
@@ -281,6 +285,8 @@ export type Database = {
           full_name?: string | null
           grade_level?: string | null
           id?: string
+          is_graduated?: boolean | null
+          last_grade_progression?: string | null
           school_id?: string | null
           school_name?: string | null
           theme?: string | null
