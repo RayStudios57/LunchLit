@@ -8,51 +8,73 @@ import { Link } from 'react-router-dom';
 import { ThemeLogo } from '@/components/ThemeLogo';
 import { LogOut, LogIn } from 'lucide-react';
 import type { TabType } from '@/pages/Index';
-
 interface HeaderProps {
   activeTab: TabType;
   onTabChange: (tab: TabType) => void;
 }
-
-export function Header({ activeTab, onTabChange }: HeaderProps) {
-  const { user, signOut } = useAuth();
-  const { profile } = useProfile();
+export function Header({
+  activeTab,
+  onTabChange
+}: HeaderProps) {
+  const {
+    user,
+    signOut
+  } = useAuth();
+  const {
+    profile
+  } = useProfile();
 
   // Primary tabs - quick access for daily use
-  const primaryTabs = [
-    { id: 'home' as const, label: 'Today', icon: Calendar },
-    { id: 'tasks' as const, label: 'Tasks', icon: CheckSquare },
-    { id: 'classes' as const, label: 'Classes', icon: Book },
-    { id: 'menu' as const, label: 'Menu', icon: Utensils },
-  ];
+  const primaryTabs = [{
+    id: 'home' as const,
+    label: 'Today',
+    icon: Calendar
+  }, {
+    id: 'tasks' as const,
+    label: 'Tasks',
+    icon: CheckSquare
+  }, {
+    id: 'classes' as const,
+    label: 'Classes',
+    icon: Book
+  }, {
+    id: 'menu' as const,
+    label: 'Menu',
+    icon: Utensils
+  }];
 
   // Secondary tabs
-  const secondaryTabs = [
-    { id: 'study' as const, label: 'Study', icon: BookOpen },
-    { id: 'tutor' as const, label: 'Tutors', icon: GraduationCap },
-    { id: 'chat' as const, label: 'AI Chat', icon: MessageCircle },
-    { id: 'discuss' as const, label: 'Community', icon: Users },
-  ];
-
-  return (
-    <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border">
+  const secondaryTabs = [{
+    id: 'study' as const,
+    label: 'Study',
+    icon: BookOpen
+  }, {
+    id: 'tutor' as const,
+    label: 'Tutors',
+    icon: GraduationCap
+  }, {
+    id: 'chat' as const,
+    label: 'AI Chat',
+    icon: MessageCircle
+  }, {
+    id: 'discuss' as const,
+    label: 'Community',
+    icon: Users
+  }];
+  return <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border">
       <div className="container py-3">
         {/* Top Bar */}
         <div className="flex items-center justify-between">
-          <button
-            onClick={() => onTabChange('home')}
-            className="flex items-center gap-3 hover:opacity-90 transition-opacity"
-          >
+          <button onClick={() => onTabChange('home')} className="flex items-center gap-3 hover:opacity-90 transition-opacity">
             <ThemeLogo size="md" />
             <div className="hidden sm:block">
-              <h1 className="font-display font-bold text-lg text-foreground leading-tight">LunchLit</h1>
+              <h1 className="font-display font-bold text-lg text-foreground leading-tight text-justify">LunchLit</h1>
               <p className="text-xs text-muted-foreground">Your school companion</p>
             </div>
           </button>
           
           <div className="flex items-center gap-2">
-            {user ? (
-              <DropdownMenu>
+            {user ? <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="sm" className="gap-2">
                     <Avatar className="w-7 h-7">
@@ -79,71 +101,45 @@ export function Header({ activeTab, onTabChange }: HeaderProps) {
                     Sign Out
                   </DropdownMenuItem>
                 </DropdownMenuContent>
-              </DropdownMenu>
-            ) : (
-              <Button variant="default" size="sm" asChild>
+              </DropdownMenu> : <Button variant="default" size="sm" asChild>
                 <Link to="/auth">
                   <LogIn className="h-4 w-4 mr-1" />
                   Sign In
                 </Link>
-              </Button>
-            )}
+              </Button>}
           </div>
         </div>
         
         {/* Navigation - Primary Tabs */}
         <nav className="flex gap-1 mt-3 bg-secondary/50 p-1 rounded-xl">
           {primaryTabs.map(tab => {
-            const Icon = tab.icon;
-            const isActive = activeTab === tab.id;
-            return (
-              <button
-                key={tab.id}
-                onClick={() => onTabChange(tab.id)}
-                className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg font-medium text-sm transition-all duration-200 ${
-                  isActive
-                    ? 'bg-card text-foreground shadow-card'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-card/50'
-                }`}
-              >
+          const Icon = tab.icon;
+          const isActive = activeTab === tab.id;
+          return <button key={tab.id} onClick={() => onTabChange(tab.id)} className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg font-medium text-sm transition-all duration-200 ${isActive ? 'bg-card text-foreground shadow-card' : 'text-muted-foreground hover:text-foreground hover:bg-card/50'}`}>
                 <Icon className="w-4 h-4" />
                 <span className="hidden sm:inline">{tab.label}</span>
-              </button>
-            );
-          })}
+              </button>;
+        })}
           
           {/* More dropdown for secondary tabs */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button
-                className={`flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg font-medium text-sm transition-all duration-200 ${
-                  secondaryTabs.some(t => t.id === activeTab)
-                    ? 'bg-card text-foreground shadow-card'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-card/50'
-                }`}
-              >
+              <button className={`flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg font-medium text-sm transition-all duration-200 ${secondaryTabs.some(t => t.id === activeTab) ? 'bg-card text-foreground shadow-card' : 'text-muted-foreground hover:text-foreground hover:bg-card/50'}`}>
                 <span className="text-lg">•••</span>
                 <span className="hidden sm:inline">More</span>
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-40">
               {secondaryTabs.map(tab => {
-                const Icon = tab.icon;
-                return (
-                  <DropdownMenuItem
-                    key={tab.id}
-                    onClick={() => onTabChange(tab.id)}
-                    className={activeTab === tab.id ? 'bg-secondary' : ''}
-                  >
+              const Icon = tab.icon;
+              return <DropdownMenuItem key={tab.id} onClick={() => onTabChange(tab.id)} className={activeTab === tab.id ? 'bg-secondary' : ''}>
                     <Icon className="w-4 h-4 mr-2" />
                     {tab.label}
-                  </DropdownMenuItem>
-                );
-              })}
+                  </DropdownMenuItem>;
+            })}
             </DropdownMenuContent>
           </DropdownMenu>
         </nav>
       </div>
-    </header>
-  );
+    </header>;
 }
