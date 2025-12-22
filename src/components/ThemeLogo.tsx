@@ -40,6 +40,9 @@ export function ThemeLogo({ className = '', size = 'md' }: ThemeLogoProps) {
   const darkKey = `${theme}-dark`;
   const logoPath = isDark && logoMap[darkKey] ? logoMap[darkKey] : logoMap[theme] || logoMap['default'];
 
+  // Debug logging
+  console.log('ThemeLogo Debug:', { theme, colorMode, isDark, darkKey, logoPath, logoMapKeys: Object.keys(logoMap) });
+
   return (
     <img
       src={logoPath}
