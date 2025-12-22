@@ -5,59 +5,46 @@ interface ThemeLogoProps {
   size?: 'sm' | 'md' | 'lg';
 }
 
+// Logo paths - update these when you upload your logos
+const logoMap: Record<string, string> = {
+  'default': '/logos/logo-default.png',
+  'ocean': '/logos/logo-ocean.png',
+  'sunset': '/logos/logo-sunset.png',
+  'forest': '/logos/logo-forest.png',
+  'lavender': '/logos/logo-lavender.png',
+  'midnight': '/logos/logo-midnight.png',
+  // Dark mode variants (optional - falls back to regular if not provided)
+  'default-dark': '/logos/logo-default.png',
+  'ocean-dark': '/logos/logo-ocean.png',
+  'sunset-dark': '/logos/logo-sunset.png',
+  'forest-dark': '/logos/logo-forest.png',
+  'lavender-dark': '/logos/logo-lavender.png',
+  'midnight-dark': '/logos/logo-midnight-dark.png',
+};
+
 export function ThemeLogo({ className = '', size = 'md' }: ThemeLogoProps) {
   const { theme, colorMode } = useTheme();
 
   // Size mappings
   const sizeClasses = {
-    sm: 'w-8 h-8 text-lg',
-    md: 'w-10 h-10 text-xl',
-    lg: 'w-14 h-14 text-2xl',
+    sm: 'w-8 h-8',
+    md: 'w-10 h-10',
+    lg: 'w-14 h-14',
   };
 
-  // Get icon and gradient based on theme
-  const getThemeStyles = () => {
-    switch (theme) {
-      case 'ocean':
-        return {
-          icon: '🌊',
-          gradient: 'from-[hsl(200,80%,50%)] to-[hsl(180,70%,45%)]',
-        };
-      case 'sunset':
-        return {
-          icon: '🌅',
-          gradient: 'from-[hsl(20,80%,55%)] to-[hsl(350,75%,55%)]',
-        };
-      case 'forest':
-        return {
-          icon: '🌲',
-          gradient: 'from-[hsl(140,50%,35%)] to-[hsl(80,60%,45%)]',
-        };
-      case 'lavender':
-        return {
-          icon: '💜',
-          gradient: 'from-[hsl(270,60%,60%)] to-[hsl(300,50%,55%)]',
-        };
-      case 'midnight':
-        return {
-          icon: '🌙',
-          gradient: 'from-[hsl(230,70%,55%)] to-[hsl(260,60%,60%)]',
-        };
-      default: // 'default' emerald theme
-        return {
-          icon: '🍴',
-          gradient: 'from-primary to-accent',
-        };
-    }
-  };
-
-  const { icon, gradient } = getThemeStyles();
+  // Determine if we should use dark variant
+  const isDark = colorMode === 'dark' || 
+    (colorMode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  
+  // Get logo path - try dark variant first if in dark mode
+  const darkKey = `${theme}-dark`;
+  const logoPath = isDark && logoMap[darkKey] ? logoMap[darkKey] : logoMap[theme] || logoMap['default'];
 
   return (
-    <div
-      className={`rounded-xl bg-gradient-to-br ${gradient} flex items-center justify-center shadow-glow transition-all duration-300 ${sizeClasses[size]} ${className}`}
-    >
-      <span>{icon}</span>
-    </div>
+    <img
+      src={logoPath}
+      alt="LunchLit Logo"
+      className={`${sizeClasses[size]} rounded-xl object-contain transition-all duration-300 ${className}`}
+    />
   );
 }
