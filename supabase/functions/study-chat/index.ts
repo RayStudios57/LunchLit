@@ -1,9 +1,60 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.2";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
+
+// Input validation
+interface ChatMessage {
+  role: 'user' | 'assistant';
+  content: string;
+}
+
+function validateMessages(messages: unknown): ChatMessage[] {
+  if (!Array.isArray(messages)) {
+    throw new Error('Messages must be an array');
+  }
+
+  if (messages.length === 0) {
+    throw new Error('Messages array cannot be empty');
+  }
+
+  if (messages.length > 20) {
+    throw new Error('Too many messages. Maximum 20 allowed.');
+  }
+
+  const validatedMessages: ChatMessage[] = [];
+
+  for (const msg of messages) {
+    if (typeof msg !== 'object' || msg === null) {
+      throw new Error('Each message must be an object');
+    }
+
+    const { role, content } = msg as { role?: unknown; content?: unknown };
+
+    if (role !== 'user' && role !== 'assistant') {
+      throw new Error('Message role must be "user" or "assistant"');
+    }
+
+    if (typeof content !== 'string') {
+      throw new Error('Message content must be a string');
+    }
+
+    if (content.length === 0) {
+      throw new Error('Message content cannot be empty');
+    }
+
+    if (content.length > 4000) {
+      throw new Error('Message content exceeds maximum length of 4000 characters');
+    }
+
+    validatedMessages.push({ role, content });
+  }
+
+  return validatedMessages;
+}
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -11,14 +62,44 @@ serve(async (req) => {
   }
 
   try {
-    const { messages } = await req.json();
+    // Verify authentication
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) {
+      console.error('Missing authorization header');
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+        status: 401,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    const supabaseClient = createClient(
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_ANON_KEY')!,
+      { global: { headers: { Authorization: authHeader } } }
+    );
+
+    const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
+    if (authError || !user) {
+      console.error('Authentication failed:', authError?.message);
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+        status: 401,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    console.log('Authenticated user:', user.id);
+
+    // Parse and validate request body
+    const body = await req.json();
+    const messages = validateMessages(body.messages);
+
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
     
     if (!LOVABLE_API_KEY) {
       throw new Error('LOVABLE_API_KEY is not configured');
     }
 
-    console.log('Received chat request with', messages?.length, 'messages');
+    console.log('Received chat request from user', user.id, 'with', messages.length, 'messages');
 
     const systemPrompt = `You are LunchLit's AI Study Buddy - a friendly, encouraging, and knowledgeable assistant designed to help high school and middle school students succeed academically.
 
@@ -68,7 +149,7 @@ Guidelines:
 
     if (!response.ok) {
       if (response.status === 429) {
-        console.error('Rate limit exceeded');
+        console.error('Rate limit exceeded for user', user.id);
         return new Response(JSON.stringify({ error: 'Rate limits exceeded, please try again later.' }), {
           status: 429,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -89,15 +170,23 @@ Guidelines:
       });
     }
 
-    console.log('Streaming response started');
+    console.log('Streaming response started for user', user.id);
     
     return new Response(response.body, {
       headers: { ...corsHeaders, 'Content-Type': 'text/event-stream' },
     });
   } catch (error) {
     console.error('Chat error:', error);
-    return new Response(JSON.stringify({ error: error instanceof Error ? error.message : 'Unknown error' }), {
-      status: 500,
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    
+    // Return 400 for validation errors
+    const isValidationError = message.includes('must be') || 
+                               message.includes('cannot be') || 
+                               message.includes('exceeds') ||
+                               message.includes('Too many');
+    
+    return new Response(JSON.stringify({ error: message }), {
+      status: isValidationError ? 400 : 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   }
