@@ -1,3 +1,29 @@
+📦 v0.3
+✨ Added
+
+Theme customization system with multiple light, dark, and color-based themes.
+
+Theme-aware app logos that automatically update based on the selected theme.
+
+Dedicated Tasks / To-Do tab with a fillable input for creating and editing tasks.
+
+Centralized Settings page for managing themes, preferences, and account deletion.
+
+Google Calendar export and syncing for classes and tasks with enable/disable toggle.
+
+🧭Improved
+
+Updated navigation to prioritize fast access to Today, Tasks, and Classes.
+
+Improved UI layout, spacing, and visual consistency across the app.
+
+Enhanced accessibility and readability for student users.
+
+⚠️Fixed
+
+Fixed an issue where interacting with Settings resulted in a white screen crash.
+
+-------------------------------------------------------------------------------------------------------------------------------------------
 📦 v0.2
 ✨ Added
 
