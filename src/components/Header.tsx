@@ -68,7 +68,7 @@ export function Header({
           <button onClick={() => onTabChange('home')} className="flex items-center gap-3 hover:opacity-90 transition-opacity">
             <ThemeLogo size="md" />
             <div className="hidden sm:block">
-              <h1 className="font-display font-bold text-lg text-foreground leading-tight text-justify">LunchLit</h1>
+              <h1 className="font-display font-bold text-lg text-foreground leading-tight text-left">LunchLit</h1>
               <p className="text-xs text-muted-foreground">Your school companion</p>
             </div>
           </button>
