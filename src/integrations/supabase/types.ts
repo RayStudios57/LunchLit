@@ -14,6 +14,81 @@ export type Database = {
   }
   public: {
     Tables: {
+      brag_sheet_entries: {
+        Row: {
+          category: Database["public"]["Enums"]["brag_category"]
+          created_at: string
+          description: string | null
+          end_date: string | null
+          grade_level: string
+          hours_spent: number | null
+          id: string
+          impact: string | null
+          is_auto_suggested: boolean | null
+          is_ongoing: boolean | null
+          school_year: string
+          start_date: string | null
+          suggested_from_task_id: string | null
+          title: string
+          updated_at: string
+          user_id: string
+          verification_notes: string | null
+          verification_status:
+            | Database["public"]["Enums"]["verification_status"]
+            | null
+          verified_at: string | null
+          verified_by: string | null
+        }
+        Insert: {
+          category?: Database["public"]["Enums"]["brag_category"]
+          created_at?: string
+          description?: string | null
+          end_date?: string | null
+          grade_level: string
+          hours_spent?: number | null
+          id?: string
+          impact?: string | null
+          is_auto_suggested?: boolean | null
+          is_ongoing?: boolean | null
+          school_year: string
+          start_date?: string | null
+          suggested_from_task_id?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+          verification_notes?: string | null
+          verification_status?:
+            | Database["public"]["Enums"]["verification_status"]
+            | null
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Update: {
+          category?: Database["public"]["Enums"]["brag_category"]
+          created_at?: string
+          description?: string | null
+          end_date?: string | null
+          grade_level?: string
+          hours_spent?: number | null
+          id?: string
+          impact?: string | null
+          is_auto_suggested?: boolean | null
+          is_ongoing?: boolean | null
+          school_year?: string
+          start_date?: string | null
+          suggested_from_task_id?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+          verification_notes?: string | null
+          verification_status?:
+            | Database["public"]["Enums"]["verification_status"]
+            | null
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Relationships: []
+      }
       chat_messages: {
         Row: {
           content: string
@@ -326,7 +401,17 @@ export type Database = {
       get_user_school_id: { Args: { _user_id: string }; Returns: string }
     }
     Enums: {
-      [_ in never]: never
+      brag_category:
+        | "volunteering"
+        | "job"
+        | "award"
+        | "internship"
+        | "leadership"
+        | "club"
+        | "extracurricular"
+        | "academic"
+        | "other"
+      verification_status: "pending" | "verified" | "rejected"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -453,6 +538,19 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      brag_category: [
+        "volunteering",
+        "job",
+        "award",
+        "internship",
+        "leadership",
+        "club",
+        "extracurricular",
+        "academic",
+        "other",
+      ],
+      verification_status: ["pending", "verified", "rejected"],
+    },
   },
 } as const
