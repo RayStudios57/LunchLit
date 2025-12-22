@@ -7,19 +7,15 @@ interface ThemeLogoProps {
 
 // Logo paths for each theme
 const logoMap: Record<string, string> = {
-  // Cache-busted filenames for themes that were not showing reliably
   'default': '/logos/logo-default-v2.png',
-  'ocean': '/logos/logo-ocean-v2.png',
+  'ocean': '/logos/logo-ocean-new.png',
   'sunset': '/logos/logo-sunset-v2.png',
   'forest': '/logos/logo-forest-v2.png',
-
-  // Working themes (leave unchanged)
   'lavender': '/logos/logo-lavender.png',
   'midnight': '/logos/logo-midnight.png',
-
   // Dark mode variants
   'default-dark': '/logos/logo-default-dark.png',
-  'ocean-dark': '/logos/logo-ocean-v2.png',
+  'ocean-dark': '/logos/logo-ocean-new.png',
   'sunset-dark': '/logos/logo-sunset-v2.png',
   'forest-dark': '/logos/logo-forest-v2.png',
   'lavender-dark': '/logos/logo-lavender.png',
