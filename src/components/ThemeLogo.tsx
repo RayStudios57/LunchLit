@@ -5,21 +5,21 @@ interface ThemeLogoProps {
   size?: 'sm' | 'md' | 'lg';
 }
 
-// Logo paths - update these when you upload your logos
+// Logo paths for each theme
 const logoMap: Record<string, string> = {
   'default': '/logos/logo-default.png',
-  'ocean': '/logos/logo-ocean.png',
+  'ocean': '/logos/logo-midnight.png', // Uses midnight logo (blue theme)
   'sunset': '/logos/logo-sunset.png',
   'forest': '/logos/logo-forest.png',
   'lavender': '/logos/logo-lavender.png',
   'midnight': '/logos/logo-midnight.png',
-  // Dark mode variants (optional - falls back to regular if not provided)
-  'default-dark': '/logos/logo-default.png',
-  'ocean-dark': '/logos/logo-ocean.png',
+  // Dark mode variants
+  'default-dark': '/logos/logo-default-dark.png',
+  'ocean-dark': '/logos/logo-midnight.png',
   'sunset-dark': '/logos/logo-sunset.png',
   'forest-dark': '/logos/logo-forest.png',
   'lavender-dark': '/logos/logo-lavender.png',
-  'midnight-dark': '/logos/logo-midnight-dark.png',
+  'midnight-dark': '/logos/logo-midnight.png',
 };
 
 export function ThemeLogo({ className = '', size = 'md' }: ThemeLogoProps) {
