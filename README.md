@@ -95,7 +95,7 @@ Advanced personalization based on grade and usage
 
 📦 Status
 
-Current Version: v0.2
+Current Version: v0.3
 LunchLit is actively under development. Features and APIs may change as the platform evolves.
 
 
