@@ -1,7 +1,8 @@
 import { getTodayMenu, studyHalls } from '@/data/mockData';
 import { MenuCard } from './MenuCard';
 import { StudyHallCard } from './StudyHallCard';
-import { Utensils, BookOpen, Sparkles, ArrowRight } from 'lucide-react';
+import { Utensils, BookOpen, Sparkles, ArrowRight, Calendar } from 'lucide-react';
+import { format } from 'date-fns';
 
 interface TodayViewProps {
   onNavigateToMenu: () => void;
@@ -11,7 +12,8 @@ interface TodayViewProps {
 export function TodayView({ onNavigateToMenu, onNavigateToStudy }: TodayViewProps) {
   const todayMenu = getTodayMenu();
   const availableHalls = studyHalls.filter((h) => h.available).slice(0, 2);
-  const featuredItem = todayMenu.items[0];
+  const today = new Date();
+  const formattedDate = format(today, 'EEEE, MMMM d, yyyy');
 
   return (
     <div className="space-y-8 pb-8">
@@ -21,6 +23,10 @@ export function TodayView({ onNavigateToMenu, onNavigateToStudy }: TodayViewProp
         <div className="absolute bottom-0 left-0 w-24 h-24 bg-primary-foreground/5 rounded-full blur-2xl" />
         
         <div className="relative">
+          <div className="flex items-center gap-2 mb-2">
+            <Calendar className="w-4 h-4" />
+            <span className="text-sm font-medium opacity-90">{formattedDate}</span>
+          </div>
           <div className="flex items-center gap-2 mb-3">
             <Sparkles className="w-5 h-5" />
             <span className="text-sm font-medium opacity-90">Today's Highlight</span>
