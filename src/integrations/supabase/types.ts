@@ -247,6 +247,56 @@ export type Database = {
           },
         ]
       }
+      menu_uploads: {
+        Row: {
+          created_at: string
+          id: string
+          review_notes: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          school_email: string
+          school_id: string | null
+          school_name: string
+          status: string | null
+          updated_at: string
+          upload_data: Json
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          school_email: string
+          school_id?: string | null
+          school_name: string
+          status?: string | null
+          updated_at?: string
+          upload_data: Json
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          school_email?: string
+          school_id?: string | null
+          school_name?: string
+          status?: string | null
+          updated_at?: string
+          upload_data?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "menu_uploads_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -399,14 +449,59 @@ export type Database = {
         }
         Relationships: []
       }
+      user_roles: {
+        Row: {
+          created_at: string
+          email_domain: string | null
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          school_id: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          email_domain?: string | null
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          school_id?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          email_domain?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          school_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_roles_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
       get_user_school_id: { Args: { _user_id: string }; Returns: string }
+      get_verifier_school_id: { Args: { _user_id: string }; Returns: string }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      is_verifier: { Args: { _user_id: string }; Returns: boolean }
     }
     Enums: {
+      app_role: "admin" | "teacher" | "counselor" | "student"
       brag_category:
         | "volunteering"
         | "job"
@@ -545,6 +640,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      app_role: ["admin", "teacher", "counselor", "student"],
       brag_category: [
         "volunteering",
         "job",

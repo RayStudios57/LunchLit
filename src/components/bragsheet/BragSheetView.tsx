@@ -9,6 +9,7 @@ import { Plus, Trophy, Clock, Award, TrendingUp, Sparkles } from 'lucide-react';
 import { BragSheetEntryCard } from './BragSheetEntryCard';
 import { BragSheetEntryForm } from './BragSheetEntryForm';
 import { BragSheetSuggestions } from './BragSheetSuggestions';
+import { BragSheetPDFExport } from './BragSheetPDFExport';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Link } from 'react-router-dom';
 
@@ -110,20 +111,23 @@ export function BragSheetView() {
               {profile?.grade_level ? `Currently in ${profile.grade_level}` : 'Track your achievements across high school'}
             </CardDescription>
           </div>
-          <Dialog open={isAddingEntry} onOpenChange={setIsAddingEntry}>
-            <DialogTrigger asChild>
-              <Button>
-                <Plus className="w-4 h-4 mr-2" />
-                Add Achievement
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
-              <DialogHeader>
-                <DialogTitle>Add New Achievement</DialogTitle>
-              </DialogHeader>
-              <BragSheetEntryForm onSuccess={() => setIsAddingEntry(false)} />
-            </DialogContent>
-          </Dialog>
+          <div className="flex gap-2">
+            <BragSheetPDFExport entries={entries} entriesByYear={entriesByYear} profile={profile} />
+            <Dialog open={isAddingEntry} onOpenChange={setIsAddingEntry}>
+              <DialogTrigger asChild>
+                <Button>
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add Achievement
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+                <DialogHeader>
+                  <DialogTitle>Add New Achievement</DialogTitle>
+                </DialogHeader>
+                <BragSheetEntryForm onSuccess={() => setIsAddingEntry(false)} />
+              </DialogContent>
+            </Dialog>
+          </div>
         </CardHeader>
         
         <CardContent>

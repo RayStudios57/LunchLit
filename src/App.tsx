@@ -9,6 +9,7 @@ import { useThemeFavicon } from "@/hooks/useThemeFavicon";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Graduation from "./pages/Graduation";
+import MenuUpload from "./pages/MenuUpload";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,6 +33,7 @@ const App = () => (
                 <Route path="/" element={<Index />} />
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/graduation" element={<Graduation />} />
+                <Route path="/menu-upload" element={<MenuUpload />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </BrowserRouter>
