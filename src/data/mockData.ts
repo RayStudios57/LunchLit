@@ -34,14 +34,13 @@ const generateWeeklyMenu = (): DayMenu[] => {
     ],
   ];
 
-  const dayNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
   const menus: DayMenu[] = [];
 
   for (let i = 0; i < 5; i++) {
     const date = addDays(weekStart, i);
     menus.push({
       date: format(date, 'yyyy-MM-dd'),
-      dayName: dayNames[i],
+      dayName: format(date, 'EEEE'), // Use date-fns to get the actual day name
       items: menuItems[i],
     });
   }

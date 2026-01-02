@@ -1,6 +1,7 @@
-import { Calendar, CheckSquare, Book, Utensils, BookOpen, GraduationCap, MessageCircle, Users, Settings, Download, Trophy } from 'lucide-react';
+import { Calendar, CheckSquare, Book, Utensils, BookOpen, GraduationCap, MessageCircle, Users, Settings, Download, Trophy, Shield } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/hooks/useProfile';
+import { useUserRoles } from '@/hooks/useUserRoles';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
@@ -23,6 +24,7 @@ export function Header({
   const {
     profile
   } = useProfile();
+  const { isAdmin } = useUserRoles();
 
   // Primary tabs - quick access for daily use
   const primaryTabs = [{
@@ -99,6 +101,17 @@ export function Header({
                     <Download className="w-4 h-4 mr-2" />
                     Import/Export
                   </DropdownMenuItem>
+                  {isAdmin && (
+                    <>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem asChild>
+                        <Link to="/admin">
+                          <Shield className="w-4 h-4 mr-2" />
+                          Admin Dashboard
+                        </Link>
+                      </DropdownMenuItem>
+                    </>
+                  )}
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={signOut} className="text-destructive focus:text-destructive">
                     <LogOut className="w-4 h-4 mr-2" />
