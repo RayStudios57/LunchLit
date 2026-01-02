@@ -14,6 +14,44 @@ export type Database = {
   }
   public: {
     Tables: {
+      allowed_email_domains: {
+        Row: {
+          auto_assign_role: Database["public"]["Enums"]["app_role"]
+          created_at: string
+          created_by: string | null
+          description: string | null
+          domain: string
+          id: string
+          school_id: string | null
+        }
+        Insert: {
+          auto_assign_role?: Database["public"]["Enums"]["app_role"]
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          domain: string
+          id?: string
+          school_id?: string | null
+        }
+        Update: {
+          auto_assign_role?: Database["public"]["Enums"]["app_role"]
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          domain?: string
+          id?: string
+          school_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "allowed_email_domains_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       brag_sheet_entries: {
         Row: {
           category: Database["public"]["Enums"]["brag_category"]
@@ -489,6 +527,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_role_for_email_domain: {
+        Args: { _email: string }
+        Returns: Database["public"]["Enums"]["app_role"]
+      }
       get_user_school_id: { Args: { _user_id: string }; Returns: string }
       get_verifier_school_id: { Args: { _user_id: string }; Returns: string }
       has_role: {
