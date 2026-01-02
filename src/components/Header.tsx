@@ -8,6 +8,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSepara
 import { Link } from 'react-router-dom';
 import { ThemeLogo } from '@/components/ThemeLogo';
 import { LogOut, LogIn } from 'lucide-react';
+import { NotificationBell } from '@/components/NotificationBell';
 import type { TabType } from '@/pages/Index';
 interface HeaderProps {
   activeTab: TabType;
@@ -80,6 +81,7 @@ export function Header({
           </button>
           
           <div className="flex items-center gap-2">
+            {user && <NotificationBell />}
             {user ? <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="sm" className="gap-2">
