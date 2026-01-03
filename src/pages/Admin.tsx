@@ -2,9 +2,12 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useUserRoles } from '@/hooks/useUserRoles';
 import { AdminEmailDomains } from '@/components/admin/AdminEmailDomains';
 import { AdminUserRoles } from '@/components/admin/AdminUserRoles';
+import { AdminSchools } from '@/components/admin/AdminSchools';
+import { AdminMealManagement } from '@/components/admin/AdminMealManagement';
+import { AdminProfiles } from '@/components/admin/AdminProfiles';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ArrowLeft, Loader2, Shield, Users, Mail } from 'lucide-react';
+import { ArrowLeft, Loader2, Shield, Users, Mail, School, Utensils, UserCheck } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 
@@ -49,21 +52,45 @@ export default function Admin() {
           </div>
         </header>
         
-        <main className="container mx-auto px-4 py-8 max-w-5xl">
+        <main className="container mx-auto px-4 py-8 max-w-6xl">
           <Tabs defaultValue="users" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-2">
+            <TabsList className="grid w-full grid-cols-5">
               <TabsTrigger value="users" className="flex items-center gap-2">
                 <Users className="h-4 w-4" />
-                User Roles
+                <span className="hidden sm:inline">Roles</span>
+              </TabsTrigger>
+              <TabsTrigger value="profiles" className="flex items-center gap-2">
+                <UserCheck className="h-4 w-4" />
+                <span className="hidden sm:inline">Profiles</span>
+              </TabsTrigger>
+              <TabsTrigger value="schools" className="flex items-center gap-2">
+                <School className="h-4 w-4" />
+                <span className="hidden sm:inline">Schools</span>
+              </TabsTrigger>
+              <TabsTrigger value="meals" className="flex items-center gap-2">
+                <Utensils className="h-4 w-4" />
+                <span className="hidden sm:inline">Meals</span>
               </TabsTrigger>
               <TabsTrigger value="domains" className="flex items-center gap-2">
                 <Mail className="h-4 w-4" />
-                Email Domains
+                <span className="hidden sm:inline">Domains</span>
               </TabsTrigger>
             </TabsList>
             
             <TabsContent value="users">
               <AdminUserRoles />
+            </TabsContent>
+
+            <TabsContent value="profiles">
+              <AdminProfiles />
+            </TabsContent>
+
+            <TabsContent value="schools">
+              <AdminSchools />
+            </TabsContent>
+
+            <TabsContent value="meals">
+              <AdminMealManagement />
             </TabsContent>
             
             <TabsContent value="domains">

@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { weeklyMenu } from '@/data/mockData';
+import { weeklyMenu, getTodayMenu } from '@/data/mockData';
 import { MenuCard } from './MenuCard';
 import { DietaryType } from '@/types';
 import { Badge } from '@/components/ui/badge';
-import { Filter, X, Calendar, CalendarDays } from 'lucide-react';
-import { format, isToday, parseISO } from 'date-fns';
+import { Filter, X, Calendar, CalendarDays, AlertCircle } from 'lucide-react';
+import { format, isToday, parseISO, isWeekend } from 'date-fns';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 const dietaryFilters: { type: DietaryType; label: string }[] = [
   { type: 'vegetarian', label: 'Vegetarian' },
@@ -19,6 +20,10 @@ type ViewMode = 'today' | 'week';
 export function MenuView() {
   const [activeFilters, setActiveFilters] = useState<DietaryType[]>([]);
   const [viewMode, setViewMode] = useState<ViewMode>('today');
+  
+  const today = new Date();
+  const isOnWeekend = isWeekend(today);
+  const todayMenuData = getTodayMenu();
 
   const toggleFilter = (type: DietaryType) => {
     setActiveFilters((prev) =>
@@ -29,7 +34,7 @@ export function MenuView() {
   const clearFilters = () => setActiveFilters([]);
 
   const filteredMenu = weeklyMenu
-    .filter((day) => viewMode === 'week' || isToday(parseISO(day.date)))
+    .filter((day) => viewMode === 'week' || isToday(parseISO(day.date)) || isOnWeekend)
     .map((day) => ({
       ...day,
       items: day.items.filter((item) =>
@@ -39,10 +44,18 @@ export function MenuView() {
       ),
     }));
 
-  const todayMenu = weeklyMenu.find((day) => isToday(parseISO(day.date)));
-
   return (
     <div className="space-y-6 pb-8">
+      {/* Weekend Notice */}
+      {isOnWeekend && (
+        <Alert className="opacity-0 animate-fade-up bg-primary/10 border-primary/30">
+          <AlertCircle className="h-4 w-4 text-primary" />
+          <AlertDescription>
+            It's the weekend! Showing next week's menu starting Monday.
+          </AlertDescription>
+        </Alert>
+      )}
+
       {/* View Toggle */}
       <div className="flex items-center gap-2 opacity-0 animate-fade-up">
         <button
@@ -54,7 +67,7 @@ export function MenuView() {
           }`}
         >
           <Calendar className="w-4 h-4" />
-          Today
+          {isOnWeekend ? 'Next Week' : 'Today'}
         </button>
         <button
           onClick={() => setViewMode('week')}
@@ -65,7 +78,7 @@ export function MenuView() {
           }`}
         >
           <CalendarDays className="w-4 h-4" />
-          This Week
+          Full Week
         </button>
       </div>
       {/* Filters */}
@@ -106,9 +119,9 @@ export function MenuView() {
       </div>
 
       {/* Menu Content */}
-      {filteredMenu.length === 0 && viewMode === 'today' ? (
+      {filteredMenu.length === 0 ? (
         <div className="card-elevated p-8 text-center text-muted-foreground opacity-0 animate-fade-up" style={{ animationDelay: '0.15s' }}>
-          <p>No menu available for today. Switch to week view to see upcoming meals.</p>
+          <p>No menu available. Switch to week view to see upcoming meals.</p>
         </div>
       ) : (
         filteredMenu.map((day, dayIndex) => (
@@ -120,7 +133,7 @@ export function MenuView() {
               <Badge variant="secondary" className="text-xs">
                 {new Date(day.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
               </Badge>
-              {isToday(parseISO(day.date)) && (
+              {!isOnWeekend && isToday(parseISO(day.date)) && (
                 <Badge className="text-xs bg-primary/20 text-primary border-primary/30">
                   Today
                 </Badge>
