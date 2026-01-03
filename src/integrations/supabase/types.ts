@@ -159,7 +159,9 @@ export type Database = {
           day_of_week: number
           end_time: string
           id: string
+          is_club: boolean | null
           room_number: string | null
+          show_every_day: boolean | null
           start_time: string
           teacher_name: string | null
           updated_at: string
@@ -172,7 +174,9 @@ export type Database = {
           day_of_week: number
           end_time: string
           id?: string
+          is_club?: boolean | null
           room_number?: string | null
+          show_every_day?: boolean | null
           start_time: string
           teacher_name?: string | null
           updated_at?: string
@@ -185,13 +189,56 @@ export type Database = {
           day_of_week?: number
           end_time?: string
           id?: string
+          is_club?: boolean | null
           room_number?: string | null
+          show_every_day?: boolean | null
           start_time?: string
           teacher_name?: string | null
           updated_at?: string
           user_id?: string
         }
         Relationships: []
+      }
+      discussion_categories: {
+        Row: {
+          color: string | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          icon: string | null
+          id: string
+          name: string
+          school_id: string | null
+        }
+        Insert: {
+          color?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name: string
+          school_id?: string | null
+        }
+        Update: {
+          color?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name?: string
+          school_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "discussion_categories_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       discussions: {
         Row: {
@@ -240,6 +287,41 @@ export type Database = {
           },
           {
             foreignKeyName: "discussions_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      meal_dietary_tags: {
+        Row: {
+          color: string | null
+          created_at: string
+          icon: string | null
+          id: string
+          name: string
+          school_id: string | null
+        }
+        Insert: {
+          color?: string | null
+          created_at?: string
+          icon?: string | null
+          id?: string
+          name: string
+          school_id?: string | null
+        }
+        Update: {
+          color?: string | null
+          created_at?: string
+          icon?: string | null
+          id?: string
+          name?: string
+          school_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "meal_dietary_tags_school_id_fkey"
             columns: ["school_id"]
             isOneToOne: false
             referencedRelation: "schools"
@@ -574,6 +656,10 @@ export type Database = {
         Returns: boolean
       }
       is_verifier: { Args: { _user_id: string }; Returns: boolean }
+      toggle_discussion_pin: {
+        Args: { _discussion_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
       app_role: "admin" | "teacher" | "counselor" | "student"

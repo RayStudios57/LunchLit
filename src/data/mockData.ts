@@ -1,10 +1,13 @@
 import { DayMenu, StudyHall } from '@/types';
-import { format, addDays, startOfWeek, isWeekend, isSameDay } from 'date-fns';
+import { format, addDays, startOfWeek, isWeekend, isSameDay, nextMonday } from 'date-fns';
 
 // Generate dynamic menu based on current date
 const generateWeeklyMenu = (): DayMenu[] => {
   const today = new Date();
-  const weekStart = startOfWeek(today, { weekStartsOn: 1 }); // Monday
+  // If it's a weekend, get next week's Monday
+  const weekStart = isWeekend(today) 
+    ? nextMonday(today)
+    : startOfWeek(today, { weekStartsOn: 1 }); // Monday
   
   const menuItems: import('@/types').MenuItem[][] = [
     [
@@ -103,12 +106,12 @@ export const studyHalls: StudyHall[] = [
   },
 ];
 
-export const getTodayMenu = (): DayMenu => {
+export const getTodayMenu = (): DayMenu & { isNextWeek?: boolean } => {
   const today = new Date();
   
-  // If weekend, show Monday's menu
+  // If weekend, show Monday's menu with a flag
   if (isWeekend(today)) {
-    return weeklyMenu[0];
+    return { ...weeklyMenu[0], isNextWeek: true };
   }
   
   // Find today's menu

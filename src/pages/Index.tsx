@@ -14,6 +14,7 @@ import { DiscussionView } from '@/components/discussion/DiscussionView';
 import { TodayWidget } from '@/components/dashboard/TodayWidget';
 import { GradeSelectionModal } from '@/components/onboarding/GradeSelectionModal';
 import { BragSheetView } from '@/components/bragsheet/BragSheetView';
+import { Credits } from '@/components/Credits';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/hooks/useProfile';
 import { useGradeProgression } from '@/hooks/useGradeProgression';
@@ -52,6 +53,7 @@ const Index = () => {
                 onNavigateToMenu={() => setActiveTab('menu')} 
                 onNavigateToStudy={() => setActiveTab('study')} 
               />
+              <Credits />
             </div>
           )}
           {activeTab === 'tasks' && <TasksView />}
