@@ -19,6 +19,7 @@ import { Camera, Sun, Moon, Monitor, Check, Palette, School, GraduationCap, User
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { Link } from 'react-router-dom';
+import { NotificationPreferencesCard } from './NotificationPreferencesCard';
 export function SettingsView() {
   const {
     user,
@@ -358,6 +359,9 @@ export function SettingsView() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Notification Preferences */}
+      <NotificationPreferencesCard />
 
       {/* Calendar Sync Section */}
       <Card className="card-elevated">

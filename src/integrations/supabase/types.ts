@@ -417,6 +417,42 @@ export type Database = {
           },
         ]
       }
+      notification_preferences: {
+        Row: {
+          created_at: string
+          discussion_replies: boolean
+          grade_progression: boolean
+          id: string
+          new_menu_items: boolean
+          study_hall_availability: boolean
+          task_reminders: boolean
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          discussion_replies?: boolean
+          grade_progression?: boolean
+          id?: string
+          new_menu_items?: boolean
+          study_hall_availability?: boolean
+          task_reminders?: boolean
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          discussion_replies?: boolean
+          grade_progression?: boolean
+          id?: string
+          new_menu_items?: boolean
+          study_hall_availability?: boolean
+          task_reminders?: boolean
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       notifications: {
         Row: {
           created_at: string
@@ -529,6 +565,56 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      study_halls: {
+        Row: {
+          capacity: number
+          created_at: string
+          current_occupancy: number
+          id: string
+          is_available: boolean
+          location: string
+          name: string
+          periods: string[]
+          school_id: string | null
+          teacher: string | null
+          updated_at: string
+        }
+        Insert: {
+          capacity?: number
+          created_at?: string
+          current_occupancy?: number
+          id?: string
+          is_available?: boolean
+          location: string
+          name: string
+          periods?: string[]
+          school_id?: string | null
+          teacher?: string | null
+          updated_at?: string
+        }
+        Update: {
+          capacity?: number
+          created_at?: string
+          current_occupancy?: number
+          id?: string
+          is_available?: boolean
+          location?: string
+          name?: string
+          periods?: string[]
+          school_id?: string | null
+          teacher?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "study_halls_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       tasks: {
         Row: {
