@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Header } from '@/components/Header';
 import { TodayView } from '@/components/TodayView';
 import { MenuView } from '@/components/MenuView';
-import { StudyHallView } from '@/components/StudyHallView';
+import { StudyHallsRealtime } from '@/components/StudyHallsRealtime';
 import { TutorSection } from '@/components/TutorSection';
 import { PlannerView } from '@/components/planner/PlannerView';
 import { TasksView } from '@/components/tasks/TasksView';
@@ -59,7 +59,7 @@ const Index = () => {
           {activeTab === 'tasks' && <TasksView />}
           {activeTab === 'classes' && <ClassSchedule />}
           {activeTab === 'menu' && <MenuView />}
-          {activeTab === 'study' && <StudyHallView />}
+          {activeTab === 'study' && <StudyHallsRealtime />}
           {activeTab === 'tutor' && <TutorSection />}
           {activeTab === 'planner' && <PlannerView />}
           {activeTab === 'chat' && <ChatBot />}
