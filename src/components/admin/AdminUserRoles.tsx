@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useAdminUserRoles, AppRole } from '@/hooks/useAdminUserRoles';
 import { useSchools } from '@/hooks/useSchools';
+import { useCustomRoles } from '@/hooks/useCustomRoles';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -31,6 +32,7 @@ const roleBadgeVariants: Record<AppRole, 'destructive' | 'default' | 'secondary'
 export function AdminUserRoles() {
   const { users, isLoading, addRole, removeRole } = useAdminUserRoles();
   const { schools } = useSchools();
+  const { customRoles } = useCustomRoles();
   const { toast } = useToast();
   
   const [searchTerm, setSearchTerm] = useState('');
@@ -55,8 +57,6 @@ export function AdminUserRoles() {
     
     setIsSearching(true);
     try {
-      // Search in profiles by email pattern (since we can't access auth.users directly from client)
-      // We'll try to find the user by their profile
       const { data: profiles, error } = await supabase
         .from('profiles')
         .select('user_id, full_name')
@@ -64,8 +64,6 @@ export function AdminUserRoles() {
       
       if (error) throw error;
 
-      // For now, we'll show a message that user needs to search by user ID or name
-      // In a real app, you'd have an edge function to search users by email
       toast({
         title: 'Search by name',
         description: 'Enter part of the user\'s name to find them in the list below.',
@@ -95,6 +93,9 @@ export function AdminUserRoles() {
     setSelectedRole('teacher');
     setSelectedSchool('');
   };
+
+  // Filter out schools with invalid IDs
+  const validSchools = schools.filter(school => school.id && school.id.trim() !== '');
 
   return (
     <Card>
@@ -158,7 +159,7 @@ export function AdminUserRoles() {
                             {roleLabels[role.role]}
                             {role.school_id && (
                               <span className="ml-1 opacity-75">
-                                ({schools.find(s => s.id === role.school_id)?.name?.slice(0, 10) || 'School'})
+                                ({validSchools.find(s => s.id === role.school_id)?.name?.slice(0, 10) || 'School'})
                               </span>
                             )}
                           </Badge>
@@ -223,13 +224,16 @@ export function AdminUserRoles() {
                           
                           <div className="space-y-2">
                             <Label>School (Optional - for scoped access)</Label>
-                            <Select value={selectedSchool || "none"} onValueChange={(v) => setSelectedSchool(v === "none" ? "" : v)}>
+                            <Select 
+                              value={selectedSchool || "global"} 
+                              onValueChange={(v) => setSelectedSchool(v === "global" ? "" : v)}
+                            >
                               <SelectTrigger>
                                 <SelectValue placeholder="No school (global access)" />
                               </SelectTrigger>
                               <SelectContent>
-                                <SelectItem value="none">No school (global access)</SelectItem>
-                                {schools.map((school) => (
+                                <SelectItem value="global">No school (global access)</SelectItem>
+                                {validSchools.map((school) => (
                                   <SelectItem key={school.id} value={school.id}>
                                     {school.name}
                                   </SelectItem>
