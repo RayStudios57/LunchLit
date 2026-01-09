@@ -2,13 +2,14 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useUserRoles } from '@/hooks/useUserRoles';
 import { AdminEmailDomains } from '@/components/admin/AdminEmailDomains';
 import { AdminUserRoles } from '@/components/admin/AdminUserRoles';
+import { AdminCustomRoles } from '@/components/admin/AdminCustomRoles';
 import { AdminSchools } from '@/components/admin/AdminSchools';
 import { AdminMealManagement } from '@/components/admin/AdminMealManagement';
 import { AdminProfiles } from '@/components/admin/AdminProfiles';
 import { AdminStudyHalls } from '@/components/admin/AdminStudyHalls';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ArrowLeft, Loader2, Shield, Users, Mail, School, Utensils, UserCheck, BookOpen } from 'lucide-react';
+import { ArrowLeft, Loader2, Shield, Users, Mail, School, Utensils, UserCheck, BookOpen, ShieldCheck } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 
@@ -55,10 +56,14 @@ export default function Admin() {
         
         <main className="container mx-auto px-4 py-8 max-w-6xl">
           <Tabs defaultValue="users" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-6">
+            <TabsList className="grid w-full grid-cols-7">
               <TabsTrigger value="users" className="flex items-center gap-2">
                 <Users className="h-4 w-4" />
                 <span className="hidden sm:inline">Roles</span>
+              </TabsTrigger>
+              <TabsTrigger value="custom-roles" className="flex items-center gap-2">
+                <ShieldCheck className="h-4 w-4" />
+                <span className="hidden sm:inline">Custom</span>
               </TabsTrigger>
               <TabsTrigger value="profiles" className="flex items-center gap-2">
                 <UserCheck className="h-4 w-4" />
@@ -84,6 +89,10 @@ export default function Admin() {
             
             <TabsContent value="users">
               <AdminUserRoles />
+            </TabsContent>
+
+            <TabsContent value="custom-roles">
+              <AdminCustomRoles />
             </TabsContent>
 
             <TabsContent value="profiles">
