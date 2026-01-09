@@ -223,12 +223,12 @@ export function AdminUserRoles() {
                           
                           <div className="space-y-2">
                             <Label>School (Optional - for scoped access)</Label>
-                            <Select value={selectedSchool} onValueChange={setSelectedSchool}>
+                            <Select value={selectedSchool || "none"} onValueChange={(v) => setSelectedSchool(v === "none" ? "" : v)}>
                               <SelectTrigger>
                                 <SelectValue placeholder="No school (global access)" />
                               </SelectTrigger>
                               <SelectContent>
-                                <SelectItem value="">No school (global access)</SelectItem>
+                                <SelectItem value="none">No school (global access)</SelectItem>
                                 {schools.map((school) => (
                                   <SelectItem key={school.id} value={school.id}>
                                     {school.name}
