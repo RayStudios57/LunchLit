@@ -186,8 +186,8 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth();
-  const [theme, setThemeState] = useState<ThemeName>('default');
-  const [colorMode, setColorModeState] = useState<ColorMode>('system');
+  const [theme, setThemeState] = useState<ThemeName>('midnight');
+  const [colorMode, setColorModeState] = useState<ColorMode>('light');
 
   // Load preferences from localStorage on mount
   useEffect(() => {
