@@ -1,11 +1,19 @@
+import { useState } from 'react';
 import { usePermissions, Permission } from '@/hooks/usePermissions';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import { useRoleRequests } from '@/hooks/useRoleRequests';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Shield, Check, Lock, User, Building2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Shield, Check, Lock, User, Building2, ArrowUpCircle, Clock, CheckCircle2, XCircle, Loader2 } from 'lucide-react';
+import { format } from 'date-fns';
 
 const PERMISSION_LABELS: Record<Permission, { label: string; description: string }> = {
   manage_users: { label: 'Manage Users', description: 'View and modify user accounts' },
@@ -39,9 +47,20 @@ interface UserRoleData {
   } | null;
 }
 
+const AVAILABLE_ROLES = [
+  { value: 'teacher', label: 'Teacher', description: 'Verify entries and manage study halls' },
+  { value: 'counselor', label: 'Counselor', description: 'Verify entries and view analytics' },
+  { value: 'admin', label: 'Administrator', description: 'Full system access' },
+];
+
 export function UserRolesCard() {
   const { user } = useAuth();
   const { permissions, isLoading: permissionsLoading } = usePermissions();
+  const { myRequests, submitRequest, hasPendingRequest, isLoading: requestsLoading } = useRoleRequests();
+  
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedRole, setSelectedRole] = useState('');
+  const [reason, setReason] = useState('');
 
   const { data: userRoles, isLoading: rolesLoading } = useQuery({
     queryKey: ['my-roles', user?.id],
@@ -95,8 +114,34 @@ export function UserRolesCard() {
     enabled: !!user,
   });
 
-  const isLoading = permissionsLoading || rolesLoading;
+  const isLoading = permissionsLoading || rolesLoading || requestsLoading;
   const allPermissions = Array.from(permissions);
+
+  const handleSubmitRequest = async () => {
+    if (!selectedRole || !reason.trim()) return;
+    
+    await submitRequest.mutateAsync({
+      requestedRole: selectedRole,
+      reason: reason.trim(),
+    });
+    
+    setIsDialogOpen(false);
+    setSelectedRole('');
+    setReason('');
+  };
+
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case 'pending':
+        return <Badge variant="outline" className="gap-1"><Clock className="h-3 w-3" /> Pending</Badge>;
+      case 'approved':
+        return <Badge variant="default" className="gap-1 bg-green-600"><CheckCircle2 className="h-3 w-3" /> Approved</Badge>;
+      case 'rejected':
+        return <Badge variant="destructive" className="gap-1"><XCircle className="h-3 w-3" /> Rejected</Badge>;
+      default:
+        return <Badge variant="secondary">{status}</Badge>;
+    }
+  };
 
   if (isLoading) {
     return (
@@ -241,6 +286,119 @@ export function UserRolesCard() {
                   </div>
                 );
               })}
+            </div>
+          )}
+        </div>
+
+        {/* Request Role Upgrade */}
+        <div className="space-y-3 pt-4 border-t">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-sm font-medium flex items-center gap-2">
+                <ArrowUpCircle className="h-4 w-4" />
+                Request Role Upgrade
+              </h3>
+              <p className="text-xs text-muted-foreground mt-1">
+                Need additional permissions? Submit a request to an administrator.
+              </p>
+            </div>
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+              <DialogTrigger asChild>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  disabled={hasPendingRequest}
+                >
+                  {hasPendingRequest ? 'Request Pending' : 'Request Upgrade'}
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Request Role Upgrade</DialogTitle>
+                  <DialogDescription>
+                    Explain why you need additional permissions. An administrator will review your request.
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="space-y-4 py-4">
+                  <div className="space-y-2">
+                    <Label>Requested Role</Label>
+                    <Select value={selectedRole} onValueChange={setSelectedRole}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a role" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {AVAILABLE_ROLES.map((role) => (
+                          <SelectItem key={role.value} value={role.value}>
+                            <div>
+                              <span className="font-medium">{role.label}</span>
+                              <span className="text-muted-foreground ml-2 text-xs">
+                                {role.description}
+                              </span>
+                            </div>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Reason for Request</Label>
+                    <Textarea
+                      placeholder="Please explain why you need this role and how you'll use the additional permissions..."
+                      value={reason}
+                      onChange={(e) => setReason(e.target.value)}
+                      rows={4}
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Be specific about your responsibilities and why you need these permissions.
+                    </p>
+                  </div>
+                </div>
+                <DialogFooter>
+                  <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={handleSubmitRequest}
+                    disabled={!selectedRole || !reason.trim() || submitRequest.isPending}
+                  >
+                    {submitRequest.isPending && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
+                    Submit Request
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          </div>
+
+          {/* Previous Requests */}
+          {myRequests.length > 0 && (
+            <div className="space-y-2">
+              <p className="text-xs font-medium text-muted-foreground">Your Requests</p>
+              <div className="space-y-2">
+                {myRequests.slice(0, 3).map((request) => (
+                  <div
+                    key={request.id}
+                    className="flex items-start justify-between gap-3 p-3 rounded-lg border bg-card text-sm"
+                  >
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="font-medium capitalize">{request.requested_role}</span>
+                        {getStatusBadge(request.status)}
+                      </div>
+                      <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
+                        {request.reason}
+                      </p>
+                      {request.admin_notes && (
+                        <p className="text-xs text-muted-foreground mt-1 italic">
+                          Admin: {request.admin_notes}
+                        </p>
+                      )}
+                    </div>
+                    <span className="text-xs text-muted-foreground whitespace-nowrap">
+                      {format(new Date(request.created_at), 'MMM d')}
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
         </div>
