@@ -15,6 +15,14 @@ export interface CustomRole {
   updated_at: string;
 }
 
+// Helper to convert JSON permissions to string array
+function parsePermissions(permissions: unknown): string[] {
+  if (Array.isArray(permissions)) {
+    return permissions.filter((p): p is string => typeof p === 'string');
+  }
+  return [];
+}
+
 export interface CreateCustomRoleInput {
   name: string;
   display_name: string;
@@ -37,7 +45,13 @@ export function useCustomRoles() {
         .order('created_at', { ascending: true });
       
       if (error) throw error;
-      return data as CustomRole[];
+      
+      // Transform the data to ensure permissions is always a string array
+      return (data || []).map(role => ({
+        ...role,
+        color: role.color || '#6366f1',
+        permissions: parsePermissions(role.permissions),
+      })) as CustomRole[];
     },
   });
 
