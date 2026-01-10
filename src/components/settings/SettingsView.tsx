@@ -20,6 +20,7 @@ import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { Link } from 'react-router-dom';
 import { NotificationPreferencesCard } from './NotificationPreferencesCard';
+import { UserRolesCard } from './UserRolesCard';
 export function SettingsView() {
   const {
     user,
@@ -359,6 +360,9 @@ export function SettingsView() {
           </div>
         </CardContent>
       </Card>
+
+      {/* User Roles & Permissions */}
+      <UserRolesCard />
 
       {/* Notification Preferences */}
       <NotificationPreferencesCard />
