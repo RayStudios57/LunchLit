@@ -41,6 +41,7 @@ export function AdminUserRoles() {
   const [foundUser, setFoundUser] = useState<{ id: string; email: string; full_name: string | null } | null>(null);
   const [selectedRole, setSelectedRole] = useState<AppRole>('teacher');
   const [selectedSchool, setSelectedSchool] = useState<string>('');
+  const [selectedCustomRole, setSelectedCustomRole] = useState<string>('');
   const [isSearching, setIsSearching] = useState(false);
 
   const filteredUsers = users.filter(user => {
@@ -86,12 +87,14 @@ export function AdminUserRoles() {
       userId,
       role: selectedRole,
       schoolId: selectedSchool || undefined,
+      customRoleId: selectedCustomRole || undefined,
     });
     setIsAddDialogOpen(false);
     setFoundUser(null);
     setSearchEmail('');
     setSelectedRole('teacher');
     setSelectedSchool('');
+    setSelectedCustomRole('');
   };
 
   // Filter out schools with invalid IDs
@@ -155,8 +158,11 @@ export function AdminUserRoles() {
                     <div className="flex flex-wrap gap-1">
                       {user.roles.map((role) => (
                         <div key={role.id} className="flex items-center gap-1">
-                          <Badge variant={roleBadgeVariants[role.role]}>
-                            {roleLabels[role.role]}
+                          <Badge 
+                            variant={roleBadgeVariants[role.role]}
+                            style={role.custom_role_color ? { backgroundColor: role.custom_role_color, color: 'white' } : undefined}
+                          >
+                            {role.custom_role_name || roleLabels[role.role]}
                             {role.school_id && (
                               <span className="ml-1 opacity-75">
                                 ({validSchools.find(s => s.id === role.school_id)?.name?.slice(0, 10) || 'School'})
@@ -208,7 +214,7 @@ export function AdminUserRoles() {
                         </DialogHeader>
                         <div className="space-y-4 py-4">
                           <div className="space-y-2">
-                            <Label>Role</Label>
+                            <Label>Base Role</Label>
                             <Select value={selectedRole} onValueChange={(v) => setSelectedRole(v as AppRole)}>
                               <SelectTrigger>
                                 <SelectValue />
@@ -221,6 +227,37 @@ export function AdminUserRoles() {
                               </SelectContent>
                             </Select>
                           </div>
+
+                          {customRoles.length > 0 && (
+                            <div className="space-y-2">
+                              <Label>Custom Role (Optional - adds extra permissions)</Label>
+                              <Select 
+                                value={selectedCustomRole || "none"} 
+                                onValueChange={(v) => setSelectedCustomRole(v === "none" ? "" : v)}
+                              >
+                                <SelectTrigger>
+                                  <SelectValue placeholder="No custom role" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="none">No custom role</SelectItem>
+                                  {customRoles.map((cr) => (
+                                    <SelectItem key={cr.id} value={cr.id}>
+                                      <div className="flex items-center gap-2">
+                                        <div
+                                          className="w-2 h-2 rounded-full"
+                                          style={{ backgroundColor: cr.color }}
+                                        />
+                                        {cr.display_name}
+                                      </div>
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                              <p className="text-xs text-muted-foreground">
+                                Custom roles add extra permissions on top of the base role.
+                              </p>
+                            </div>
+                          )}
                           
                           <div className="space-y-2">
                             <Label>School (Optional - for scoped access)</Label>
@@ -241,7 +278,7 @@ export function AdminUserRoles() {
                               </SelectContent>
                             </Select>
                             <p className="text-xs text-muted-foreground">
-                              If a school is selected, the user's admin access will be limited to that school's data.
+                              If a school is selected, the user's access will be limited to that school's data.
                             </p>
                           </div>
                         </div>

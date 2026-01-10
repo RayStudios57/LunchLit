@@ -5,15 +5,20 @@ import { useToast } from '@/hooks/use-toast';
 
 export type AppRole = 'admin' | 'teacher' | 'counselor' | 'student';
 
+export interface UserRoleEntry {
+  id: string;
+  role: AppRole;
+  school_id: string | null;
+  custom_role_id: string | null;
+  custom_role_name?: string | null;
+  custom_role_color?: string | null;
+}
+
 export interface UserWithRoles {
   id: string;
   email: string;
   full_name: string | null;
-  roles: {
-    id: string;
-    role: AppRole;
-    school_id: string | null;
-  }[];
+  roles: UserRoleEntry[];
 }
 
 export function useAdminUserRoles() {
@@ -32,10 +37,17 @@ export function useAdminUserRoles() {
       
       if (profileError) throw profileError;
 
-      // Get all user roles
+      // Get all user roles with custom role info
       const { data: roles, error: rolesError } = await supabase
         .from('user_roles')
-        .select('*');
+        .select(`
+          *,
+          custom_roles (
+            name,
+            display_name,
+            color
+          )
+        `);
       
       if (rolesError) throw rolesError;
 
@@ -52,24 +64,25 @@ export function useAdminUserRoles() {
         });
       });
 
-      roles?.forEach(role => {
+      roles?.forEach((role: any) => {
+        const roleEntry: UserRoleEntry = {
+          id: role.id,
+          role: role.role as AppRole,
+          school_id: role.school_id,
+          custom_role_id: role.custom_role_id,
+          custom_role_name: role.custom_roles?.display_name || null,
+          custom_role_color: role.custom_roles?.color || null,
+        };
+
         const user = usersMap.get(role.user_id);
         if (user) {
-          user.roles.push({
-            id: role.id,
-            role: role.role as AppRole,
-            school_id: role.school_id,
-          });
+          user.roles.push(roleEntry);
         } else {
           usersMap.set(role.user_id, {
             id: role.user_id,
             email: role.email_domain ? `@${role.email_domain}` : '',
             full_name: null,
-            roles: [{
-              id: role.id,
-              role: role.role as AppRole,
-              school_id: role.school_id,
-            }],
+            roles: [roleEntry],
           });
         }
       });
@@ -83,11 +96,13 @@ export function useAdminUserRoles() {
     mutationFn: async ({ 
       userId, 
       role, 
-      schoolId 
+      schoolId,
+      customRoleId,
     }: { 
       userId: string; 
       role: AppRole; 
       schoolId?: string;
+      customRoleId?: string;
     }) => {
       const { data, error } = await supabase
         .from('user_roles')
@@ -95,6 +110,7 @@ export function useAdminUserRoles() {
           user_id: userId,
           role,
           school_id: schoolId || null,
+          custom_role_id: customRoleId || null,
         })
         .select()
         .single();
