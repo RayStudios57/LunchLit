@@ -206,9 +206,12 @@ export type Database = {
           created_by: string | null
           description: string | null
           display_name: string
+          icon: string | null
           id: string
+          is_active: boolean | null
           name: string
           permissions: Json | null
+          priority: number | null
           updated_at: string
         }
         Insert: {
@@ -217,9 +220,12 @@ export type Database = {
           created_by?: string | null
           description?: string | null
           display_name: string
+          icon?: string | null
           id?: string
+          is_active?: boolean | null
           name: string
           permissions?: Json | null
+          priority?: number | null
           updated_at?: string
         }
         Update: {
@@ -228,9 +234,12 @@ export type Database = {
           created_by?: string | null
           description?: string | null
           display_name?: string
+          icon?: string | null
           id?: string
+          is_active?: boolean | null
           name?: string
           permissions?: Json | null
+          priority?: number | null
           updated_at?: string
         }
         Relationships: []
