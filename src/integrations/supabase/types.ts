@@ -536,6 +536,9 @@ export type Database = {
           avatar_url: string | null
           calendar_sync_enabled: boolean | null
           created_at: string
+          display_role_color: string | null
+          display_role_icon: string | null
+          display_role_priority: number | null
           full_name: string | null
           grade_level: string | null
           id: string
@@ -551,6 +554,9 @@ export type Database = {
           avatar_url?: string | null
           calendar_sync_enabled?: boolean | null
           created_at?: string
+          display_role_color?: string | null
+          display_role_icon?: string | null
+          display_role_priority?: number | null
           full_name?: string | null
           grade_level?: string | null
           id?: string
@@ -566,6 +572,9 @@ export type Database = {
           avatar_url?: string | null
           calendar_sync_enabled?: boolean | null
           created_at?: string
+          display_role_color?: string | null
+          display_role_icon?: string | null
+          display_role_priority?: number | null
           full_name?: string | null
           grade_level?: string | null
           id?: string
@@ -586,6 +595,39 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      role_audit_logs: {
+        Row: {
+          action_type: string
+          created_at: string
+          custom_role_id: string | null
+          details: Json | null
+          id: string
+          performed_by: string
+          target_role_id: string | null
+          target_user_id: string | null
+        }
+        Insert: {
+          action_type: string
+          created_at?: string
+          custom_role_id?: string | null
+          details?: Json | null
+          id?: string
+          performed_by: string
+          target_role_id?: string | null
+          target_user_id?: string | null
+        }
+        Update: {
+          action_type?: string
+          created_at?: string
+          custom_role_id?: string | null
+          details?: Json | null
+          id?: string
+          performed_by?: string
+          target_role_id?: string | null
+          target_user_id?: string | null
+        }
+        Relationships: []
       }
       role_upgrade_requests: {
         Row: {

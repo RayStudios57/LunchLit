@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useDiscussions, useDiscussionReplies } from '@/hooks/useDiscussions';
 import { useProfile } from '@/hooks/useProfile';
 import { useUserRoles } from '@/hooks/useUserRoles';
+import { useCustomRoles } from '@/hooks/useCustomRoles';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -18,6 +19,8 @@ import { MessageSquare, Send, Plus, ArrowLeft, Trash2, Pin, School, Eye, EyeOff 
 import { formatDistanceToNow } from 'date-fns';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { RoleIcon } from './RoleIcon';
+import { useQuery } from '@tanstack/react-query';
 
 const CATEGORIES = [
   { id: 'all', label: 'All' },
@@ -44,6 +47,71 @@ const getAnonymousAvatar = (userId: string) => {
   return colors[Math.abs(hash) % colors.length];
 };
 
+const BASE_ROLE_PRIORITIES: Record<string, number> = {
+  admin: 100,
+  teacher: 50,
+  counselor: 50,
+  student: 10,
+};
+
+// Hook to get user role displays for discussions
+function useUserRoleDisplays(userIds: string[]) {
+  const { customRoles } = useCustomRoles();
+  
+  return useQuery({
+    queryKey: ['user-role-displays', userIds.join(',')],
+    queryFn: async () => {
+      if (userIds.length === 0) return {};
+      
+      const { data: roles } = await supabase
+        .from('user_roles')
+        .select('user_id, role, custom_role_id')
+        .in('user_id', userIds);
+      
+      const displays: Record<string, { icon: string; color: string; name: string }> = {};
+      
+      for (const userId of userIds) {
+        const userRoles = (roles || []).filter(r => r.user_id === userId);
+        let highestPriority = 0;
+        let displayIcon = '';
+        let displayColor = '';
+        let displayName = '';
+        
+        for (const roleEntry of userRoles) {
+          const basePriority = BASE_ROLE_PRIORITIES[roleEntry.role] || 0;
+          
+          if (basePriority > highestPriority) {
+            highestPriority = basePriority;
+            displayName = roleEntry.role;
+            displayIcon = roleEntry.role === 'admin' ? 'crown' : 'shield';
+            displayColor = roleEntry.role === 'admin' ? '#eab308' : '#6366f1';
+          }
+          
+          if (roleEntry.custom_role_id) {
+            const customRole = customRoles.find((r: any) => r.id === roleEntry.custom_role_id);
+            if (customRole && customRole.is_active) {
+              const customPriority = (customRole.priority || 0) * 10;
+              if (customPriority >= highestPriority) {
+                highestPriority = customPriority;
+                displayName = customRole.display_name;
+                displayIcon = customRole.icon || 'shield';
+                displayColor = customRole.color || '#6366f1';
+              }
+            }
+          }
+        }
+        
+        if (displayIcon) {
+          displays[userId] = { icon: displayIcon, color: displayColor, name: displayName };
+        }
+      }
+      
+      return displays;
+    },
+    enabled: userIds.length > 0 && customRoles.length >= 0,
+  });
+}
+
 export function DiscussionView() {
   const { user } = useAuth();
   const { profile } = useProfile();
@@ -55,6 +123,10 @@ export function DiscussionView() {
   
   const { discussions, isLoading, createDiscussion, deleteDiscussion } = useDiscussions(category);
   const { toast } = useToast();
+  
+  // Get unique user IDs from discussions for role display
+  const discussionUserIds = [...new Set(discussions.map(d => d.user_id))];
+  const { data: roleDisplays = {} } = useUserRoleDisplays(discussionUserIds);
 
   // Filter discussions by school if toggled
   const filteredDiscussions = showSchoolOnly && profile?.school_id
@@ -208,10 +280,25 @@ export function DiscussionView() {
                         </TooltipProvider>
                       )}
                       <h3 className="font-medium truncate">{discussion.title || 'Untitled'}</h3>
+                      {roleDisplays[discussion.user_id] && (
+                        <RoleIcon
+                          icon={roleDisplays[discussion.user_id].icon}
+                          color={roleDisplays[discussion.user_id].color}
+                          roleName={roleDisplays[discussion.user_id].name}
+                          size="sm"
+                        />
+                      )}
                     </div>
                     <p className="text-sm text-muted-foreground line-clamp-2">{discussion.content}</p>
                     <div className="flex items-center gap-3 mt-2 text-xs text-muted-foreground">
-                      <span>{getAnonymousName(discussion.user_id)}</span>
+                      <span className="flex items-center gap-1">
+                        {getAnonymousName(discussion.user_id)}
+                        {roleDisplays[discussion.user_id] && (
+                          <span className="text-primary capitalize">
+                            • {roleDisplays[discussion.user_id].name}
+                          </span>
+                        )}
+                      </span>
                       <span>•</span>
                       <span>{formatDistanceToNow(new Date(discussion.created_at), { addSuffix: true })}</span>
                       <span>•</span>

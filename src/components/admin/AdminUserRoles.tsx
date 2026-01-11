@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useAdminUserRoles, AppRole } from '@/hooks/useAdminUserRoles';
 import { useSchools } from '@/hooks/useSchools';
 import { useCustomRoles } from '@/hooks/useCustomRoles';
 import { useRoleRequests } from '@/hooks/useRoleRequests';
+import { useAuditLog } from '@/hooks/useAuditLog';
+import { useRoleHierarchy } from '@/hooks/useRoleHierarchy';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -11,13 +13,15 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Plus, Trash2, Users, Loader2, Search, Clock, CheckCircle2, XCircle, Mail } from 'lucide-react';
+import { Plus, Trash2, Users, Loader2, Search, Clock, CheckCircle2, XCircle, Mail, UsersRound, History, ShieldAlert } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { format } from 'date-fns';
+import { AuditLogView } from './AuditLogView';
 
 const roleLabels: Record<AppRole, string> = {
   admin: 'Admin',
@@ -33,11 +37,20 @@ const roleBadgeVariants: Record<AppRole, 'destructive' | 'default' | 'secondary'
   student: 'secondary',
 };
 
+const BASE_ROLE_PRIORITIES: Record<string, number> = {
+  admin: 100,
+  teacher: 50,
+  counselor: 50,
+  student: 10,
+};
+
 export function AdminUserRoles() {
   const { users, isLoading, addRole, removeRole } = useAdminUserRoles();
   const { schools } = useSchools();
   const { customRoles } = useCustomRoles();
   const { allRequests, reviewRequest, isLoading: requestsLoading } = useRoleRequests();
+  const { logAction } = useAuditLog();
+  const { userPriority, canAssignRole } = useRoleHierarchy();
   const { toast } = useToast();
   
   const [searchTerm, setSearchTerm] = useState('');
@@ -48,6 +61,13 @@ export function AdminUserRoles() {
   const [selectedSchool, setSelectedSchool] = useState<string>('');
   const [selectedCustomRole, setSelectedCustomRole] = useState<string>('');
   const [isSearching, setIsSearching] = useState(false);
+  
+  // Bulk assignment state
+  const [selectedUsers, setSelectedUsers] = useState<Set<string>>(new Set());
+  const [isBulkDialogOpen, setIsBulkDialogOpen] = useState(false);
+  const [bulkRole, setBulkRole] = useState<AppRole>('student');
+  const [bulkCustomRole, setBulkCustomRole] = useState<string>('');
+  const [isBulkAssigning, setIsBulkAssigning] = useState(false);
   
   // Role request review state
   const [reviewDialogOpen, setReviewDialogOpen] = useState(false);
@@ -93,12 +113,56 @@ export function AdminUserRoles() {
     }
   };
 
+  // Calculate user priorities for hierarchy check
+  const getUserHighestPriority = (userId: string): number => {
+    const user = users.find(u => u.id === userId);
+    if (!user) return 0;
+    
+    let highest = 0;
+    for (const role of user.roles) {
+      const basePriority = BASE_ROLE_PRIORITIES[role.role] || 0;
+      highest = Math.max(highest, basePriority);
+      
+      if (role.custom_role_id) {
+        const cr = customRoles.find(r => r.id === role.custom_role_id);
+        if (cr && cr.is_active) {
+          highest = Math.max(highest, (cr.priority || 0) * 10);
+        }
+      }
+    }
+    return highest;
+  };
+
   const handleAddRole = async (userId: string, userEmail?: string, userName?: string) => {
+    // Check hierarchy
+    const targetPriority = getUserHighestPriority(userId);
+    const myPriority = userPriority?.highestPriority || 0;
+    
+    if (myPriority < 100 && targetPriority >= myPriority) {
+      toast({
+        title: 'Cannot assign role',
+        description: 'You can only manage users with lower priority roles than your own.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
     await addRole.mutateAsync({
       userId,
       role: selectedRole,
       schoolId: selectedSchool || undefined,
       customRoleId: selectedCustomRole || undefined,
+    });
+    
+    // Log the action
+    await logAction.mutateAsync({
+      action_type: 'role_added',
+      target_user_id: userId,
+      details: {
+        target_email: userEmail,
+        role_name: roleLabels[selectedRole],
+        custom_role_id: selectedCustomRole || null,
+      },
     });
     
     // Send email notification
@@ -112,6 +176,77 @@ export function AdminUserRoles() {
     setSelectedRole('teacher');
     setSelectedSchool('');
     setSelectedCustomRole('');
+  };
+
+  const handleBulkAssign = async () => {
+    if (selectedUsers.size === 0) return;
+    
+    setIsBulkAssigning(true);
+    try {
+      const userIds = Array.from(selectedUsers);
+      let successCount = 0;
+      
+      for (const userId of userIds) {
+        const targetPriority = getUserHighestPriority(userId);
+        const myPriority = userPriority?.highestPriority || 0;
+        
+        // Skip users we can't manage
+        if (myPriority < 100 && targetPriority >= myPriority) continue;
+        
+        await addRole.mutateAsync({
+          userId,
+          role: bulkRole,
+          customRoleId: bulkCustomRole || undefined,
+        });
+        successCount++;
+      }
+      
+      // Log bulk action
+      await logAction.mutateAsync({
+        action_type: 'bulk_assignment',
+        details: {
+          affected_count: successCount,
+          role_name: roleLabels[bulkRole],
+          custom_role_id: bulkCustomRole || null,
+        },
+      });
+      
+      toast({
+        title: 'Bulk assignment complete',
+        description: `Assigned ${roleLabels[bulkRole]} role to ${successCount} user(s).`,
+      });
+      
+      setSelectedUsers(new Set());
+      setIsBulkDialogOpen(false);
+      setBulkRole('student');
+      setBulkCustomRole('');
+    } catch (error: any) {
+      toast({
+        title: 'Bulk assignment failed',
+        description: error.message,
+        variant: 'destructive',
+      });
+    } finally {
+      setIsBulkAssigning(false);
+    }
+  };
+
+  const toggleUserSelection = (userId: string) => {
+    const newSet = new Set(selectedUsers);
+    if (newSet.has(userId)) {
+      newSet.delete(userId);
+    } else {
+      newSet.add(userId);
+    }
+    setSelectedUsers(newSet);
+  };
+
+  const toggleAllUsers = () => {
+    if (selectedUsers.size === filteredUsers.length) {
+      setSelectedUsers(new Set());
+    } else {
+      setSelectedUsers(new Set(filteredUsers.map(u => u.id)));
+    }
   };
 
   const sendRoleNotification = async (
@@ -158,6 +293,17 @@ export function AdminUserRoles() {
             userId: selectedRequest.user_id,
             role: selectedRequest.requested_role as AppRole,
           });
+          
+          // Log the action
+          await logAction.mutateAsync({
+            action_type: 'role_added',
+            target_user_id: selectedRequest.user_id,
+            details: {
+              target_email: user.email,
+              role_name: selectedRequest.requested_role,
+              source: 'request_approved',
+            },
+          });
         }
       }
 
@@ -188,6 +334,23 @@ export function AdminUserRoles() {
     }
   };
 
+  const handleRemoveRole = async (roleId: string, userId: string, roleName: string, userEmail: string, userName?: string) => {
+    await removeRole.mutateAsync(roleId);
+    
+    // Log the action
+    await logAction.mutateAsync({
+      action_type: 'role_removed',
+      target_user_id: userId,
+      target_role_id: roleId,
+      details: {
+        target_email: userEmail,
+        role_name: roleName,
+      },
+    });
+    
+    await sendRoleNotification(userEmail, userName, roleName, 'removed');
+  };
+
   const pendingRequests = allRequests.filter(r => r.status === 'pending');
 
   // Filter out schools with invalid IDs
@@ -216,7 +379,7 @@ export function AdminUserRoles() {
       </CardHeader>
       <CardContent className="space-y-4">
         <Tabs defaultValue="users" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
+          <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="users">Users</TabsTrigger>
             <TabsTrigger value="requests" className="relative">
               Requests
@@ -225,6 +388,10 @@ export function AdminUserRoles() {
                   {pendingRequests.length}
                 </span>
               )}
+            </TabsTrigger>
+            <TabsTrigger value="audit">
+              <History className="h-4 w-4 mr-1" />
+              Audit Log
             </TabsTrigger>
           </TabsList>
           
@@ -239,6 +406,13 @@ export function AdminUserRoles() {
                   className="pl-9"
                 />
               </div>
+              
+              {selectedUsers.size > 0 && (
+                <Button onClick={() => setIsBulkDialogOpen(true)} variant="outline">
+                  <UsersRound className="h-4 w-4 mr-2" />
+                  Bulk Assign ({selectedUsers.size})
+                </Button>
+              )}
             </div>
 
         {isLoading ? (
@@ -253,19 +427,46 @@ export function AdminUserRoles() {
           <Table>
             <TableHeader>
               <TableRow>
+                <TableHead className="w-[50px]">
+                  <Checkbox
+                    checked={selectedUsers.size === filteredUsers.length && filteredUsers.length > 0}
+                    onCheckedChange={toggleAllUsers}
+                  />
+                </TableHead>
                 <TableHead>User</TableHead>
+                <TableHead>Priority</TableHead>
                 <TableHead>Roles</TableHead>
                 <TableHead className="w-[150px]">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredUsers.map((user) => (
-                <TableRow key={user.id}>
+              {filteredUsers.map((user) => {
+                const userHighestPriority = getUserHighestPriority(user.id);
+                const canManage = (userPriority?.highestPriority || 0) >= 100 || 
+                                  (userPriority?.highestPriority || 0) > userHighestPriority;
+                
+                return (
+                <TableRow key={user.id} className={!canManage ? 'opacity-60' : ''}>
+                  <TableCell>
+                    <Checkbox
+                      checked={selectedUsers.has(user.id)}
+                      onCheckedChange={() => toggleUserSelection(user.id)}
+                      disabled={!canManage}
+                    />
+                  </TableCell>
                   <TableCell>
                     <div>
                       <p className="font-medium">{user.full_name || 'Unknown'}</p>
                       <p className="text-sm text-muted-foreground">{user.email || user.id.slice(0, 8) + '...'}</p>
                     </div>
+                  </TableCell>
+                  <TableCell>
+                    <Badge variant="outline" className="font-mono text-xs">
+                      {userHighestPriority}
+                    </Badge>
+                    {!canManage && (
+                      <ShieldAlert className="h-3 w-3 ml-1 inline text-muted-foreground" />
+                    )}
                   </TableCell>
                   <TableCell>
                     <div className="flex flex-wrap gap-1">
@@ -284,7 +485,7 @@ export function AdminUserRoles() {
                           </Badge>
                           <AlertDialog>
                             <AlertDialogTrigger asChild>
-                              <Button variant="ghost" size="icon" className="h-5 w-5">
+                              <Button variant="ghost" size="icon" className="h-5 w-5" disabled={!canManage}>
                                 <Trash2 className="h-3 w-3 text-destructive" />
                               </Button>
                             </AlertDialogTrigger>
@@ -298,15 +499,13 @@ export function AdminUserRoles() {
                               <AlertDialogFooter>
                                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                                 <AlertDialogAction
-                                  onClick={async () => {
-                                    await removeRole.mutateAsync(role.id);
-                                    await sendRoleNotification(
-                                      user.email,
-                                      user.full_name || undefined,
-                                      roleLabels[role.role],
-                                      'removed'
-                                    );
-                                  }}
+                                  onClick={() => handleRemoveRole(
+                                    role.id,
+                                    user.id,
+                                    roleLabels[role.role],
+                                    user.email,
+                                    user.full_name || undefined
+                                  )}
                                   className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                                 >
                                   Remove
@@ -321,7 +520,7 @@ export function AdminUserRoles() {
                   <TableCell>
                     <Dialog>
                       <DialogTrigger asChild>
-                        <Button variant="outline" size="sm">
+                        <Button variant="outline" size="sm" disabled={!canManage}>
                           <Plus className="h-4 w-4 mr-1" />
                           Add Role
                         </Button>
@@ -420,10 +619,15 @@ export function AdminUserRoles() {
                     </Dialog>
                   </TableCell>
                 </TableRow>
-              ))}
+              );
+              })}
             </TableBody>
           </Table>
         )}
+          </TabsContent>
+          
+          <TabsContent value="audit">
+            <AuditLogView />
           </TabsContent>
           
           <TabsContent value="requests" className="space-y-4">
@@ -559,6 +763,79 @@ export function AdminUserRoles() {
               >
                 {isApproving && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
                 Approve
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        {/* Bulk Assignment Dialog */}
+        <Dialog open={isBulkDialogOpen} onOpenChange={setIsBulkDialogOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Bulk Role Assignment</DialogTitle>
+              <DialogDescription>
+                Assign a role to {selectedUsers.size} selected user(s). Users with higher priority than yours will be skipped.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4 py-4">
+              <div className="space-y-2">
+                <Label>Base Role</Label>
+                <Select value={bulkRole} onValueChange={(v) => setBulkRole(v as AppRole)}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="admin" disabled={!canAssignRole('admin')}>
+                      Admin (Priority 100)
+                    </SelectItem>
+                    <SelectItem value="teacher" disabled={!canAssignRole('teacher')}>
+                      Teacher (Priority 50)
+                    </SelectItem>
+                    <SelectItem value="counselor" disabled={!canAssignRole('counselor')}>
+                      Counselor (Priority 50)
+                    </SelectItem>
+                    <SelectItem value="student">
+                      Student (Priority 10)
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {customRoles.filter(cr => cr.is_active).length > 0 && (
+                <div className="space-y-2">
+                  <Label>Custom Role (Optional)</Label>
+                  <Select 
+                    value={bulkCustomRole || "none"} 
+                    onValueChange={(v) => setBulkCustomRole(v === "none" ? "" : v)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="No custom role" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="none">No custom role</SelectItem>
+                      {customRoles.filter(cr => cr.is_active).map((cr) => (
+                        <SelectItem key={cr.id} value={cr.id}>
+                          <div className="flex items-center gap-2">
+                            <div
+                              className="w-2 h-2 rounded-full"
+                              style={{ backgroundColor: cr.color }}
+                            />
+                            {cr.display_name} (Priority {cr.priority * 10})
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setIsBulkDialogOpen(false)}>
+                Cancel
+              </Button>
+              <Button onClick={handleBulkAssign} disabled={isBulkAssigning}>
+                {isBulkAssigning && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
+                Assign to {selectedUsers.size} Users
               </Button>
             </DialogFooter>
           </DialogContent>
