@@ -9,7 +9,7 @@ import { TasksView } from '@/components/tasks/TasksView';
 import { ClassSchedule } from '@/components/planner/ClassSchedule';
 import { ChatBot } from '@/components/chat/ChatBot';
 import { SettingsView } from '@/components/settings/SettingsView';
-import { ImportExportView } from '@/components/import-export/ImportExportView';
+// Import/Export removed - replaced with admin meal management
 import { DiscussionView } from '@/components/discussion/DiscussionView';
 import { TodayWidget } from '@/components/dashboard/TodayWidget';
 import { GradeSelectionModal } from '@/components/onboarding/GradeSelectionModal';
@@ -20,7 +20,7 @@ import { useProfile } from '@/hooks/useProfile';
 import { useGradeProgression } from '@/hooks/useGradeProgression';
 import { Helmet } from 'react-helmet';
 
-export type TabType = 'home' | 'menu' | 'study' | 'tutor' | 'planner' | 'chat' | 'discuss' | 'settings' | 'import-export' | 'tasks' | 'classes' | 'bragsheet';
+export type TabType = 'home' | 'menu' | 'study' | 'tutor' | 'planner' | 'chat' | 'discuss' | 'settings' | 'tasks' | 'classes' | 'bragsheet';
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState<TabType>('home');
@@ -66,7 +66,7 @@ const Index = () => {
           {activeTab === 'discuss' && <DiscussionView />}
           {activeTab === 'bragsheet' && <BragSheetView />}
           {activeTab === 'settings' && <SettingsView />}
-          {activeTab === 'import-export' && <ImportExportView />}
+          
         </main>
       </div>
 
