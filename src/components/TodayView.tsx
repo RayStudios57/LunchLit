@@ -1,8 +1,9 @@
-import { getTodayMenu, studyHalls } from '@/data/mockData';
+import { getTodayMenu } from '@/data/mockData';
 import { MenuCard } from './MenuCard';
 import { StudyHallCard } from './StudyHallCard';
 import { Utensils, BookOpen, Sparkles, ArrowRight, Calendar } from 'lucide-react';
 import { format } from 'date-fns';
+import { useSchoolStudyHalls } from '@/hooks/useSchoolStudyHalls';
 
 interface TodayViewProps {
   onNavigateToMenu: () => void;
@@ -11,7 +12,8 @@ interface TodayViewProps {
 
 export function TodayView({ onNavigateToMenu, onNavigateToStudy }: TodayViewProps) {
   const todayMenu = getTodayMenu();
-  const availableHalls = studyHalls.filter((h) => h.available).slice(0, 2);
+  const { studyHalls, hasStudyHalls } = useSchoolStudyHalls();
+  const availableHalls = studyHalls.filter((h) => h.is_available).slice(0, 2);
   const today = new Date();
   const formattedDate = format(today, 'EEEE, MMMM d, yyyy');
 
@@ -47,13 +49,15 @@ export function TodayView({ onNavigateToMenu, onNavigateToStudy }: TodayViewProp
               View Full Menu
               <ArrowRight className="w-4 h-4" />
             </button>
-            <button 
-              onClick={onNavigateToStudy}
-              className="inline-flex items-center gap-2 bg-primary-foreground/20 px-4 py-2 rounded-lg font-medium text-sm hover:bg-primary-foreground/30 transition-colors"
-            >
-              <BookOpen className="w-4 h-4" />
-              Find Study Spots
-            </button>
+            {hasStudyHalls && (
+              <button 
+                onClick={onNavigateToStudy}
+                className="inline-flex items-center gap-2 bg-primary-foreground/20 px-4 py-2 rounded-lg font-medium text-sm hover:bg-primary-foreground/30 transition-colors"
+              >
+                <BookOpen className="w-4 h-4" />
+                Find Study Spots
+              </button>
+            )}
           </div>
         </div>
       </section>
@@ -81,28 +85,30 @@ export function TodayView({ onNavigateToMenu, onNavigateToStudy }: TodayViewProp
         </div>
       </section>
 
-      {/* Available Study Halls */}
-      <section className="opacity-0 animate-fade-up stagger-2">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2">
-            <BookOpen className="w-5 h-5 text-primary" />
-            <h2 className="font-display font-semibold text-lg">Open Study Halls</h2>
+      {/* Available Study Halls - Only show if school has study halls */}
+      {hasStudyHalls && availableHalls.length > 0 && (
+        <section className="opacity-0 animate-fade-up stagger-2">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <BookOpen className="w-5 h-5 text-primary" />
+              <h2 className="font-display font-semibold text-lg">Open Study Halls</h2>
+            </div>
+            <button 
+              onClick={onNavigateToStudy}
+              className="text-sm text-primary hover:text-primary/80 transition-colors flex items-center gap-1"
+            >
+              See all
+              <ArrowRight className="w-4 h-4" />
+            </button>
           </div>
-          <button 
-            onClick={onNavigateToStudy}
-            className="text-sm text-primary hover:text-primary/80 transition-colors flex items-center gap-1"
-          >
-            See all
-            <ArrowRight className="w-4 h-4" />
-          </button>
-        </div>
-        
-        <div className="grid gap-4 sm:grid-cols-2">
-          {availableHalls.map((hall, index) => (
-            <StudyHallCard key={hall.id} hall={hall} index={index} />
-          ))}
-        </div>
-      </section>
+          
+          <div className="grid gap-4 sm:grid-cols-2">
+            {availableHalls.map((hall, index) => (
+              <StudyHallCard key={hall.id} hall={hall} index={index} />
+            ))}
+          </div>
+        </section>
+      )}
     </div>
   );
 }

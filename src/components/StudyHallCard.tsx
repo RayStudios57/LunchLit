@@ -1,14 +1,30 @@
-import { StudyHall } from '@/types';
 import { Badge } from '@/components/ui/badge';
 import { MapPin, User, Users, Clock } from 'lucide-react';
 
+// Support both DB and mock data types
+interface StudyHallProps {
+  id: string;
+  name: string;
+  location: string;
+  teacher?: string | null;
+  capacity: number;
+  current_occupancy?: number;
+  currentOccupancy?: number;
+  is_available?: boolean;
+  available?: boolean;
+  periods: string[];
+}
+
 interface StudyHallCardProps {
-  hall: StudyHall;
+  hall: StudyHallProps;
   index: number;
 }
 
 export function StudyHallCard({ hall, index }: StudyHallCardProps) {
-  const occupancyPercent = (hall.currentOccupancy / hall.capacity) * 100;
+  // Support both DB naming (current_occupancy/is_available) and mock data naming
+  const currentOccupancy = hall.current_occupancy ?? hall.currentOccupancy ?? 0;
+  const isAvailable = hall.is_available ?? hall.available ?? true;
+  const occupancyPercent = (currentOccupancy / hall.capacity) * 100;
   
   return (
     <div 
@@ -26,19 +42,21 @@ export function StudyHallCard({ hall, index }: StudyHallCardProps) {
               <span>{hall.location}</span>
             </div>
           </div>
-          <Badge variant={hall.available ? 'available' : 'busy'}>
-            {hall.available ? 'Available' : 'Full'}
+          <Badge variant={isAvailable ? 'available' : 'busy'}>
+            {isAvailable ? 'Available' : 'Full'}
           </Badge>
         </div>
         
         <div className="flex items-center gap-4 text-sm">
-          <div className="flex items-center gap-1.5 text-muted-foreground">
-            <User className="w-4 h-4" />
-            <span>{hall.teacher}</span>
-          </div>
+          {hall.teacher && (
+            <div className="flex items-center gap-1.5 text-muted-foreground">
+              <User className="w-4 h-4" />
+              <span>{hall.teacher}</span>
+            </div>
+          )}
           <div className="flex items-center gap-1.5 text-muted-foreground">
             <Users className="w-4 h-4" />
-            <span>{hall.currentOccupancy}/{hall.capacity}</span>
+            <span>{currentOccupancy}/{hall.capacity}</span>
           </div>
         </div>
         

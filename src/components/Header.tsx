@@ -1,4 +1,4 @@
-import { Calendar, CheckSquare, Book, Utensils, BookOpen, GraduationCap, MessageCircle, Users, Settings, Download, Trophy, Shield } from 'lucide-react';
+import { Calendar, CheckSquare, Book, Utensils, BookOpen, GraduationCap, MessageCircle, Users, Settings, Trophy, Shield } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/hooks/useProfile';
 import { useUserRoles } from '@/hooks/useUserRoles';
@@ -98,10 +98,6 @@ export function Header({
                   <DropdownMenuItem onClick={() => onTabChange('settings')}>
                     <Settings className="w-4 h-4 mr-2" />
                     Settings
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => onTabChange('import-export')}>
-                    <Download className="w-4 h-4 mr-2" />
-                    Import/Export
                   </DropdownMenuItem>
                   {isAdmin && (
                     <>

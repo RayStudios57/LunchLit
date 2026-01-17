@@ -11,6 +11,7 @@ import Auth from "./pages/Auth";
 import Graduation from "./pages/Graduation";
 import MenuUpload from "./pages/MenuUpload";
 import Admin from "./pages/Admin";
+import About from "./pages/About";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -36,6 +37,7 @@ const App = () => (
                 <Route path="/graduation" element={<Graduation />} />
                 <Route path="/menu-upload" element={<MenuUpload />} />
                 <Route path="/admin" element={<Admin />} />
+                <Route path="/about" element={<About />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </BrowserRouter>

@@ -877,6 +877,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_admin: { Args: { _user_id: string }; Returns: boolean }
       is_verifier: { Args: { _user_id: string }; Returns: boolean }
       toggle_discussion_pin: {
         Args: { _discussion_id: string }
