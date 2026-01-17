@@ -12,7 +12,6 @@ export function Credits() {
         </div>
         <div className="text-center mt-2">
           <p className="font-semibold text-foreground">Ramakrishna Krishna</p>
-          <p className="text-sm text-muted-foreground">Joshua John • Jeremy John</p>
         </div>
         <div className="flex items-center justify-center gap-1 mt-2 text-xs text-muted-foreground">
           <Code className="h-3 w-3" />
