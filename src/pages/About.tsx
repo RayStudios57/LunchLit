@@ -2,10 +2,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Heart, Code, Shield, Users, Utensils, BookOpen } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-
 export default function About() {
-  return (
-    <div className="min-h-screen bg-background">
+  return <div className="min-h-screen bg-background">
       <div className="container py-8 max-w-2xl mx-auto space-y-6">
         <div className="text-center mb-8">
           <h1 className="font-display text-3xl font-bold mb-2">About LunchLit</h1>
@@ -50,7 +48,7 @@ export default function About() {
               </li>
               <li className="flex items-center gap-2">
                 <Shield className="h-4 w-4 text-primary" />
-                Track tasks and class schedules
+                ​Automatically create a brag sheet based on what you have logged              
               </li>
             </ul>
           </CardContent>
@@ -79,6 +77,5 @@ export default function About() {
           </Button>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 }
