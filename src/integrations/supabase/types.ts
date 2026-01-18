@@ -52,21 +52,64 @@ export type Database = {
           },
         ]
       }
+      brag_sheet_academics: {
+        Row: {
+          colleges_applying: string[] | null
+          courses: Json | null
+          created_at: string
+          gpa_unweighted: number | null
+          gpa_weighted: number | null
+          id: string
+          test_scores: Json | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          colleges_applying?: string[] | null
+          courses?: Json | null
+          created_at?: string
+          gpa_unweighted?: number | null
+          gpa_weighted?: number | null
+          id?: string
+          test_scores?: Json | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          colleges_applying?: string[] | null
+          courses?: Json | null
+          created_at?: string
+          gpa_unweighted?: number | null
+          gpa_weighted?: number | null
+          id?: string
+          test_scores?: Json | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       brag_sheet_entries: {
         Row: {
           category: Database["public"]["Enums"]["brag_category"]
+          colleges_applying_to: string[] | null
+          courses_taken: Json | null
           created_at: string
           description: string | null
           end_date: string | null
+          gpa_unweighted: number | null
+          gpa_weighted: number | null
           grade_level: string
+          grades_participated: string[] | null
           hours_spent: number | null
           id: string
           impact: string | null
           is_auto_suggested: boolean | null
           is_ongoing: boolean | null
+          position_role: string | null
           school_year: string
           start_date: string | null
           suggested_from_task_id: string | null
+          test_scores: Json | null
           title: string
           updated_at: string
           user_id: string
@@ -76,21 +119,29 @@ export type Database = {
             | null
           verified_at: string | null
           verified_by: string | null
+          year_received: string | null
         }
         Insert: {
           category?: Database["public"]["Enums"]["brag_category"]
+          colleges_applying_to?: string[] | null
+          courses_taken?: Json | null
           created_at?: string
           description?: string | null
           end_date?: string | null
+          gpa_unweighted?: number | null
+          gpa_weighted?: number | null
           grade_level: string
+          grades_participated?: string[] | null
           hours_spent?: number | null
           id?: string
           impact?: string | null
           is_auto_suggested?: boolean | null
           is_ongoing?: boolean | null
+          position_role?: string | null
           school_year: string
           start_date?: string | null
           suggested_from_task_id?: string | null
+          test_scores?: Json | null
           title: string
           updated_at?: string
           user_id: string
@@ -100,21 +151,29 @@ export type Database = {
             | null
           verified_at?: string | null
           verified_by?: string | null
+          year_received?: string | null
         }
         Update: {
           category?: Database["public"]["Enums"]["brag_category"]
+          colleges_applying_to?: string[] | null
+          courses_taken?: Json | null
           created_at?: string
           description?: string | null
           end_date?: string | null
+          gpa_unweighted?: number | null
+          gpa_weighted?: number | null
           grade_level?: string
+          grades_participated?: string[] | null
           hours_spent?: number | null
           id?: string
           impact?: string | null
           is_auto_suggested?: boolean | null
           is_ongoing?: boolean | null
+          position_role?: string | null
           school_year?: string
           start_date?: string | null
           suggested_from_task_id?: string | null
+          test_scores?: Json | null
           title?: string
           updated_at?: string
           user_id?: string
@@ -124,6 +183,34 @@ export type Database = {
             | null
           verified_at?: string | null
           verified_by?: string | null
+          year_received?: string | null
+        }
+        Relationships: []
+      }
+      brag_sheet_insights: {
+        Row: {
+          answer: string | null
+          created_at: string
+          id: string
+          question_key: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          answer?: string | null
+          created_at?: string
+          id?: string
+          question_key: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          answer?: string | null
+          created_at?: string
+          id?: string
+          question_key?: string
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
