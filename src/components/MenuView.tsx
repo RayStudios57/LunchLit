@@ -1,11 +1,15 @@
 import { useState } from 'react';
-import { weeklyMenu, getTodayMenu } from '@/data/mockData';
+import { useMealSchedules } from '@/hooks/useMealSchedules';
 import { MenuCard } from './MenuCard';
 import { DietaryType } from '@/types';
 import { Badge } from '@/components/ui/badge';
-import { Filter, X, Calendar, CalendarDays, AlertCircle } from 'lucide-react';
+import { Filter, X, Calendar, CalendarDays, AlertCircle, Utensils } from 'lucide-react';
 import { format, isToday, parseISO, isWeekend } from 'date-fns';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
+import { useUserRoles } from '@/hooks/useUserRoles';
 
 const dietaryFilters: { type: DietaryType; label: string }[] = [
   { type: 'vegetarian', label: 'Vegetarian' },
@@ -20,10 +24,12 @@ type ViewMode = 'today' | 'week';
 export function MenuView() {
   const [activeFilters, setActiveFilters] = useState<DietaryType[]>([]);
   const [viewMode, setViewMode] = useState<ViewMode>('today');
+  const { weeklyMenu, isLoading, hasMenuData } = useMealSchedules();
+  const { isAdmin, roles } = useUserRoles();
+  const isTeacher = roles.some(r => r.role === 'teacher');
   
   const today = new Date();
   const isOnWeekend = isWeekend(today);
-  const todayMenuData = getTodayMenu();
 
   const toggleFilter = (type: DietaryType) => {
     setActiveFilters((prev) =>
@@ -43,6 +49,39 @@ export function MenuView() {
           : activeFilters.some((filter) => item.dietary.includes(filter))
       ),
     }));
+
+  if (isLoading) {
+    return (
+      <div className="space-y-4">
+        {[1, 2, 3].map((i) => (
+          <div key={i} className="h-32 bg-muted animate-pulse rounded-lg" />
+        ))}
+      </div>
+    );
+  }
+
+  // Show empty state if no menu data
+  if (!hasMenuData) {
+    return (
+      <div className="space-y-6 pb-8">
+        <Card className="card-elevated">
+          <CardContent className="py-12 text-center">
+            <Utensils className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+            <h3 className="text-lg font-semibold mb-2">No Menu Available</h3>
+            <p className="text-muted-foreground mb-4 max-w-md mx-auto">
+              Your school hasn't added any meals for this week yet.
+              {(isAdmin || isTeacher) && ' You can add meals from the Admin dashboard.'}
+            </p>
+            {(isAdmin || isTeacher) && (
+              <Button asChild>
+                <Link to="/admin">Manage Meals</Link>
+              </Button>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 pb-8">
@@ -131,7 +170,7 @@ export function MenuView() {
                 {day.dayName}
               </h2>
               <Badge variant="secondary" className="text-xs">
-                {new Date(day.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                {format(parseISO(day.date), 'MMM d')}
               </Badge>
               {!isOnWeekend && isToday(parseISO(day.date)) && (
                 <Badge className="text-xs bg-primary/20 text-primary border-primary/30">
@@ -143,12 +182,22 @@ export function MenuView() {
             {day.items.length > 0 ? (
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {day.items.map((item, index) => (
-                  <MenuCard key={item.id} item={item} index={index} />
+                  <MenuCard 
+                    key={item.id} 
+                    item={{
+                      id: item.id,
+                      name: item.name,
+                      description: item.description,
+                      dietary: item.dietary as DietaryType[],
+                      image: undefined,
+                    }} 
+                    index={index} 
+                  />
                 ))}
               </div>
             ) : (
               <div className="card-elevated p-8 text-center text-muted-foreground">
-                <p>No items match your filters for this day.</p>
+                <p>No items available for this day.</p>
               </div>
             )}
           </section>

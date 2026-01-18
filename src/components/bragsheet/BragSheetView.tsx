@@ -5,20 +5,30 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
-import { Plus, Trophy, Clock, Award, TrendingUp, Sparkles } from 'lucide-react';
+import { Plus, Trophy, Clock, Award, TrendingUp, Sparkles, GraduationCap, Lightbulb, User, Mail } from 'lucide-react';
 import { BragSheetEntryCard } from './BragSheetEntryCard';
 import { BragSheetEntryForm } from './BragSheetEntryForm';
 import { BragSheetSuggestions } from './BragSheetSuggestions';
 import { BragSheetPDFExport } from './BragSheetPDFExport';
+import { BragSheetAcademicsForm } from './BragSheetAcademicsForm';
+import { BragSheetInsightsForm } from './BragSheetInsightsForm';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Link } from 'react-router-dom';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 export function BragSheetView() {
   const { user } = useAuth();
   const { profile } = useProfile();
   const { entries, entriesByYear, stats, isLoading } = useBragSheet();
   const [isAddingEntry, setIsAddingEntry] = useState(false);
-  const [activeTab, setActiveTab] = useState<'timeline' | 'suggestions'>('timeline');
+  const [activeTab, setActiveTab] = useState<'overview' | 'academics' | 'activities' | 'awards' | 'insights'>('overview');
+
+  // Filter entries by category
+  const activityEntries = entries.filter(e => 
+    ['volunteering', 'job', 'internship', 'leadership', 'club', 'extracurricular', 'other'].includes(e.category)
+  );
+  const awardEntries = entries.filter(e => e.category === 'award' || e.category === 'academic');
 
   if (!user) {
     return (
@@ -40,7 +50,52 @@ export function BragSheetView() {
 
   return (
     <div className="space-y-6 animate-fade-up">
-      {/* Stats Header */}
+      {/* Header with Student Info */}
+      <Card className="card-elevated bg-gradient-to-br from-primary/5 to-primary/10">
+        <CardContent className="pt-6">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
+                <User className="w-8 h-8 text-primary" />
+              </div>
+              <div>
+                <h1 className="text-2xl font-display font-bold">{profile?.full_name || 'Student'}</h1>
+                <div className="flex items-center gap-4 text-sm text-muted-foreground mt-1">
+                  <span className="flex items-center gap-1">
+                    <Mail className="w-4 h-4" />
+                    {user.email}
+                  </span>
+                  {profile?.grade_level && (
+                    <span className="flex items-center gap-1">
+                      <GraduationCap className="w-4 h-4" />
+                      {profile.grade_level}
+                    </span>
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className="flex gap-2">
+              <BragSheetPDFExport entries={entries} entriesByYear={entriesByYear} profile={profile} />
+              <Dialog open={isAddingEntry} onOpenChange={setIsAddingEntry}>
+                <DialogTrigger asChild>
+                  <Button>
+                    <Plus className="w-4 h-4 mr-2" />
+                    Add Entry
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+                  <DialogHeader>
+                    <DialogTitle>Add New Entry</DialogTitle>
+                  </DialogHeader>
+                  <BragSheetEntryForm onSuccess={() => setIsAddingEntry(false)} />
+                </DialogContent>
+              </Dialog>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Stats Row */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Card className="card-elevated">
           <CardContent className="pt-4">
@@ -50,7 +105,7 @@ export function BragSheetView() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{stats.total}</p>
-                <p className="text-xs text-muted-foreground">Achievements</p>
+                <p className="text-xs text-muted-foreground">Total Entries</p>
               </div>
             </div>
           </CardContent>
@@ -99,48 +154,35 @@ export function BragSheetView() {
         </Card>
       </div>
 
-      {/* Main Content */}
+      {/* Main Tabs */}
       <Card className="card-elevated">
-        <CardHeader className="flex flex-row items-center justify-between">
-          <div>
-            <CardTitle className="font-display flex items-center gap-2">
-              <Trophy className="w-5 h-5 text-primary" />
-              My Brag Sheet
-            </CardTitle>
-            <CardDescription>
-              {profile?.grade_level ? `Currently in ${profile.grade_level}` : 'Track your achievements across high school'}
-            </CardDescription>
-          </div>
-          <div className="flex gap-2">
-            <BragSheetPDFExport entries={entries} entriesByYear={entriesByYear} profile={profile} />
-            <Dialog open={isAddingEntry} onOpenChange={setIsAddingEntry}>
-              <DialogTrigger asChild>
-                <Button>
-                  <Plus className="w-4 h-4 mr-2" />
-                  Add Achievement
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
-                <DialogHeader>
-                  <DialogTitle>Add New Achievement</DialogTitle>
-                </DialogHeader>
-                <BragSheetEntryForm onSuccess={() => setIsAddingEntry(false)} />
-              </DialogContent>
-            </Dialog>
-          </div>
-        </CardHeader>
-        
-        <CardContent>
-          <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as 'timeline' | 'suggestions')}>
-            <TabsList className="mb-4">
-              <TabsTrigger value="timeline">Timeline</TabsTrigger>
-              <TabsTrigger value="suggestions" className="flex items-center gap-1">
-                <Sparkles className="w-3 h-3" />
-                Suggestions
+        <CardContent className="pt-6">
+          <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as typeof activeTab)}>
+            <TabsList className="mb-6 flex flex-wrap h-auto gap-1">
+              <TabsTrigger value="overview" className="flex items-center gap-1">
+                <Trophy className="w-4 h-4" />
+                Overview
+              </TabsTrigger>
+              <TabsTrigger value="academics" className="flex items-center gap-1">
+                <GraduationCap className="w-4 h-4" />
+                Academics
+              </TabsTrigger>
+              <TabsTrigger value="activities" className="flex items-center gap-1">
+                <Sparkles className="w-4 h-4" />
+                Activities
+              </TabsTrigger>
+              <TabsTrigger value="awards" className="flex items-center gap-1">
+                <Award className="w-4 h-4" />
+                Awards
+              </TabsTrigger>
+              <TabsTrigger value="insights" className="flex items-center gap-1">
+                <Lightbulb className="w-4 h-4" />
+                Insights
               </TabsTrigger>
             </TabsList>
 
-            <TabsContent value="timeline">
+            {/* Overview Tab */}
+            <TabsContent value="overview">
               {isLoading ? (
                 <div className="space-y-4">
                   {[1, 2, 3].map((i) => (
@@ -150,13 +192,13 @@ export function BragSheetView() {
               ) : entries.length === 0 ? (
                 <div className="text-center py-12">
                   <Trophy className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                  <h3 className="font-medium text-lg mb-2">No achievements yet</h3>
+                  <h3 className="font-medium text-lg mb-2">No entries yet</h3>
                   <p className="text-muted-foreground mb-4">
-                    Start building your portfolio by adding your first achievement!
+                    Start building your portfolio by adding your first entry!
                   </p>
                   <Button onClick={() => setIsAddingEntry(true)}>
                     <Plus className="w-4 h-4 mr-2" />
-                    Add Your First Achievement
+                    Add Your First Entry
                   </Button>
                 </div>
               ) : (
@@ -181,10 +223,94 @@ export function BragSheetView() {
               )}
             </TabsContent>
 
-            <TabsContent value="suggestions">
-              <BragSheetSuggestions />
+            {/* Academics Tab */}
+            <TabsContent value="academics">
+              <BragSheetAcademicsForm />
+            </TabsContent>
+
+            {/* Activities Tab */}
+            <TabsContent value="activities">
+              <div className="space-y-4">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <h3 className="font-semibold">Top Activities</h3>
+                    <p className="text-sm text-muted-foreground">
+                      School, home, volunteering, work experience, etc.
+                    </p>
+                  </div>
+                  <Button size="sm" onClick={() => setIsAddingEntry(true)}>
+                    <Plus className="w-4 h-4 mr-2" />
+                    Add Activity
+                  </Button>
+                </div>
+                
+                {activityEntries.length === 0 ? (
+                  <div className="text-center py-8 bg-muted/50 rounded-lg">
+                    <Sparkles className="w-10 h-10 text-muted-foreground mx-auto mb-3" />
+                    <p className="text-muted-foreground">No activities added yet.</p>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {activityEntries.map((entry) => (
+                      <BragSheetEntryCard key={entry.id} entry={entry} />
+                    ))}
+                  </div>
+                )}
+              </div>
+            </TabsContent>
+
+            {/* Awards Tab */}
+            <TabsContent value="awards">
+              <div className="space-y-4">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <h3 className="font-semibold">Awards & Honors</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Recognition, achievements, and academic honors
+                    </p>
+                  </div>
+                  <Button size="sm" onClick={() => setIsAddingEntry(true)}>
+                    <Plus className="w-4 h-4 mr-2" />
+                    Add Award
+                  </Button>
+                </div>
+                
+                {awardEntries.length === 0 ? (
+                  <div className="text-center py-8 bg-muted/50 rounded-lg">
+                    <Award className="w-10 h-10 text-muted-foreground mx-auto mb-3" />
+                    <p className="text-muted-foreground">No awards added yet.</p>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {awardEntries.map((entry) => (
+                      <BragSheetEntryCard key={entry.id} entry={entry} />
+                    ))}
+                  </div>
+                )}
+              </div>
+            </TabsContent>
+
+            {/* Insights Tab */}
+            <TabsContent value="insights">
+              <BragSheetInsightsForm />
             </TabsContent>
           </Tabs>
+        </CardContent>
+      </Card>
+
+      {/* Suggestions Section */}
+      <Card className="card-elevated">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Sparkles className="w-5 h-5 text-primary" />
+            Suggestions
+          </CardTitle>
+          <CardDescription>
+            Based on your tasks and activities
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <BragSheetSuggestions />
         </CardContent>
       </Card>
     </div>
