@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Heart, Code, Shield, Users, Utensils, BookOpen } from 'lucide-react';
+import { Code, Shield, Users, Utensils, BookOpen } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 export default function About() {
@@ -57,9 +57,9 @@ export default function About() {
         <Card className="bg-gradient-to-r from-primary/5 to-secondary/5 border-primary/20">
           <CardContent className="py-6">
             <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
-              <span>Made with</span>
-              <Heart className="h-4 w-4 text-red-500 fill-red-500 animate-pulse" />
-              <span>by</span>
+              <span>Made by</span>
+              
+              
             </div>
             <div className="text-center mt-2">
               <p className="font-semibold text-foreground">Ramakrishna Krishna</p>
