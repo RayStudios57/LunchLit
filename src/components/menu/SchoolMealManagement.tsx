@@ -14,10 +14,12 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Plus, Trash2, Utensils, Loader2, Tag, CalendarIcon, ExternalLink, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Plus, Trash2, Utensils, Loader2, Tag, CalendarIcon, ExternalLink, ChevronLeft, ChevronRight, Eye } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { format, addMonths, subMonths, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isSameDay, parseISO } from 'date-fns';
 import { cn } from '@/lib/utils';
+import { MealPreview } from './MealPreview';
+import { MealViewerImport } from './MealViewerImport';
 
 interface DietaryTag {
   id: string;
@@ -391,10 +393,23 @@ export function SchoolMealManagement() {
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
                       <Label>Menu Items</Label>
-                      <Button type="button" variant="outline" size="sm" onClick={addMealItem}>
-                        <Plus className="h-4 w-4 mr-1" />
-                        Add Item
-                      </Button>
+                      <div className="flex gap-2">
+                        <MealViewerImport 
+                          onImport={(items) => setNewMeal(prev => ({ 
+                            ...prev, 
+                            items: [...prev.items, ...items.map(i => ({
+                              name: i.name,
+                              description: i.description || '',
+                              calories: i.calories || 0,
+                              dietary: i.dietary || []
+                            }))] 
+                          }))}
+                        />
+                        <Button type="button" variant="outline" size="sm" onClick={addMealItem}>
+                          <Plus className="h-4 w-4 mr-1" />
+                          Add Item
+                        </Button>
+                      </div>
                     </div>
 
                     {newMeal.items.map((item, index) => (

@@ -17,10 +17,15 @@ import { Link } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
+import { useBragSheetAcademics } from '@/hooks/useBragSheetAcademics';
+import { useBragSheetInsights } from '@/hooks/useBragSheetInsights';
+
 export function BragSheetView() {
   const { user } = useAuth();
   const { profile } = useProfile();
   const { entries, entriesByYear, stats, isLoading } = useBragSheet();
+  const { academics } = useBragSheetAcademics();
+  const { insights } = useBragSheetInsights();
   const [isAddingEntry, setIsAddingEntry] = useState(false);
   const [activeTab, setActiveTab] = useState<'overview' | 'academics' | 'activities' | 'awards' | 'insights'>('overview');
 
@@ -75,7 +80,7 @@ export function BragSheetView() {
               </div>
             </div>
             <div className="flex gap-2">
-              <BragSheetPDFExport entries={entries} entriesByYear={entriesByYear} profile={profile} />
+              <BragSheetPDFExport entries={entries} entriesByYear={entriesByYear} profile={profile} academics={academics} insights={insights} />
               <Dialog open={isAddingEntry} onOpenChange={setIsAddingEntry}>
                 <DialogTrigger asChild>
                   <Button>

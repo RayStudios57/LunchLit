@@ -106,6 +106,9 @@ export function BragSheetSuggestions() {
         grade_level: profile?.grade_level || 'Unknown',
         school_year: getCurrentSchoolYear(),
         hours_spent: null,
+        position_role: null,
+        grades_participated: null,
+        year_received: null,
         suggested_from_task_id: suggestion.taskId || null,
         is_auto_suggested: true,
       });

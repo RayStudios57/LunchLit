@@ -54,6 +54,9 @@ const formSchema = z.object({
   grade_level: z.string().min(1, 'Grade level is required'),
   school_year: z.string().min(1, 'School year is required'),
   hours_spent: z.number().min(0).optional(),
+  position_role: z.string().max(200).optional(),
+  grades_participated: z.array(z.string()).optional(),
+  year_received: z.string().optional(),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -82,10 +85,14 @@ export function BragSheetEntryForm({ entry, onSuccess, suggestedData }: BragShee
       grade_level: entry?.grade_level || profile?.grade_level || suggestedData?.grade_level || '',
       school_year: entry?.school_year || suggestedData?.school_year || getCurrentSchoolYear(),
       hours_spent: entry?.hours_spent || suggestedData?.hours_spent || undefined,
+      position_role: entry?.position_role || '',
+      grades_participated: entry?.grades_participated || [],
+      year_received: entry?.year_received || '',
     },
   });
 
   const isOngoing = form.watch('is_ongoing');
+  const selectedCategory = form.watch('category');
 
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
@@ -101,6 +108,9 @@ export function BragSheetEntryForm({ entry, onSuccess, suggestedData }: BragShee
         grade_level: data.grade_level,
         school_year: data.school_year,
         hours_spent: data.hours_spent || null,
+        position_role: data.position_role || null,
+        grades_participated: data.grades_participated?.length ? data.grades_participated : null,
+        year_received: data.year_received || null,
         suggested_from_task_id: null,
         is_auto_suggested: false,
       };
@@ -287,6 +297,88 @@ export function BragSheetEntryForm({ entry, onSuccess, suggestedData }: BragShee
             </FormItem>
           )}
         />
+
+        {/* Position/Role - shown for activities/leadership/jobs */}
+        {['leadership', 'club', 'extracurricular', 'job', 'internship', 'volunteering'].includes(selectedCategory) && (
+          <FormField
+            control={form.control}
+            name="position_role"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Position/Role</FormLabel>
+                <FormControl>
+                  <Input 
+                    placeholder="e.g., President, Team Captain, Volunteer Coordinator"
+                    {...field}
+                  />
+                </FormControl>
+                <FormDescription>
+                  Your specific title or role in this activity
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
+
+        {/* Grades Participated - for activities */}
+        {['leadership', 'club', 'extracurricular', 'volunteering'].includes(selectedCategory) && (
+          <FormField
+            control={form.control}
+            name="grades_participated"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Grades Participated</FormLabel>
+                <div className="flex flex-wrap gap-2">
+                  {GRADE_LEVELS.map((grade) => {
+                    const isSelected = field.value?.includes(grade);
+                    return (
+                      <Button
+                        key={grade}
+                        type="button"
+                        variant={isSelected ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => {
+                          const current = field.value || [];
+                          const updated = isSelected
+                            ? current.filter(g => g !== grade)
+                            : [...current, grade];
+                          field.onChange(updated);
+                        }}
+                      >
+                        {grade.split(' ')[0]}
+                      </Button>
+                    );
+                  })}
+                </div>
+                <FormDescription>
+                  Select all grade levels during which you participated
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
+
+        {/* Year Received - for awards */}
+        {selectedCategory === 'award' && (
+          <FormField
+            control={form.control}
+            name="year_received"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Year Received</FormLabel>
+                <FormControl>
+                  <Input 
+                    placeholder="e.g., 2024"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
 
         <FormField
           control={form.control}
