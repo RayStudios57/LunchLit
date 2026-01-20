@@ -29,6 +29,9 @@ export interface BragSheetEntry {
   grade_level: string;
   school_year: string;
   hours_spent: number | null;
+  position_role: string | null;
+  grades_participated: string[] | null;
+  year_received: string | null;
   verification_status: VerificationStatus;
   verified_by: string | null;
   verified_at: string | null;
