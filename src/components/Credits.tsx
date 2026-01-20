@@ -1,14 +1,11 @@
-import { Heart, Code, ChevronDown, Info } from 'lucide-react';
+import { Code, ChevronDown, Info } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-
 export function Credits() {
   const [isOpen, setIsOpen] = useState(false);
-
-  return (
-    <Collapsible open={isOpen} onOpenChange={setIsOpen} className="w-full">
+  return <Collapsible open={isOpen} onOpenChange={setIsOpen} className="w-full">
       <div className="card-elevated p-3">
         <CollapsibleTrigger asChild>
           <button className="w-full flex items-center justify-between text-sm text-muted-foreground hover:text-foreground transition-colors">
@@ -21,9 +18,9 @@ export function Credits() {
         </CollapsibleTrigger>
         <CollapsibleContent className="pt-3 animate-accordion-down">
           <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
-            <span>Made with</span>
-            <Heart className="h-4 w-4 text-red-500 fill-red-500 animate-pulse" />
-            <span>by</span>
+            <span>Made by</span>
+            
+            
           </div>
           <div className="text-center mt-2">
             <p className="font-semibold text-foreground">Ramakrishna Krishna</p>
@@ -38,6 +35,5 @@ export function Credits() {
           </div>
         </CollapsibleContent>
       </div>
-    </Collapsible>
-  );
+    </Collapsible>;
 }
