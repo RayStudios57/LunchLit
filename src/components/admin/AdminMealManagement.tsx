@@ -287,12 +287,12 @@ export function AdminMealManagement() {
 
           <TabsContent value="meals" className="space-y-4">
             <div className="flex items-center justify-between gap-4">
-              <Select value={selectedSchool} onValueChange={setSelectedSchool}>
+              <Select value={selectedSchool || "all"} onValueChange={(v) => setSelectedSchool(v === "all" ? "" : v)}>
                 <SelectTrigger className="w-[250px]">
                   <SelectValue placeholder="All Schools" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Schools</SelectItem>
+                  <SelectItem value="all">All Schools</SelectItem>
                   {schools.map((school) => (
                     <SelectItem key={school.id} value={school.id}>
                       {school.name}
