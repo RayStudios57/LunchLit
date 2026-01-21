@@ -286,6 +286,36 @@ export type Database = {
         }
         Relationships: []
       }
+      creator_social_links: {
+        Row: {
+          created_at: string
+          display_order: number | null
+          icon: string
+          id: string
+          platform: string
+          updated_at: string
+          url: string
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number | null
+          icon: string
+          id?: string
+          platform: string
+          updated_at?: string
+          url: string
+        }
+        Update: {
+          created_at?: string
+          display_order?: number | null
+          icon?: string
+          id?: string
+          platform?: string
+          updated_at?: string
+          url?: string
+        }
+        Relationships: []
+      }
       custom_roles: {
         Row: {
           color: string | null
@@ -945,6 +975,39 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      user_suggestions: {
+        Row: {
+          category: string | null
+          created_at: string
+          description: string | null
+          id: string
+          status: string | null
+          title: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          status?: string | null
+          title: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          status?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
       }
     }
     Views: {

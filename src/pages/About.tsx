@@ -1,9 +1,11 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Code, Shield, Users, Utensils, BookOpen, Calendar, MessageSquare, ClipboardList, GraduationCap, Bell, Palette, History, Mail, Github, Linkedin, Twitter, ExternalLink } from 'lucide-react';
+import { Code, Shield, Users, Utensils, BookOpen, Calendar, MessageSquare, ClipboardList, GraduationCap, Bell, Palette, History } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Helmet } from 'react-helmet';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { CreatorSocialLinks } from '@/components/about/CreatorSocialLinks';
+import { SuggestionsSection } from '@/components/about/SuggestionsSection';
 
 const CURRENT_VERSION = '0.5';
 
@@ -20,15 +22,44 @@ const changelogData = [
     ],
   },
   {
-    version: '0.1 - 0.4',
+    version: '0.4',
     date: 'December 2025',
     changes: [
-      'Core student dashboard and class schedule viewer',
+      'Manual Brag Sheet entry management with structured fields',
+      'Auto-suggested entries based on completed tasks',
+      'Updated grade level selection (5th-12th grade)',
+    ],
+  },
+  {
+    version: '0.3',
+    date: 'December 2025',
+    changes: [
       'Theme customization with multiple light/dark themes',
-      'Tasks, planning, and Google Calendar syncing',
+      'Theme-aware app logos',
+      'Dedicated Tasks / To-Do tab',
+      'Centralized Settings page',
+      'Google Calendar export and syncing',
+    ],
+  },
+  {
+    version: '0.2',
+    date: 'December 2025',
+    changes: [
+      'Today dashboard widget with upcoming classes/tasks',
+      'Import/export for schedules and tasks (CSV/JSON)',
+      'Grade level selection during onboarding',
       'Discussion/community tab for communication',
+    ],
+  },
+  {
+    version: '0.1',
+    date: 'December 2025',
+    changes: [
+      'Core student dashboard',
+      'Class schedule viewer',
+      'School meal display',
+      'Basic task and planning functionality',
       'Study halls and open periods finder',
-      'Import/export for schedules and tasks',
     ],
   },
 ];
@@ -211,50 +242,18 @@ export default function About() {
           </CardContent>
         </Card>
 
+        {/* Suggestions Section */}
+        <SuggestionsSection />
+
         {/* Creator Card */}
         <Card className="bg-gradient-to-br from-primary/10 via-primary/5 to-background border-primary/20">
           <CardContent className="py-6">
             <div className="text-center space-y-4">
-              <p className="text-sm text-muted-foreground">Created with ❤️ by</p>
+              <p className="text-sm text-muted-foreground">Created by</p>
               <p className="font-display text-xl font-semibold text-foreground">Ramakrishna Krishna</p>
               
-              {/* Social Links */}
-              <div className="flex items-center justify-center gap-3 pt-2">
-                <a 
-                  href="mailto:ramakrishnakrishna@example.com" 
-                  className="p-2 rounded-full bg-secondary/50 hover:bg-secondary transition-colors"
-                  title="Email"
-                >
-                  <Mail className="h-4 w-4 text-muted-foreground" />
-                </a>
-                <a 
-                  href="https://github.com/ramakrishnakrishna" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="p-2 rounded-full bg-secondary/50 hover:bg-secondary transition-colors"
-                  title="GitHub"
-                >
-                  <Github className="h-4 w-4 text-muted-foreground" />
-                </a>
-                <a 
-                  href="https://linkedin.com/in/ramakrishnakrishna" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="p-2 rounded-full bg-secondary/50 hover:bg-secondary transition-colors"
-                  title="LinkedIn"
-                >
-                  <Linkedin className="h-4 w-4 text-muted-foreground" />
-                </a>
-                <a 
-                  href="https://twitter.com/ramakrishnakrishna" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="p-2 rounded-full bg-secondary/50 hover:bg-secondary transition-colors"
-                  title="Twitter"
-                >
-                  <Twitter className="h-4 w-4 text-muted-foreground" />
-                </a>
-              </div>
+              {/* Dynamic Social Links */}
+              <CreatorSocialLinks />
 
               <div className="flex items-center justify-center gap-1.5 pt-2 text-xs text-muted-foreground">
                 <Code className="h-3.5 w-3.5" />
