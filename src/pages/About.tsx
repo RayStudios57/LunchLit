@@ -5,52 +5,30 @@ import { Button } from '@/components/ui/button';
 import { Helmet } from 'react-helmet';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
-const CURRENT_VERSION = '0.4';
+const CURRENT_VERSION = '0.5';
 
 const changelogData = [
   {
-    version: '0.4',
+    version: '0.5',
     date: 'January 2026',
     changes: [
-      'Introduced real-time Brag Sheet system for tracking achievements',
-      'Added grade level progression with historical records',
-      'Manual Brag Sheet entry management with structured fields',
-      'Auto-suggested entries based on completed tasks',
-      'Added Google Sign-In authentication',
-      'Updated grade level selection (5th-12th grade)',
+      'Real-time Brag Sheet system for tracking achievements',
+      'Grade level progression with historical records',
+      'Academics section with GPA, test scores, and courses',
+      'PDF export for Brag Sheet with full profile',
+      'Meal preview and MealViewer import for admins',
     ],
   },
   {
-    version: '0.3',
+    version: '0.1 - 0.4',
     date: 'December 2025',
     changes: [
+      'Core student dashboard and class schedule viewer',
       'Theme customization with multiple light/dark themes',
-      'Theme-aware app logos',
-      'Dedicated Tasks / To-Do tab',
-      'Centralized Settings page',
-      'Google Calendar export and syncing',
-      'Fixed Settings white screen crash',
-    ],
-  },
-  {
-    version: '0.2',
-    date: 'November 2025',
-    changes: [
-      'Today dashboard widget with upcoming classes/tasks',
-      'Import/export for schedules and tasks (CSV/JSON)',
-      'Grade level selection during onboarding',
+      'Tasks, planning, and Google Calendar syncing',
       'Discussion/community tab for communication',
-    ],
-  },
-  {
-    version: '0.1',
-    date: 'October 2025',
-    changes: [
-      'Core student dashboard',
-      'Class schedule viewer',
-      'School meal display',
-      'Basic task and planning functionality',
       'Study halls and open periods finder',
+      'Import/export for schedules and tasks',
     ],
   },
 ];
