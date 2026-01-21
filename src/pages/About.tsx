@@ -1,8 +1,59 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Code, Shield, Users, Utensils, BookOpen, Calendar, MessageSquare, ClipboardList, GraduationCap, Bell, Palette } from 'lucide-react';
+import { Code, Shield, Users, Utensils, BookOpen, Calendar, MessageSquare, ClipboardList, GraduationCap, Bell, Palette, History, Mail, Github, Linkedin, Twitter, ExternalLink } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Helmet } from 'react-helmet';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+
+const CURRENT_VERSION = '0.4';
+
+const changelogData = [
+  {
+    version: '0.4',
+    date: 'January 2026',
+    changes: [
+      'Introduced real-time Brag Sheet system for tracking achievements',
+      'Added grade level progression with historical records',
+      'Manual Brag Sheet entry management with structured fields',
+      'Auto-suggested entries based on completed tasks',
+      'Added Google Sign-In authentication',
+      'Updated grade level selection (5th-12th grade)',
+    ],
+  },
+  {
+    version: '0.3',
+    date: 'December 2025',
+    changes: [
+      'Theme customization with multiple light/dark themes',
+      'Theme-aware app logos',
+      'Dedicated Tasks / To-Do tab',
+      'Centralized Settings page',
+      'Google Calendar export and syncing',
+      'Fixed Settings white screen crash',
+    ],
+  },
+  {
+    version: '0.2',
+    date: 'November 2025',
+    changes: [
+      'Today dashboard widget with upcoming classes/tasks',
+      'Import/export for schedules and tasks (CSV/JSON)',
+      'Grade level selection during onboarding',
+      'Discussion/community tab for communication',
+    ],
+  },
+  {
+    version: '0.1',
+    date: 'October 2025',
+    changes: [
+      'Core student dashboard',
+      'Class schedule viewer',
+      'School meal display',
+      'Basic task and planning functionality',
+      'Study halls and open periods finder',
+    ],
+  },
+];
 
 export default function About() {
   return (
@@ -18,6 +69,10 @@ export default function About() {
             About LunchLit
           </h1>
           <p className="text-muted-foreground text-lg">Your daily school companion</p>
+          <div className="mt-2 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium">
+            <Code className="h-3.5 w-3.5" />
+            Version {CURRENT_VERSION}
+          </div>
         </div>
 
         {/* Mission Card */}
@@ -110,6 +165,42 @@ export default function About() {
           </CardContent>
         </Card>
 
+        {/* Changelog Card */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <History className="h-5 w-5 text-primary" />
+              What's New
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Accordion type="single" collapsible defaultValue="0.4" className="w-full">
+              {changelogData.map((release) => (
+                <AccordionItem key={release.version} value={release.version}>
+                  <AccordionTrigger className="hover:no-underline">
+                    <div className="flex items-center gap-3">
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary">
+                        v{release.version}
+                      </span>
+                      <span className="text-sm text-muted-foreground">{release.date}</span>
+                    </div>
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <ul className="space-y-2 pl-1">
+                      {release.changes.map((change, idx) => (
+                        <li key={idx} className="flex items-start gap-2 text-sm text-muted-foreground">
+                          <span className="text-primary mt-1.5">•</span>
+                          {change}
+                        </li>
+                      ))}
+                    </ul>
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </CardContent>
+        </Card>
+
         {/* Themes Card */}
         <Card>
           <CardHeader>
@@ -145,10 +236,49 @@ export default function About() {
         {/* Creator Card */}
         <Card className="bg-gradient-to-br from-primary/10 via-primary/5 to-background border-primary/20">
           <CardContent className="py-6">
-            <div className="text-center">
-              <p className="text-sm text-muted-foreground mb-2">Created with ❤️ by</p>
+            <div className="text-center space-y-4">
+              <p className="text-sm text-muted-foreground">Created with ❤️ by</p>
               <p className="font-display text-xl font-semibold text-foreground">Ramakrishna Krishna</p>
-              <div className="flex items-center justify-center gap-1.5 mt-3 text-xs text-muted-foreground">
+              
+              {/* Social Links */}
+              <div className="flex items-center justify-center gap-3 pt-2">
+                <a 
+                  href="mailto:ramakrishnakrishna@example.com" 
+                  className="p-2 rounded-full bg-secondary/50 hover:bg-secondary transition-colors"
+                  title="Email"
+                >
+                  <Mail className="h-4 w-4 text-muted-foreground" />
+                </a>
+                <a 
+                  href="https://github.com/ramakrishnakrishna" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="p-2 rounded-full bg-secondary/50 hover:bg-secondary transition-colors"
+                  title="GitHub"
+                >
+                  <Github className="h-4 w-4 text-muted-foreground" />
+                </a>
+                <a 
+                  href="https://linkedin.com/in/ramakrishnakrishna" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="p-2 rounded-full bg-secondary/50 hover:bg-secondary transition-colors"
+                  title="LinkedIn"
+                >
+                  <Linkedin className="h-4 w-4 text-muted-foreground" />
+                </a>
+                <a 
+                  href="https://twitter.com/ramakrishnakrishna" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="p-2 rounded-full bg-secondary/50 hover:bg-secondary transition-colors"
+                  title="Twitter"
+                >
+                  <Twitter className="h-4 w-4 text-muted-foreground" />
+                </a>
+              </div>
+
+              <div className="flex items-center justify-center gap-1.5 pt-2 text-xs text-muted-foreground">
                 <Code className="h-3.5 w-3.5" />
                 <span>LunchLit © {new Date().getFullYear()}</span>
               </div>
