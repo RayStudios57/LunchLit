@@ -13,8 +13,9 @@ import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Plus, Trash2, Utensils, Loader2, Tag } from 'lucide-react';
+import { Plus, Trash2, Utensils, Loader2, Tag, Download } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { MealViewerImport } from '@/components/menu/MealViewerImport';
 
 interface DietaryTag {
   id: string;
@@ -364,12 +365,30 @@ export function AdminMealManagement() {
                     </div>
 
                     <div className="space-y-3">
-                      <div className="flex items-center justify-between">
+                      <div className="flex items-center justify-between gap-2">
                         <Label>Menu Items</Label>
-                        <Button type="button" variant="outline" size="sm" onClick={addMealItem}>
-                          <Plus className="h-4 w-4 mr-1" />
-                          Add Item
-                        </Button>
+                        <div className="flex gap-2">
+                          <MealViewerImport 
+                            onImport={(items) => {
+                              setNewMeal(prev => ({
+                                ...prev,
+                                items: [
+                                  ...prev.items.filter(i => i.name.trim()),
+                                  ...items.map(item => ({
+                                    name: item.name,
+                                    description: item.description || '',
+                                    calories: item.calories || 0,
+                                    dietary: item.dietary || [],
+                                  })),
+                                ],
+                              }));
+                            }}
+                          />
+                          <Button type="button" variant="outline" size="sm" onClick={addMealItem}>
+                            <Plus className="h-4 w-4 mr-1" />
+                            Add Item
+                          </Button>
+                        </div>
                       </div>
 
                       {newMeal.items.map((item, index) => (
