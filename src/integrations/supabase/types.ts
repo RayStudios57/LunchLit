@@ -812,6 +812,48 @@ export type Database = {
         }
         Relationships: []
       }
+      student_goals: {
+        Row: {
+          created_at: string
+          description: string | null
+          goal_type: string
+          id: string
+          notes: string | null
+          priority: string | null
+          status: string
+          target_date: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          goal_type?: string
+          id?: string
+          notes?: string | null
+          priority?: string | null
+          status?: string
+          target_date?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          goal_type?: string
+          id?: string
+          notes?: string | null
+          priority?: string | null
+          status?: string
+          target_date?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       study_halls: {
         Row: {
           capacity: number
@@ -861,6 +903,54 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      target_schools: {
+        Row: {
+          admission_type: string | null
+          application_deadline: string | null
+          created_at: string
+          id: string
+          is_match: boolean | null
+          is_reach: boolean | null
+          is_safety: boolean | null
+          location: string | null
+          notes: string | null
+          school_name: string
+          status: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          admission_type?: string | null
+          application_deadline?: string | null
+          created_at?: string
+          id?: string
+          is_match?: boolean | null
+          is_reach?: boolean | null
+          is_safety?: boolean | null
+          location?: string | null
+          notes?: string | null
+          school_name: string
+          status?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          admission_type?: string | null
+          application_deadline?: string | null
+          created_at?: string
+          id?: string
+          is_match?: boolean | null
+          is_reach?: boolean | null
+          is_safety?: boolean | null
+          location?: string | null
+          notes?: string | null
+          school_name?: string
+          status?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       tasks: {
         Row: {

@@ -14,13 +14,14 @@ import { DiscussionView } from '@/components/discussion/DiscussionView';
 import { TodayWidget } from '@/components/dashboard/TodayWidget';
 import { GradeSelectionModal } from '@/components/onboarding/GradeSelectionModal';
 import { BragSheetView } from '@/components/bragsheet/BragSheetView';
+import { StudentPortfolioView } from '@/components/portfolio/StudentPortfolioView';
 import { Credits } from '@/components/Credits';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/hooks/useProfile';
 import { useGradeProgression } from '@/hooks/useGradeProgression';
 import { Helmet } from 'react-helmet';
 
-export type TabType = 'home' | 'menu' | 'study' | 'tutor' | 'planner' | 'chat' | 'discuss' | 'settings' | 'tasks' | 'classes' | 'bragsheet';
+export type TabType = 'home' | 'menu' | 'study' | 'tutor' | 'planner' | 'chat' | 'discuss' | 'settings' | 'tasks' | 'classes' | 'bragsheet' | 'portfolio';
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState<TabType>('home');
@@ -65,6 +66,7 @@ const Index = () => {
           {activeTab === 'chat' && <ChatBot />}
           {activeTab === 'discuss' && <DiscussionView />}
           {activeTab === 'bragsheet' && <BragSheetView />}
+          {activeTab === 'portfolio' && <StudentPortfolioView />}
           {activeTab === 'settings' && <SettingsView />}
           
         </main>

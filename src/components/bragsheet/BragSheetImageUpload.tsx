@@ -44,7 +44,7 @@ export function BragSheetImageUpload({
     
     // Validate file types and sizes
     const validTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
-    const maxSize = 5 * 1024 * 1024; // 5MB
+    const maxSize = 1024 * 1024 * 1024; // 1GB
 
     for (const file of filesToUpload) {
       if (!validTypes.includes(file.type)) {
@@ -58,7 +58,7 @@ export function BragSheetImageUpload({
       if (file.size > maxSize) {
         toast({ 
           title: 'File too large', 
-          description: 'Images must be under 5MB',
+          description: 'Images must be under 1GB',
           variant: 'destructive' 
         });
         return;
@@ -189,7 +189,7 @@ export function BragSheetImageUpload({
             )}
           </Button>
           <p className="text-xs text-muted-foreground mt-1">
-            JPG, PNG, WebP, or GIF (max 5MB each)
+            JPG, PNG, WebP, or GIF (max 1GB each)
           </p>
         </div>
       )}
