@@ -383,6 +383,33 @@ export function AdminMealManagement() {
                                 ],
                               }));
                             }}
+                            onImportMultipleDays={async (days) => {
+                              if (!newMeal.school_id) {
+                                toast({ title: 'Please select a school first', variant: 'destructive' });
+                                return;
+                              }
+                              // Import each day as a separate meal schedule
+                              for (const day of days) {
+                                try {
+                                  await supabase.from('meal_schedules').insert({
+                                    school_id: newMeal.school_id,
+                                    meal_date: day.date,
+                                    meal_type: newMeal.meal_type,
+                                    menu_items: day.items.map(item => ({
+                                      name: item.name,
+                                      description: item.description || '',
+                                      calories: item.calories || 0,
+                                      dietary: item.dietary || [],
+                                    })),
+                                  });
+                                } catch (err) {
+                                  console.error('Failed to import day:', day.date, err);
+                                }
+                              }
+                              queryClient.invalidateQueries({ queryKey: ['admin-meals'] });
+                              toast({ title: `Imported menus for ${days.length} days!` });
+                              setIsAddMealOpen(false);
+                            }}
                           />
                           <Button type="button" variant="outline" size="sm" onClick={addMealItem}>
                             <Plus className="h-4 w-4 mr-1" />
