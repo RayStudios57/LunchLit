@@ -38,6 +38,7 @@ export interface BragSheetEntry {
   verification_notes: string | null;
   suggested_from_task_id: string | null;
   is_auto_suggested: boolean;
+  images: string[] | null;
   created_at: string;
   updated_at: string;
 }

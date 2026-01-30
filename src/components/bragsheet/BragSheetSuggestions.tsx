@@ -111,6 +111,7 @@ export function BragSheetSuggestions() {
         year_received: null,
         suggested_from_task_id: suggestion.taskId || null,
         is_auto_suggested: true,
+        images: null,
       });
       setDismissedSuggestions(prev => new Set([...prev, suggestion.id]));
     } catch (error) {

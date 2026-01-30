@@ -7,10 +7,11 @@ import { useProfile } from '@/hooks/useProfile';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { BragSheetImageUpload } from './BragSheetImageUpload';
+import { Separator } from '@/components/ui/separator';
 
 const CATEGORIES: { value: BragCategory; label: string }[] = [
   { value: 'volunteering', label: 'Volunteering' },
@@ -57,6 +58,7 @@ const formSchema = z.object({
   position_role: z.string().max(200).optional(),
   grades_participated: z.array(z.string()).optional(),
   year_received: z.string().optional(),
+  images: z.array(z.string()).optional(),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -71,6 +73,7 @@ export function BragSheetEntryForm({ entry, onSuccess, suggestedData }: BragShee
   const { addEntry, updateEntry } = useBragSheet();
   const { profile } = useProfile();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [images, setImages] = useState<string[]>(entry?.images || []);
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -88,6 +91,7 @@ export function BragSheetEntryForm({ entry, onSuccess, suggestedData }: BragShee
       position_role: entry?.position_role || '',
       grades_participated: entry?.grades_participated || [],
       year_received: entry?.year_received || '',
+      images: entry?.images || [],
     },
   });
 
@@ -113,6 +117,7 @@ export function BragSheetEntryForm({ entry, onSuccess, suggestedData }: BragShee
         year_received: data.year_received || null,
         suggested_from_task_id: null,
         is_auto_suggested: false,
+        images: images.length > 0 ? images : null,
       };
 
       if (entry) {
@@ -400,6 +405,15 @@ export function BragSheetEntryForm({ entry, onSuccess, suggestedData }: BragShee
               <FormMessage />
             </FormItem>
           )}
+        />
+
+        <Separator className="my-4" />
+
+        {/* Image Upload Section */}
+        <BragSheetImageUpload
+          images={images}
+          onImagesChange={setImages}
+          maxImages={5}
         />
 
         <div className="flex justify-end gap-2 pt-4">
