@@ -1,7 +1,17 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useProfile } from '@/hooks/useProfile';
-import { format, startOfWeek, endOfWeek, addDays, isWeekend, parseISO } from 'date-fns';
+import { 
+  format, 
+  startOfWeek, 
+  endOfWeek, 
+  startOfMonth,
+  endOfMonth,
+  addDays, 
+  isWeekend, 
+  parseISO,
+  eachDayOfInterval,
+} from 'date-fns';
 
 interface MenuItem {
   name: string;
@@ -33,9 +43,10 @@ interface DayMenu {
   }[];
 }
 
-export function useMealSchedules() {
+export function useMealSchedules(monthDate?: Date) {
   const { profile } = useProfile();
 
+  // Weekly menu query
   const { data: mealSchedules = [], isLoading } = useQuery({
     queryKey: ['meal-schedules', profile?.school_id],
     queryFn: async () => {
@@ -59,6 +70,36 @@ export function useMealSchedules() {
         .order('meal_date', { ascending: true });
 
       // Filter by school if user has one
+      if (profile?.school_id) {
+        query = query.eq('school_id', profile.school_id);
+      }
+
+      const { data, error } = await query;
+      
+      if (error) throw error;
+      return (data || []).map(item => ({
+        ...item,
+        menu_items: (item.menu_items as unknown as MenuItem[]) || [],
+      })) as MealSchedule[];
+    },
+    enabled: true,
+  });
+
+  // Monthly menu query
+  const currentMonthDate = monthDate || new Date();
+  const { data: monthlyMealSchedules = [], isLoading: isLoadingMonthly } = useQuery({
+    queryKey: ['meal-schedules-monthly', profile?.school_id, format(currentMonthDate, 'yyyy-MM')],
+    queryFn: async () => {
+      const monthStart = startOfMonth(currentMonthDate);
+      const monthEnd = endOfMonth(currentMonthDate);
+
+      let query = supabase
+        .from('meal_schedules')
+        .select('*')
+        .gte('meal_date', format(monthStart, 'yyyy-MM-dd'))
+        .lte('meal_date', format(monthEnd, 'yyyy-MM-dd'))
+        .order('meal_date', { ascending: true });
+
       if (profile?.school_id) {
         query = query.eq('school_id', profile.school_id);
       }
@@ -113,6 +154,39 @@ export function useMealSchedules() {
     return days;
   })();
 
+  // Monthly menu data
+  const monthlyMenu: DayMenu[] = (() => {
+    const monthStart = startOfMonth(currentMonthDate);
+    const monthEnd = endOfMonth(currentMonthDate);
+    const allDays = eachDayOfInterval({ start: monthStart, end: monthEnd });
+    
+    return allDays.map(date => {
+      const dateStr = format(date, 'yyyy-MM-dd');
+      
+      const daySchedules = monthlyMealSchedules.filter(
+        schedule => schedule.meal_date === dateStr
+      );
+
+      const items = daySchedules.flatMap(schedule => {
+        const menuItems = schedule.menu_items as MenuItem[];
+        return menuItems.map((item, idx) => ({
+          id: `${schedule.id}-${idx}`,
+          name: item.name,
+          description: item.description || '',
+          dietary: item.dietary_tags || [],
+          mealType: schedule.meal_type,
+          calories: item.calories,
+        }));
+      });
+
+      return {
+        date: dateStr,
+        dayName: format(date, 'EEEE'),
+        items,
+      };
+    });
+  })();
+
   const getTodayMenu = () => {
     const today = format(new Date(), 'yyyy-MM-dd');
     return weeklyMenu.find(day => day.date === today);
@@ -121,8 +195,11 @@ export function useMealSchedules() {
   return {
     mealSchedules,
     weeklyMenu,
+    monthlyMenu,
     getTodayMenu,
     isLoading,
+    isLoadingMonthly,
     hasMenuData: mealSchedules.length > 0,
+    hasMonthlyData: monthlyMealSchedules.length > 0,
   };
 }
