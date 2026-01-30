@@ -27,46 +27,46 @@ export function Header({
   } = useProfile();
   const { isAdmin } = useUserRoles();
 
-  // Primary tabs - quick access for daily use
+  // Primary tabs - main navigation (left to right: Today, Menu, Classes, Brag Sheet)
   const primaryTabs = [{
     id: 'home' as const,
     label: 'Today',
     icon: Calendar
   }, {
-    id: 'tasks' as const,
-    label: 'Tasks',
-    icon: CheckSquare
+    id: 'menu' as const,
+    label: 'Menu',
+    icon: Utensils
   }, {
     id: 'classes' as const,
     label: 'Classes',
     icon: Book
   }, {
-    id: 'menu' as const,
-    label: 'Menu',
-    icon: Utensils
-  }];
-
-  // Secondary tabs
-  const secondaryTabs = [{
     id: 'bragsheet' as const,
     label: 'Brag Sheet',
     icon: Trophy
+  }];
+
+  // Secondary tabs in More dropdown (Tasks, Community, Study Hall, AI Chat, Tutors)
+  const secondaryTabs = [{
+    id: 'tasks' as const,
+    label: 'Tasks',
+    icon: CheckSquare
+  }, {
+    id: 'discuss' as const,
+    label: 'Community',
+    icon: Users
   }, {
     id: 'study' as const,
-    label: 'Study',
+    label: 'Study Hall',
     icon: BookOpen
-  }, {
-    id: 'tutor' as const,
-    label: 'Tutors',
-    icon: GraduationCap
   }, {
     id: 'chat' as const,
     label: 'AI Chat',
     icon: MessageCircle
   }, {
-    id: 'discuss' as const,
-    label: 'Community',
-    icon: Users
+    id: 'tutor' as const,
+    label: 'Tutors',
+    icon: GraduationCap
   }];
   return <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border">
       <div className="container py-3">
