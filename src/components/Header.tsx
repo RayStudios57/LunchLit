@@ -1,4 +1,4 @@
-import { Calendar, CheckSquare, Book, Utensils, BookOpen, GraduationCap, MessageCircle, Users, Settings, Trophy, Shield } from 'lucide-react';
+import { Calendar, CheckSquare, Book, Utensils, BookOpen, GraduationCap, MessageCircle, Users, Settings, Trophy, Shield, Target } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/hooks/useProfile';
 import { useUserRoles } from '@/hooks/useUserRoles';
@@ -27,7 +27,7 @@ export function Header({
   } = useProfile();
   const { isAdmin } = useUserRoles();
 
-  // Primary tabs - main navigation (left to right: Today, Menu, Classes, Brag Sheet)
+  // Primary tabs - main navigation (left to right: Today, Menu, Classes, Brag Sheet, Portfolio)
   const primaryTabs = [{
     id: 'home' as const,
     label: 'Today',
@@ -44,6 +44,10 @@ export function Header({
     id: 'bragsheet' as const,
     label: 'Brag Sheet',
     icon: Trophy
+  }, {
+    id: 'portfolio' as const,
+    label: 'Portfolio',
+    icon: Target
   }];
 
   // Secondary tabs in More dropdown (Tasks, Community, Study Hall, AI Chat, Tutors)

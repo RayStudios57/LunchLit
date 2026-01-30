@@ -78,6 +78,9 @@ export default function About() {
             About LunchLit
           </h1>
           <p className="text-muted-foreground text-lg">Your daily school companion</p>
+          <p className="text-sm text-muted-foreground mt-1">
+            <strong>LIT</strong> = <strong>L</strong>earning, <strong>I</strong>nsight, <strong>T</strong>racking
+          </p>
           <div className="mt-2 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium">
             <Code className="h-3.5 w-3.5" />
             Version {CURRENT_VERSION}
@@ -250,7 +253,10 @@ export default function About() {
           <CardContent className="py-6">
             <div className="text-center space-y-4">
               <p className="text-sm text-muted-foreground">Created by</p>
-              <p className="font-display text-xl font-semibold text-foreground">Ramakrishna Krishna</p>
+              <div className="space-y-1">
+                <p className="font-display text-xl font-semibold text-foreground">Ramakrishna Krishna</p>
+                <p className="font-display text-lg text-foreground">Alex Quinones</p>
+              </div>
               
               {/* Dynamic Social Links */}
               <CreatorSocialLinks />
