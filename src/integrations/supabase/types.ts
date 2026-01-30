@@ -102,6 +102,7 @@ export type Database = {
           grades_participated: string[] | null
           hours_spent: number | null
           id: string
+          images: string[] | null
           impact: string | null
           is_auto_suggested: boolean | null
           is_ongoing: boolean | null
@@ -134,6 +135,7 @@ export type Database = {
           grades_participated?: string[] | null
           hours_spent?: number | null
           id?: string
+          images?: string[] | null
           impact?: string | null
           is_auto_suggested?: boolean | null
           is_ongoing?: boolean | null
@@ -166,6 +168,7 @@ export type Database = {
           grades_participated?: string[] | null
           hours_spent?: number | null
           id?: string
+          images?: string[] | null
           impact?: string | null
           is_auto_suggested?: boolean | null
           is_ongoing?: boolean | null

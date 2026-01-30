@@ -19,7 +19,8 @@ import {
   GraduationCap,
   Star,
   Trophy,
-  MoreHorizontal
+  MoreHorizontal,
+  ImageIcon
 } from 'lucide-react';
 import { BragSheetEntryForm } from './BragSheetEntryForm';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
@@ -164,6 +165,28 @@ export function BragSheetEntryCard({ entry }: BragSheetEntryCardProps) {
                   <span className="font-medium text-primary">Impact: </span>
                   {entry.impact}
                 </p>
+              )}
+
+              {/* Display images if present */}
+              {entry.images && entry.images.length > 0 && (
+                <div className="mt-3 flex items-center gap-2">
+                  <ImageIcon className="w-3 h-3 text-muted-foreground" />
+                  <div className="flex gap-1">
+                    {entry.images.slice(0, 3).map((img, idx) => (
+                      <img
+                        key={idx}
+                        src={img}
+                        alt={`${entry.title} image ${idx + 1}`}
+                        className="w-8 h-8 rounded object-cover border"
+                      />
+                    ))}
+                    {entry.images.length > 3 && (
+                      <span className="text-xs text-muted-foreground flex items-center">
+                        +{entry.images.length - 3} more
+                      </span>
+                    )}
+                  </div>
+                </div>
               )}
             </div>
           </div>
