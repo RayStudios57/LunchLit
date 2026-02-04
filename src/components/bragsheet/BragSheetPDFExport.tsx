@@ -287,159 +287,279 @@ export function BragSheetPDFExport({ entries, entriesByYear, profile, academics,
     doc.text(`Total Hours: ${totalHours}`, margin, yPos);
   };
 
+  const loadImageAsBase64 = async (url: string): Promise<string | null> => {
+    try {
+      const response = await fetch(url);
+      const blob = await response.blob();
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result as string);
+        reader.onerror = () => resolve(null);
+        reader.readAsDataURL(blob);
+      });
+    } catch {
+      return null;
+    }
+  };
+
   const generateFancyPDF = async (doc: any) => {
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
-    const margin = 20;
+    const margin = 18;
     const contentWidth = pageWidth - margin * 2;
     let yPos = margin;
 
-    const primaryColor = [59, 130, 246]; // Blue
-    const secondaryColor = [100, 116, 139]; // Slate
+    // Enhanced color palette
+    const primaryColor = [79, 70, 229]; // Indigo
+    const primaryLight = [129, 140, 248]; // Indigo light
+    const accentColor = [16, 185, 129]; // Emerald
+    const warmAccent = [251, 146, 60]; // Orange
+    const textDark = [15, 23, 42]; // Slate 900
+    const textMuted = [71, 85, 105]; // Slate 600
+    const bgLight = [248, 250, 252]; // Slate 50
+    const bgCard = [241, 245, 249]; // Slate 100
 
     const checkNewPage = (neededHeight: number) => {
-      if (yPos + neededHeight > pageHeight - margin) {
+      if (yPos + neededHeight > pageHeight - margin - 15) {
+        // Add page number before new page
+        addPageFooter();
         doc.addPage();
-        yPos = margin;
+        yPos = margin + 5;
         return true;
       }
       return false;
     };
 
-    const drawSectionHeader = (title: string) => {
-      checkNewPage(15);
-      doc.setFillColor(...primaryColor);
-      doc.rect(margin, yPos - 3, contentWidth, 10, 'F');
-      doc.setFontSize(11);
-      doc.setFont('helvetica', 'bold');
-      doc.setTextColor(255, 255, 255);
-      doc.text(title, margin + 4, yPos + 4);
-      doc.setTextColor(0, 0, 0);
-      yPos += 14;
+    const addPageFooter = () => {
+      const pageNum = doc.internal.getNumberOfPages();
+      doc.setFontSize(8);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(...textMuted);
+      doc.text(`Page ${pageNum}`, pageWidth / 2, pageHeight - 10, { align: 'center' });
     };
 
-    // Header with decorative line
-    doc.setFillColor(...primaryColor);
-    doc.rect(0, 0, pageWidth, 35, 'F');
+    const drawSectionHeader = (title: string, icon?: string) => {
+      checkNewPage(18);
+      
+      // Gradient-like effect with two rectangles
+      doc.setFillColor(...primaryColor);
+      doc.roundedRect(margin, yPos - 2, contentWidth, 12, 2, 2, 'F');
+      doc.setFillColor(...primaryLight);
+      doc.roundedRect(margin + contentWidth - 40, yPos - 2, 40, 12, 2, 2, 'F');
+      
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(255, 255, 255);
+      doc.text(icon ? `${icon}  ${title}` : title, margin + 6, yPos + 6);
+      doc.setTextColor(0, 0, 0);
+      yPos += 18;
+    };
 
-    doc.setFontSize(28);
+    const drawDivider = () => {
+      doc.setDrawColor(...bgCard);
+      doc.setLineWidth(0.5);
+      doc.line(margin + 10, yPos, pageWidth - margin - 10, yPos);
+      yPos += 6;
+    };
+
+    // ========== HEADER ==========
+    // Gradient header background
+    doc.setFillColor(...primaryColor);
+    doc.rect(0, 0, pageWidth, 42, 'F');
+    doc.setFillColor(...primaryLight);
+    doc.rect(pageWidth - 60, 0, 60, 42, 'F');
+    
+    // Decorative accent bar
+    doc.setFillColor(...accentColor);
+    doc.rect(0, 42, pageWidth, 3, 'F');
+
+    // Title
+    doc.setFontSize(26);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(255, 255, 255);
-    doc.text('Student Brag Sheet', margin, 23);
+    doc.text('Student Brag Sheet', margin, 26);
+    
+    // Subtitle
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(200, 200, 255);
+    doc.text('Academic & Extracurricular Portfolio', margin, 36);
+    
     doc.setTextColor(0);
-    yPos = 45;
+    yPos = 55;
 
-    // Student info card
-    doc.setFillColor(248, 250, 252);
-    doc.roundedRect(margin, yPos, contentWidth, 30, 3, 3, 'F');
+    // ========== STUDENT INFO CARD ==========
+    doc.setFillColor(...bgLight);
+    doc.roundedRect(margin, yPos, contentWidth, 32, 4, 4, 'F');
+    
+    // Left accent bar
+    doc.setFillColor(...primaryColor);
+    doc.roundedRect(margin, yPos, 4, 32, 2, 2, 'F');
 
-    doc.setFontSize(14);
+    doc.setFontSize(16);
     doc.setFont('helvetica', 'bold');
-    doc.setTextColor(30, 41, 59);
+    doc.setTextColor(...textDark);
     if (profile?.full_name) {
-      doc.text(profile.full_name, margin + 8, yPos + 12);
+      doc.text(profile.full_name, margin + 14, yPos + 13);
     }
 
     doc.setFontSize(10);
     doc.setFont('helvetica', 'normal');
-    doc.setTextColor(...secondaryColor);
+    doc.setTextColor(...textMuted);
     let infoLine = [];
     if (profile?.school_name) infoLine.push(profile.school_name);
-    if (profile?.grade_level) infoLine.push(profile.grade_level);
+    if (profile?.grade_level) infoLine.push(`Grade ${profile.grade_level}`);
     if (infoLine.length > 0) {
-      doc.text(infoLine.join(' • '), margin + 8, yPos + 20);
+      doc.text(infoLine.join('  •  '), margin + 14, yPos + 23);
     }
 
-    doc.setFontSize(9);
-    doc.text(`Generated ${format(new Date(), 'MMMM d, yyyy')}`, pageWidth - margin - 45, yPos + 20);
+    // Date badge on right
+    doc.setFillColor(...primaryLight);
+    doc.roundedRect(pageWidth - margin - 50, yPos + 10, 46, 14, 3, 3, 'F');
+    doc.setFontSize(8);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(255, 255, 255);
+    doc.text(format(new Date(), 'MMM d, yyyy'), pageWidth - margin - 27, yPos + 19, { align: 'center' });
+    
     doc.setTextColor(0);
-    yPos += 40;
+    yPos += 42;
 
-    // Academics Section
-    if (academics) {
-      drawSectionHeader('ACADEMIC PROFILE');
+    // ========== QUICK STATS ==========
+    const totalHours = entries.reduce((sum, e) => sum + (e.hours_spent || 0), 0);
+    const verifiedCount = entries.filter(e => e.verification_status === 'verified').length;
+    const yearsActive = Object.keys(entriesByYear).length;
+    
+    const statsWidth = (contentWidth - 12) / 4;
+    const stats = [
+      { label: 'Activities', value: entries.length.toString(), color: primaryColor },
+      { label: 'Verified', value: verifiedCount.toString(), color: accentColor },
+      { label: 'Hours', value: totalHours.toString(), color: warmAccent },
+      { label: 'Years', value: yearsActive.toString(), color: primaryLight },
+    ];
 
-      doc.setFontSize(10);
+    stats.forEach((stat, i) => {
+      const x = margin + i * (statsWidth + 4);
+      doc.setFillColor(...stat.color);
+      doc.roundedRect(x, yPos, statsWidth, 22, 3, 3, 'F');
+      
+      doc.setFontSize(14);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(255, 255, 255);
+      doc.text(stat.value, x + statsWidth / 2, yPos + 10, { align: 'center' });
+      
+      doc.setFontSize(7);
       doc.setFont('helvetica', 'normal');
+      doc.text(stat.label, x + statsWidth / 2, yPos + 17, { align: 'center' });
+    });
+    
+    doc.setTextColor(0);
+    yPos += 32;
 
-      // GPA in a nice box
+    // ========== ACADEMICS SECTION ==========
+    if (academics) {
+      drawSectionHeader('ACADEMIC PROFILE', '📚');
+
+      // GPA Card
       if (academics.gpa_weighted || academics.gpa_unweighted) {
-        doc.setFillColor(240, 249, 255);
-        doc.roundedRect(margin, yPos, contentWidth / 2 - 5, 20, 2, 2, 'F');
+        doc.setFillColor(...bgCard);
+        doc.roundedRect(margin, yPos, contentWidth / 2 - 4, 28, 3, 3, 'F');
         
+        doc.setFillColor(...accentColor);
+        doc.roundedRect(margin, yPos, 3, 28, 1, 1, 'F');
+        
+        doc.setFontSize(9);
         doc.setFont('helvetica', 'bold');
-        doc.setTextColor(...primaryColor);
-        doc.text('GPA', margin + 8, yPos + 8);
+        doc.setTextColor(...textMuted);
+        doc.text('GRADE POINT AVERAGE', margin + 10, yPos + 8);
         
-        doc.setFont('helvetica', 'normal');
-        doc.setTextColor(0);
+        doc.setFontSize(14);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(...textDark);
         const gpaText = [];
         if (academics.gpa_unweighted) gpaText.push(`${academics.gpa_unweighted} UW`);
         if (academics.gpa_weighted) gpaText.push(`${academics.gpa_weighted} W`);
-        doc.text(gpaText.join(' / '), margin + 8, yPos + 15);
-        yPos += 25;
+        doc.text(gpaText.join('  /  '), margin + 10, yPos + 20);
+        yPos += 34;
       }
 
       // Test scores
       if (academics.test_scores && academics.test_scores.length > 0) {
+        doc.setFontSize(9);
         doc.setFont('helvetica', 'bold');
-        doc.setTextColor(...secondaryColor);
-        doc.text('Test Scores', margin, yPos);
-        yPos += 6;
+        doc.setTextColor(...primaryColor);
+        doc.text('TEST SCORES', margin, yPos);
+        yPos += 7;
         
         doc.setFont('helvetica', 'normal');
-        doc.setTextColor(0);
+        doc.setTextColor(...textDark);
+        doc.setFontSize(10);
         for (const score of academics.test_scores) {
           const scoreText = score.subject 
             ? `${score.type} ${score.subject}: ${score.score}`
             : `${score.type}: ${score.score}`;
-          doc.text(`• ${scoreText}`, margin + 4, yPos);
+          doc.text(`▸ ${scoreText}`, margin + 4, yPos);
           yPos += 5;
         }
-        yPos += 3;
+        yPos += 4;
       }
 
       // Courses
       if (academics.courses && academics.courses.length > 0) {
-        checkNewPage(20);
+        checkNewPage(25);
+        doc.setFontSize(9);
         doc.setFont('helvetica', 'bold');
-        doc.setTextColor(...secondaryColor);
-        doc.text('Courses', margin, yPos);
-        yPos += 6;
+        doc.setTextColor(...primaryColor);
+        doc.text('COURSEWORK', margin, yPos);
+        yPos += 7;
         
         doc.setFont('helvetica', 'normal');
-        doc.setTextColor(0);
+        doc.setTextColor(...textDark);
+        doc.setFontSize(10);
         for (const course of academics.courses) {
           const courseText = course.teacher 
             ? `${course.name} — ${course.teacher}`
             : course.name;
-          doc.text(`• ${courseText}`, margin + 4, yPos);
+          doc.text(`▸ ${courseText}`, margin + 4, yPos);
           yPos += 5;
         }
-        yPos += 3;
+        yPos += 4;
       }
 
       // Colleges
       if (academics.colleges_applying && academics.colleges_applying.length > 0) {
-        checkNewPage(15);
+        checkNewPage(20);
+        doc.setFontSize(9);
         doc.setFont('helvetica', 'bold');
-        doc.setTextColor(...secondaryColor);
-        doc.text('Colleges of Interest', margin, yPos);
-        yPos += 6;
+        doc.setTextColor(...primaryColor);
+        doc.text('TARGET COLLEGES', margin, yPos);
+        yPos += 7;
         
         doc.setFont('helvetica', 'normal');
-        doc.setTextColor(0);
-        const collegesText = academics.colleges_applying.join(', ');
+        doc.setTextColor(...textDark);
+        doc.setFontSize(10);
+        const collegesText = academics.colleges_applying.join('  •  ');
         const collegeLines = doc.splitTextToSize(collegesText, contentWidth - 8);
         doc.text(collegeLines, margin + 4, yPos);
-        yPos += collegeLines.length * 5;
+        yPos += collegeLines.length * 5 + 4;
       }
 
-      yPos += 8;
+      yPos += 6;
     }
 
-    // Activities by category
+    // ========== ACTIVITIES BY CATEGORY ==========
     const categoryOrder: BragCategory[] = ['leadership', 'extracurricular', 'club', 'volunteering', 'job', 'internship', 'award', 'academic', 'other'];
+    const categoryIcons: Record<BragCategory, string> = {
+      leadership: '👑',
+      extracurricular: '⚽',
+      club: '🎭',
+      volunteering: '❤️',
+      job: '💼',
+      internship: '🎯',
+      award: '🏆',
+      academic: '📖',
+      other: '✨',
+    };
+    
     const entriesByCategory = entries.reduce((acc, entry) => {
       if (!acc[entry.category]) acc[entry.category] = [];
       acc[entry.category].push(entry);
@@ -450,148 +570,183 @@ export function BragSheetPDFExport({ entries, entriesByYear, profile, academics,
       const categoryEntries = entriesByCategory[category];
       if (!categoryEntries || categoryEntries.length === 0) continue;
 
-      drawSectionHeader(categoryLabels[category].toUpperCase());
+      drawSectionHeader(categoryLabels[category].toUpperCase(), categoryIcons[category]);
 
-      for (const entry of categoryEntries) {
-        checkNewPage(30);
+      for (let entryIdx = 0; entryIdx < categoryEntries.length; entryIdx++) {
+        const entry = categoryEntries[entryIdx];
+        checkNewPage(45);
 
-        // Entry card
-        doc.setFillColor(250, 250, 250);
-        doc.roundedRect(margin, yPos, contentWidth, 5, 1, 1, 'F');
+        // Entry card background
+        doc.setFillColor(...bgLight);
+        doc.roundedRect(margin, yPos - 2, contentWidth, 8, 2, 2, 'F');
 
-        // Title and verification badge
+        // Title with verification badge
         doc.setFontSize(11);
         doc.setFont('helvetica', 'bold');
-        doc.setTextColor(30, 41, 59);
+        doc.setTextColor(...textDark);
         
-        let titleText = entry.title;
+        let titleX = margin + 4;
+        doc.text(entry.title, titleX, yPos + 4);
+        
         if (entry.verification_status === 'verified') {
-          titleText += ' ✓';
-          doc.setTextColor(34, 197, 94); // Green for verified
+          const titleWidth = doc.getTextWidth(entry.title);
+          doc.setFillColor(...accentColor);
+          doc.circle(titleX + titleWidth + 6, yPos + 2, 3, 'F');
+          doc.setFontSize(6);
+          doc.setTextColor(255, 255, 255);
+          doc.text('✓', titleX + titleWidth + 4.5, yPos + 3.5);
         }
-        doc.text(titleText, margin, yPos + 4);
 
-        // Meta info on right
-        doc.setFontSize(9);
+        // Meta info badge on right
+        doc.setFontSize(8);
         doc.setFont('helvetica', 'normal');
-        doc.setTextColor(...secondaryColor);
-        const metaText = `${entry.grade_level} | ${entry.school_year}`;
+        doc.setTextColor(...textMuted);
+        const metaText = `${entry.grade_level} • ${entry.school_year}`;
         const metaWidth = doc.getTextWidth(metaText);
-        doc.text(metaText, pageWidth - margin - metaWidth, yPos + 4);
-        yPos += 8;
+        doc.text(metaText, pageWidth - margin - metaWidth - 4, yPos + 4);
+        yPos += 10;
 
-        doc.setTextColor(0);
+        doc.setTextColor(...textDark);
 
-        // Position/Role
+        // Position/Role with accent
         if (entry.position_role) {
           doc.setFontSize(10);
           doc.setFont('helvetica', 'italic');
           doc.setTextColor(...primaryColor);
-          doc.text(entry.position_role, margin + 4, yPos);
+          doc.text(entry.position_role, margin + 8, yPos);
           doc.setTextColor(0);
-          yPos += 5;
+          yPos += 6;
         }
 
-        // Grades participated
+        // Grades & Hours in a compact format
+        const detailParts = [];
         if (entry.grades_participated && entry.grades_participated.length > 0) {
-          doc.setFontSize(9);
-          doc.setTextColor(...secondaryColor);
-          doc.text(`Grades: ${entry.grades_participated.join(', ')}`, margin + 4, yPos);
-          yPos += 5;
+          detailParts.push(`Grades ${entry.grades_participated.join(', ')}`);
         }
-
-        // Hours
         if (entry.hours_spent) {
+          detailParts.push(`${entry.hours_spent} hours`);
+        }
+        if (detailParts.length > 0) {
           doc.setFontSize(9);
-          doc.setTextColor(...secondaryColor);
-          doc.text(`${entry.hours_spent} hours`, margin + 4, yPos);
+          doc.setTextColor(...textMuted);
+          doc.text(detailParts.join('  •  '), margin + 8, yPos);
           yPos += 5;
         }
 
-        doc.setTextColor(0);
+        doc.setTextColor(...textDark);
 
         // Description
         if (entry.description) {
           doc.setFontSize(10);
           doc.setFont('helvetica', 'normal');
-          const descLines = doc.splitTextToSize(entry.description, contentWidth - 8);
-          checkNewPage(descLines.length * 4 + 5);
-          doc.text(descLines, margin + 4, yPos);
-          yPos += descLines.length * 4 + 2;
+          const descLines = doc.splitTextToSize(entry.description, contentWidth - 16);
+          checkNewPage(descLines.length * 4 + 8);
+          doc.text(descLines, margin + 8, yPos);
+          yPos += descLines.length * 4 + 3;
         }
 
-        // Impact
+        // Impact with special styling
         if (entry.impact) {
+          doc.setFillColor(236, 253, 245); // Emerald 50
+          const impactLines = doc.splitTextToSize(`Impact: ${entry.impact}`, contentWidth - 20);
+          const impactHeight = impactLines.length * 4 + 6;
+          checkNewPage(impactHeight + 5);
+          
+          doc.roundedRect(margin + 4, yPos - 2, contentWidth - 8, impactHeight, 2, 2, 'F');
+          doc.setFillColor(...accentColor);
+          doc.roundedRect(margin + 4, yPos - 2, 2, impactHeight, 1, 1, 'F');
+          
           doc.setFontSize(10);
           doc.setFont('helvetica', 'italic');
-          doc.setTextColor(34, 197, 94);
-          const impactLines = doc.splitTextToSize(`Impact: ${entry.impact}`, contentWidth - 8);
-          checkNewPage(impactLines.length * 4 + 5);
-          doc.text(impactLines, margin + 4, yPos);
+          doc.setTextColor(...accentColor);
+          doc.text(impactLines, margin + 12, yPos + 3);
           doc.setTextColor(0);
-          yPos += impactLines.length * 4 + 2;
+          yPos += impactHeight + 3;
         }
 
-        yPos += 6;
+        // Images
+        if (entry.images && entry.images.length > 0) {
+          checkNewPage(45);
+          const maxImages = Math.min(entry.images.length, 3);
+          const imgWidth = (contentWidth - 16 - (maxImages - 1) * 4) / maxImages;
+          const imgHeight = 35;
+          
+          for (let i = 0; i < maxImages; i++) {
+            const imgUrl = entry.images[i];
+            const base64 = await loadImageAsBase64(imgUrl);
+            if (base64) {
+              const x = margin + 8 + i * (imgWidth + 4);
+              try {
+                doc.addImage(base64, 'JPEG', x, yPos, imgWidth, imgHeight, undefined, 'MEDIUM');
+                // Add subtle border
+                doc.setDrawColor(...bgCard);
+                doc.setLineWidth(0.5);
+                doc.roundedRect(x, yPos, imgWidth, imgHeight, 2, 2, 'S');
+              } catch (e) {
+                // Skip if image can't be added
+              }
+            }
+          }
+          
+          if (entry.images.length > 3) {
+            doc.setFontSize(8);
+            doc.setTextColor(...textMuted);
+            doc.text(`+${entry.images.length - 3} more`, pageWidth - margin - 20, yPos + imgHeight - 2);
+          }
+          
+          yPos += imgHeight + 6;
+        }
+
+        // Divider between entries (except last)
+        if (entryIdx < categoryEntries.length - 1) {
+          drawDivider();
+        } else {
+          yPos += 4;
+        }
       }
 
-      yPos += 4;
+      yPos += 6;
     }
 
-    // Insight Questions
+    // ========== INSIGHT QUESTIONS ==========
     const answeredInsights = INSIGHT_QUESTIONS.filter(q => getInsightAnswer(q.key));
     if (answeredInsights.length > 0) {
-      drawSectionHeader('PERSONAL INSIGHTS');
+      drawSectionHeader('PERSONAL INSIGHTS', '💭');
 
       for (const question of answeredInsights) {
         const answer = getInsightAnswer(question.key);
         if (!answer) continue;
 
-        checkNewPage(30);
+        checkNewPage(35);
 
+        // Question with styled background
+        doc.setFillColor(...bgCard);
+        const qLines = doc.splitTextToSize(question.question, contentWidth - 16);
+        const qHeight = qLines.length * 5 + 6;
+        doc.roundedRect(margin, yPos - 2, contentWidth, qHeight, 2, 2, 'F');
+        
         doc.setFontSize(10);
         doc.setFont('helvetica', 'bold');
         doc.setTextColor(...primaryColor);
-        const qLines = doc.splitTextToSize(question.question, contentWidth);
-        doc.text(qLines, margin, yPos);
-        yPos += qLines.length * 5 + 3;
+        doc.text(qLines, margin + 8, yPos + 4);
+        yPos += qHeight + 4;
 
+        // Answer
         doc.setFont('helvetica', 'normal');
-        doc.setTextColor(0);
-        const aLines = doc.splitTextToSize(answer, contentWidth - 4);
-        checkNewPage(aLines.length * 4 + 5);
-        doc.text(aLines, margin + 4, yPos);
-        yPos += aLines.length * 4 + 8;
+        doc.setTextColor(...textDark);
+        const aLines = doc.splitTextToSize(answer, contentWidth - 12);
+        checkNewPage(aLines.length * 4 + 8);
+        doc.text(aLines, margin + 8, yPos);
+        yPos += aLines.length * 4 + 10;
       }
     }
 
-    // Summary footer
-    checkNewPage(50);
-    yPos += 10;
+    // ========== FINAL FOOTER ==========
+    addPageFooter();
     
-    doc.setFillColor(248, 250, 252);
-    doc.roundedRect(margin, yPos, contentWidth, 35, 3, 3, 'F');
-
-    doc.setFontSize(11);
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(...primaryColor);
-    doc.text('Summary', margin + 8, yPos + 10);
-
-    const totalHours = entries.reduce((sum, e) => sum + (e.hours_spent || 0), 0);
-    const verifiedCount = entries.filter(e => e.verification_status === 'verified').length;
-    const yearsActive = Object.keys(entriesByYear).length;
-
-    doc.setFontSize(10);
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(0);
-    
-    const col1X = margin + 8;
-    const col2X = margin + contentWidth / 2;
-    
-    doc.text(`Total Activities: ${entries.length}`, col1X, yPos + 20);
-    doc.text(`Verified Entries: ${verifiedCount}`, col2X, yPos + 20);
-    doc.text(`Total Hours: ${totalHours}`, col1X, yPos + 28);
-    doc.text(`Years of Activity: ${yearsActive}`, col2X, yPos + 28);
+    // Add footer bar on last page
+    doc.setFillColor(...primaryColor);
+    doc.rect(0, pageHeight - 6, pageWidth, 6, 'F');
   };
 
   return (
