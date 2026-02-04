@@ -5,6 +5,7 @@ import { useSchools } from '@/hooks/useSchools';
 import { useTheme, ThemeName, ColorMode } from '@/contexts/ThemeContext';
 import { useGoogleCalendar } from '@/hooks/useGoogleCalendar';
 import { useGradeProgression } from '@/hooks/useGradeProgression';
+import { usePresentationMode } from '@/contexts/PresentationModeContext';
 import { GRADE_OPTIONS, GRADE_DISPLAY } from '@/config/grades';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -15,12 +16,13 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
-import { Camera, Sun, Moon, Monitor, Check, Palette, School, GraduationCap, User, Calendar, Trash2, Download, AlertTriangle, ChevronUp, ChevronDown, RotateCcw } from 'lucide-react';
+import { Camera, Sun, Moon, Monitor, Check, Palette, School, GraduationCap, User, Calendar, Trash2, Download, AlertTriangle, ChevronUp, ChevronDown, RotateCcw, Presentation } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { Link } from 'react-router-dom';
 import { NotificationPreferencesCard } from './NotificationPreferencesCard';
 import { UserRolesCard } from './UserRolesCard';
+
 export function SettingsView() {
   const {
     user,
@@ -53,6 +55,11 @@ export function SettingsView() {
     revertGrade,
     undoGraduation,
   } = useGradeProgression();
+  const {
+    isPresentationMode,
+    togglePresentationMode,
+    canAccessPresentationMode,
+  } = usePresentationMode();
   const {
     toast
   } = useToast();
@@ -396,6 +403,41 @@ export function SettingsView() {
             </div>}
         </CardContent>
       </Card>
+
+      {/* Presentation Mode - Admin Only */}
+      {canAccessPresentationMode && (
+        <Card className="card-elevated border-warning/30">
+          <CardHeader>
+            <CardTitle className="font-display flex items-center gap-2 text-warning">
+              <Presentation className="w-5 h-5" />
+              Presentation Mode
+            </CardTitle>
+            <CardDescription>Enable dummy data for demonstrations and presentations</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="space-y-0.5">
+                <Label>Enable Presentation Mode</Label>
+                <p className="text-sm text-muted-foreground">
+                  Show dummy data across all tabs for demo purposes
+                </p>
+              </div>
+              <Switch 
+                checked={isPresentationMode} 
+                onCheckedChange={togglePresentationMode} 
+              />
+            </div>
+            {isPresentationMode && (
+              <div className="p-3 rounded-lg bg-warning/10 border border-warning/20">
+                <p className="text-sm text-warning flex items-center gap-2">
+                  <AlertTriangle className="w-4 h-4" />
+                  Presentation mode is active. All data shown is dummy data.
+                </p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
 
       {/* Danger Zone */}
       <Card className="card-elevated border-destructive/30">

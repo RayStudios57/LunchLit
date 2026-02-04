@@ -12,6 +12,7 @@ import { BragSheetSuggestions } from './BragSheetSuggestions';
 import { BragSheetPDFExport } from './BragSheetPDFExport';
 import { BragSheetAcademicsForm } from './BragSheetAcademicsForm';
 import { BragSheetInsightsForm } from './BragSheetInsightsForm';
+import { DraggableActivityList } from './DraggableActivityList';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Link } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
@@ -240,7 +241,7 @@ export function BragSheetView() {
                   <div>
                     <h3 className="font-semibold">Top Activities</h3>
                     <p className="text-sm text-muted-foreground">
-                      School, home, volunteering, work experience, etc.
+                      Drag to reorder and prioritize your most important activities first
                     </p>
                   </div>
                   <Button size="sm" onClick={() => setIsAddingEntry(true)}>
@@ -255,11 +256,7 @@ export function BragSheetView() {
                     <p className="text-muted-foreground">No activities added yet.</p>
                   </div>
                 ) : (
-                  <div className="space-y-3">
-                    {activityEntries.map((entry) => (
-                      <BragSheetEntryCard key={entry.id} entry={entry} />
-                    ))}
-                  </div>
+                  <DraggableActivityList entries={activityEntries} />
                 )}
               </div>
             </TabsContent>
