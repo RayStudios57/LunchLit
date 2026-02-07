@@ -2,6 +2,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
+import { usePresentationMode } from '@/contexts/PresentationModeContext';
+import { dummyStudentGoals } from '@/data/presentationDummyData';
 
 export interface StudentGoal {
   id: string;
@@ -23,6 +25,7 @@ export function useStudentGoals() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const { toast } = useToast();
+  const { isPresentationMode } = usePresentationMode();
 
   const { data: goals = [], isLoading } = useQuery({
     queryKey: ['student-goals', user?.id],
@@ -94,17 +97,19 @@ export function useStudentGoals() {
     },
   });
 
-  const goalsByType = goals.reduce((acc, goal) => {
+  const activeGoals = isPresentationMode ? dummyStudentGoals : goals;
+
+  const goalsByType = activeGoals.reduce((acc, goal) => {
     if (!acc[goal.goal_type]) acc[goal.goal_type] = [];
     acc[goal.goal_type].push(goal);
     return acc;
   }, {} as Record<string, StudentGoal[]>);
 
   const stats = {
-    total: goals.length,
-    completed: goals.filter(g => g.status === 'completed').length,
-    inProgress: goals.filter(g => g.status === 'in_progress').length,
+    total: activeGoals.length,
+    completed: activeGoals.filter(g => g.status === 'completed').length,
+    inProgress: activeGoals.filter(g => g.status === 'in_progress').length,
   };
 
-  return { goals, goalsByType, stats, isLoading, addGoal, updateGoal, deleteGoal };
+  return { goals: activeGoals, goalsByType, stats, isLoading: isPresentationMode ? false : isLoading, addGoal, updateGoal, deleteGoal };
 }

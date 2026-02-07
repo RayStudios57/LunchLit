@@ -2,6 +2,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
+import { usePresentationMode } from '@/contexts/PresentationModeContext';
+import { dummyInsights } from '@/data/presentationDummyData';
 
 export const INSIGHT_QUESTIONS = [
   {
@@ -67,6 +69,7 @@ export function useBragSheetInsights() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const { toast } = useToast();
+  const { isPresentationMode } = usePresentationMode();
 
   const { data: insights = [], isLoading } = useQuery({
     queryKey: ['brag-sheet-insights', user?.id],
@@ -112,13 +115,15 @@ export function useBragSheetInsights() {
     },
   });
 
+  const activeInsights = isPresentationMode ? (dummyInsights as BragSheetInsight[]) : insights;
+
   const getInsightAnswer = (key: string) => {
-    return insights.find(i => i.question_key === key)?.answer || '';
+    return activeInsights.find(i => i.question_key === key)?.answer || '';
   };
 
   return {
-    insights,
-    isLoading,
+    insights: activeInsights,
+    isLoading: isPresentationMode ? false : isLoading,
     saveInsight,
     getInsightAnswer,
   };

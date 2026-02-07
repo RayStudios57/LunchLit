@@ -2,6 +2,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
+import { usePresentationMode } from '@/contexts/PresentationModeContext';
+import { dummyBragSheetEntries } from '@/data/presentationDummyData';
 
 export type BragCategory = 
   | 'volunteering' 
@@ -49,6 +51,7 @@ export function useBragSheet() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const { toast } = useToast();
+  const { isPresentationMode } = usePresentationMode();
 
   const { data: entries = [], isLoading } = useQuery({
     queryKey: ['brag-sheet', user?.id],
@@ -120,8 +123,10 @@ export function useBragSheet() {
     },
   });
 
+  const activeEntries = isPresentationMode ? dummyBragSheetEntries : entries;
+
   // Group entries by school year
-  const entriesByYear = entries.reduce((acc, entry) => {
+  const entriesByYear = activeEntries.reduce((acc, entry) => {
     const year = entry.school_year;
     if (!acc[year]) acc[year] = [];
     acc[year].push(entry);
@@ -130,17 +135,17 @@ export function useBragSheet() {
 
   // Get stats
   const stats = {
-    total: entries.length,
-    verified: entries.filter(e => e.verification_status === 'verified').length,
-    totalHours: entries.reduce((sum, e) => sum + (e.hours_spent || 0), 0),
-    byCategory: entries.reduce((acc, entry) => {
+    total: activeEntries.length,
+    verified: activeEntries.filter(e => e.verification_status === 'verified').length,
+    totalHours: activeEntries.reduce((sum, e) => sum + (e.hours_spent || 0), 0),
+    byCategory: activeEntries.reduce((acc, entry) => {
       acc[entry.category] = (acc[entry.category] || 0) + 1;
       return acc;
     }, {} as Record<BragCategory, number>),
   };
 
   return { 
-    entries, 
+    entries: activeEntries, 
     entriesByYear, 
     stats, 
     isLoading, 

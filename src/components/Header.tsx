@@ -1,7 +1,8 @@
-import { Calendar, CheckSquare, Book, Utensils, BookOpen, GraduationCap, MessageCircle, Users, Settings, Trophy, Shield, Target } from 'lucide-react';
+import { Calendar, CheckSquare, Book, Utensils, BookOpen, GraduationCap, MessageCircle, Users, Settings, Trophy, Shield, Target, Presentation } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/hooks/useProfile';
 import { useUserRoles } from '@/hooks/useUserRoles';
+import { usePresentationMode } from '@/contexts/PresentationModeContext';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
@@ -26,6 +27,7 @@ export function Header({
     profile
   } = useProfile();
   const { isAdmin } = useUserRoles();
+  const { isPresentationMode, togglePresentationMode, canAccessPresentationMode } = usePresentationMode();
 
   // Primary tabs - main navigation (left to right: Today, Menu, Classes, Brag Sheet, Portfolio)
   const primaryTabs = [{
@@ -103,6 +105,15 @@ export function Header({
                     <Settings className="w-4 h-4 mr-2" />
                     Settings
                   </DropdownMenuItem>
+                  {canAccessPresentationMode && (
+                    <>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={togglePresentationMode}>
+                        <Presentation className="w-4 h-4 mr-2" />
+                        {isPresentationMode ? '✅ Test Mode On' : 'Test Mode'}
+                      </DropdownMenuItem>
+                    </>
+                  )}
                   {isAdmin && (
                     <>
                       <DropdownMenuSeparator />
