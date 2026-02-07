@@ -7,7 +7,7 @@ export function Credits() {
         <Code className="h-4 w-4 text-muted-foreground" />
         <div className="text-sm">
           <span className="text-muted-foreground">Made by </span>
-          <span className="font-semibold text-foreground">Ramakrishna Krishna and Alex Quinones</span>
+          <span className="font-semibold text-foreground">Ramakrishna Krishna </span>
         </div>
       </div>
       <Button variant="outline" size="sm" asChild>
