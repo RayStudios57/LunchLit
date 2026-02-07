@@ -2,6 +2,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
+import { usePresentationMode } from '@/contexts/PresentationModeContext';
+import { dummyTargetSchools } from '@/data/presentationDummyData';
 
 export interface TargetSchool {
   id: string;
@@ -25,6 +27,7 @@ export function useTargetSchools() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const { toast } = useToast();
+  const { isPresentationMode } = usePresentationMode();
 
   const { data: schools = [], isLoading } = useQuery({
     queryKey: ['target-schools', user?.id],
@@ -96,13 +99,15 @@ export function useTargetSchools() {
     },
   });
 
+  const activeSchools = isPresentationMode ? dummyTargetSchools : schools;
+
   const stats = {
-    total: schools.length,
-    reaches: schools.filter(s => s.is_reach).length,
-    matches: schools.filter(s => s.is_match).length,
-    safeties: schools.filter(s => s.is_safety).length,
-    accepted: schools.filter(s => s.status === 'accepted').length,
+    total: activeSchools.length,
+    reaches: activeSchools.filter(s => s.is_reach).length,
+    matches: activeSchools.filter(s => s.is_match).length,
+    safeties: activeSchools.filter(s => s.is_safety).length,
+    accepted: activeSchools.filter(s => s.status === 'accepted').length,
   };
 
-  return { schools, stats, isLoading, addSchool, updateSchool, deleteSchool };
+  return { schools: activeSchools, stats, isLoading: isPresentationMode ? false : isLoading, addSchool, updateSchool, deleteSchool };
 }

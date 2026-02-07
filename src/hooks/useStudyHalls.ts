@@ -2,6 +2,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
+import { usePresentationMode } from '@/contexts/PresentationModeContext';
+import { dummyStudyHalls } from '@/data/presentationDummyData';
 
 export interface StudyHall {
   id: string;
@@ -20,6 +22,7 @@ export interface StudyHall {
 export function useStudyHalls() {
   const queryClient = useQueryClient();
   const { toast } = useToast();
+  const { isPresentationMode } = usePresentationMode();
 
   const { data: studyHalls = [], isLoading } = useQuery({
     queryKey: ['study_halls'],
@@ -139,9 +142,11 @@ export function useStudyHalls() {
     },
   });
 
+  const activeStudyHalls = isPresentationMode ? (dummyStudyHalls as StudyHall[]) : studyHalls;
+
   return {
-    studyHalls,
-    isLoading,
+    studyHalls: activeStudyHalls,
+    isLoading: isPresentationMode ? false : isLoading,
     updateOccupancy,
     createStudyHall,
     deleteStudyHall,

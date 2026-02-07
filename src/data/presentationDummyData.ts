@@ -388,28 +388,77 @@ export const dummyClassSchedule = [
 ];
 
 export const dummyStudyHalls = [
-  { id: genId(), name: 'Main Library', location: 'Building A', capacity: 50, current_occupancy: 32, is_available: true, periods: ['1', '2', '3', '4'], teacher: 'Mrs. Thompson' },
-  { id: genId(), name: 'Science Study Room', location: 'Building B - Room 301', capacity: 20, current_occupancy: 18, is_available: true, periods: ['2', '3', '5'], teacher: 'Dr. Patel' },
-  { id: genId(), name: 'Quiet Study Hall', location: 'Building C', capacity: 30, current_occupancy: 30, is_available: false, periods: ['1', '2', '3', '4', '5'], teacher: 'Mr. Brown' },
+  { id: genId(), name: 'Main Library', location: 'Building A', capacity: 50, current_occupancy: 32, is_available: true, periods: ['1', '2', '3', '4'], teacher: 'Mrs. Thompson', school_id: null, created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
+  { id: genId(), name: 'Science Study Room', location: 'Building B - Room 301', capacity: 20, current_occupancy: 18, is_available: true, periods: ['2', '3', '5'], teacher: 'Dr. Patel', school_id: null, created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
+  { id: genId(), name: 'Quiet Study Hall', location: 'Building C', capacity: 30, current_occupancy: 30, is_available: false, periods: ['1', '2', '3', '4', '5'], teacher: 'Mr. Brown', school_id: null, created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
 ];
 
-export const dummyMealSchedule = {
-  date: new Date().toISOString().split('T')[0],
-  meals: [
-    {
-      name: 'Chicken Teriyaki Bowl',
-      description: 'Grilled chicken with teriyaki sauce, steamed rice, and vegetables',
-      tags: ['High Protein', 'Gluten-Free'],
-    },
-    {
-      name: 'Vegetarian Pasta',
-      description: 'Penne pasta with marinara sauce and roasted vegetables',
-      tags: ['Vegetarian', 'Dairy-Free'],
-    },
-    {
-      name: 'Caesar Salad',
-      description: 'Fresh romaine lettuce with parmesan, croutons, and caesar dressing',
-      tags: ['Vegetarian'],
-    },
-  ],
-};
+export const dummyMealSchedules = [
+  {
+    id: genId(),
+    school_id: 'demo-school',
+    meal_date: new Date().toISOString().split('T')[0],
+    meal_type: 'lunch',
+    menu_items: [
+      { name: 'Chicken Teriyaki Bowl', description: 'Grilled chicken with teriyaki sauce, steamed rice, and vegetables', dietary_tags: ['High Protein', 'Gluten-Free'], calories: 520 },
+      { name: 'Vegetarian Pasta', description: 'Penne pasta with marinara sauce and roasted vegetables', dietary_tags: ['Vegetarian', 'Dairy-Free'], calories: 410 },
+      { name: 'Caesar Salad', description: 'Fresh romaine lettuce with parmesan, croutons, and caesar dressing', dietary_tags: ['Vegetarian'], calories: 320 },
+    ],
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  },
+];
+
+export const dummyDiscussions = [
+  {
+    id: genId(),
+    user_id: 'demo-user',
+    school_id: null,
+    title: 'Best study tips for AP exams?',
+    content: 'Hey everyone! AP exams are coming up soon. What study strategies have worked best for you? I\'m taking 5 APs this year and need all the help I can get!',
+    parent_id: null,
+    category: 'academic',
+    is_pinned: true,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    author_name: 'Jordan Taylor',
+    author_avatar: null,
+    reply_count: 12,
+  },
+  {
+    id: genId(),
+    user_id: 'demo-user-2',
+    school_id: null,
+    title: 'Coding Club meeting this Friday!',
+    content: 'Reminder: We have a coding club meeting this Friday at 3:30 PM in Room 205. We\'ll be working on our school app project. Snacks provided! 🍕',
+    parent_id: null,
+    category: 'clubs',
+    is_pinned: false,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    author_name: 'Alex Chen',
+    author_avatar: null,
+    reply_count: 5,
+  },
+  {
+    id: genId(),
+    user_id: 'demo-user-3',
+    school_id: null,
+    title: 'College application essay help',
+    content: 'Would anyone be interested in forming a peer review group for college essays? I think it would be really helpful to get feedback from classmates.',
+    parent_id: null,
+    category: 'college',
+    is_pinned: false,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    author_name: 'Maya Patel',
+    author_avatar: null,
+    reply_count: 8,
+  },
+];
+
+export const dummyInsights = [
+  { id: genId(), user_id: 'demo-user', question_key: 'adjectives', answer: 'Determined, curious, and compassionate. I\'m determined because I never give up on challenges, curious because I love exploring new ideas in STEM, and compassionate because I believe in giving back through volunteering.', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
+  { id: genId(), user_id: 'demo-user', question_key: 'major_goals', answer: 'I plan to major in Computer Science with a minor in Environmental Science. My career goal is to develop sustainable technology solutions that address climate change. I\'m particularly interested in AI applications for renewable energy optimization.', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
+  { id: genId(), user_id: 'demo-user', question_key: 'proudest_moment', answer: 'When our debate team made it to state finals for the first time in 5 years. As captain, I spent extra hours coaching our novice members and developing new strategies. Seeing their growth and our collective achievement was incredibly rewarding.', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
+];

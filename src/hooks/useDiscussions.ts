@@ -2,6 +2,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
+import { usePresentationMode } from '@/contexts/PresentationModeContext';
+import { dummyDiscussions } from '@/data/presentationDummyData';
 import { useEffect } from 'react';
 import { z } from 'zod';
 
@@ -44,6 +46,7 @@ export function useDiscussions(category?: string) {
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const { toast } = useToast();
+  const { isPresentationMode } = usePresentationMode();
 
   const { data: discussions = [], isLoading } = useQuery({
     queryKey: ['discussions', category],
@@ -155,7 +158,9 @@ export function useDiscussions(category?: string) {
     },
   });
 
-  return { discussions, isLoading, createDiscussion, deleteDiscussion };
+  const activeDiscussions = isPresentationMode ? (dummyDiscussions as Discussion[]) : discussions;
+
+  return { discussions: activeDiscussions, isLoading: isPresentationMode ? false : isLoading, createDiscussion, deleteDiscussion };
 }
 
 export function useDiscussionReplies(discussionId: string) {

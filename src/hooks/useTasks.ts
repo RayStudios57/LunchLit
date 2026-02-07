@@ -2,6 +2,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
+import { usePresentationMode } from '@/contexts/PresentationModeContext';
+import { dummyTasks } from '@/data/presentationDummyData';
 
 export interface Task {
   id: string;
@@ -21,6 +23,7 @@ export function useTasks() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const { toast } = useToast();
+  const { isPresentationMode } = usePresentationMode();
 
   const { data: tasks = [], isLoading } = useQuery({
     queryKey: ['tasks', user?.id],
@@ -91,5 +94,7 @@ export function useTasks() {
     },
   });
 
-  return { tasks, isLoading, addTask, updateTask, deleteTask };
+  const activeTasks = isPresentationMode ? (dummyTasks as Task[]) : tasks;
+
+  return { tasks: activeTasks, isLoading: isPresentationMode ? false : isLoading, addTask, updateTask, deleteTask };
 }
