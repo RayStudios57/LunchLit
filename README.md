@@ -21,8 +21,6 @@ Optimized for fast load times and short daily check-ins
 
 Create and manage class schedules and assignments
 
-Import and export data using .CSV or .JSON for backups and sharing
-
 File validation to prevent corrupted or incompatible imports
 
 🔐 Authentication & Integrations
