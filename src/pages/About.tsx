@@ -6,8 +6,12 @@ import { Helmet } from 'react-helmet';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { CreatorSocialLinks } from '@/components/about/CreatorSocialLinks';
 import { SuggestionsSection } from '@/components/about/SuggestionsSection';
-const CURRENT_VERSION = '0.5';
+const CURRENT_VERSION = '0.6';
 const changelogData = [{
+  version: '0.6',
+  date: 'February 2026',
+  changes: ['Fancy PDF export with embedded images and visual styling', 'Common App format PDF export matching college application layouts', 'Drag-and-drop activity reordering for Brag Sheet priorities', 'Admin-only Presentation Mode with dummy data for demos', 'Student Portfolio with goals, target schools, and college predictor']
+}, {
   version: '0.5',
   date: 'January 2026',
   changes: ['Real-time Brag Sheet system for tracking achievements', 'Grade level progression with historical records', 'Academics section with GPA, test scores, and courses', 'PDF export for Brag Sheet with full profile', 'Meal preview and MealViewer import for admins']
