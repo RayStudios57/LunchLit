@@ -6,67 +6,30 @@ import { Helmet } from 'react-helmet';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { CreatorSocialLinks } from '@/components/about/CreatorSocialLinks';
 import { SuggestionsSection } from '@/components/about/SuggestionsSection';
-
 const CURRENT_VERSION = '0.5';
-
-const changelogData = [
-  {
-    version: '0.5',
-    date: 'January 2026',
-    changes: [
-      'Real-time Brag Sheet system for tracking achievements',
-      'Grade level progression with historical records',
-      'Academics section with GPA, test scores, and courses',
-      'PDF export for Brag Sheet with full profile',
-      'Meal preview and MealViewer import for admins',
-    ],
-  },
-  {
-    version: '0.4',
-    date: 'December 2025',
-    changes: [
-      'Manual Brag Sheet entry management with structured fields',
-      'Auto-suggested entries based on completed tasks',
-      'Updated grade level selection (5th-12th grade)',
-    ],
-  },
-  {
-    version: '0.3',
-    date: 'December 2025',
-    changes: [
-      'Theme customization with multiple light/dark themes',
-      'Theme-aware app logos',
-      'Dedicated Tasks / To-Do tab',
-      'Centralized Settings page',
-      'Google Calendar export and syncing',
-    ],
-  },
-  {
-    version: '0.2',
-    date: 'December 2025',
-    changes: [
-      'Today dashboard widget with upcoming classes/tasks',
-      'Import/export for schedules and tasks (CSV/JSON)',
-      'Grade level selection during onboarding',
-      'Discussion/community tab for communication',
-    ],
-  },
-  {
-    version: '0.1',
-    date: 'December 2025',
-    changes: [
-      'Core student dashboard',
-      'Class schedule viewer',
-      'School meal display',
-      'Basic task and planning functionality',
-      'Study halls and open periods finder',
-    ],
-  },
-];
-
+const changelogData = [{
+  version: '0.5',
+  date: 'January 2026',
+  changes: ['Real-time Brag Sheet system for tracking achievements', 'Grade level progression with historical records', 'Academics section with GPA, test scores, and courses', 'PDF export for Brag Sheet with full profile', 'Meal preview and MealViewer import for admins']
+}, {
+  version: '0.4',
+  date: 'December 2025',
+  changes: ['Manual Brag Sheet entry management with structured fields', 'Auto-suggested entries based on completed tasks', 'Updated grade level selection (5th-12th grade)']
+}, {
+  version: '0.3',
+  date: 'December 2025',
+  changes: ['Theme customization with multiple light/dark themes', 'Theme-aware app logos', 'Dedicated Tasks / To-Do tab', 'Centralized Settings page', 'Google Calendar export and syncing']
+}, {
+  version: '0.2',
+  date: 'December 2025',
+  changes: ['Today dashboard widget with upcoming classes/tasks', 'Import/export for schedules and tasks (CSV/JSON)', 'Grade level selection during onboarding', 'Discussion/community tab for communication']
+}, {
+  version: '0.1',
+  date: 'December 2025',
+  changes: ['Core student dashboard', 'Class schedule viewer', 'School meal display', 'Basic task and planning functionality', 'Study halls and open periods finder']
+}];
 export default function About() {
-  return (
-    <div className="min-h-screen bg-background">
+  return <div className="min-h-screen bg-background">
       <Helmet>
         <title>About LunchLit - Your Daily School Companion</title>
         <meta name="description" content="Learn about LunchLit, the comprehensive school companion app designed to help students manage their daily school life." />
@@ -187,8 +150,7 @@ export default function About() {
           </CardHeader>
           <CardContent>
             <Accordion type="single" collapsible defaultValue="0.4" className="w-full">
-              {changelogData.map((release) => (
-                <AccordionItem key={release.version} value={release.version}>
+              {changelogData.map(release => <AccordionItem key={release.version} value={release.version}>
                   <AccordionTrigger className="hover:no-underline">
                     <div className="flex items-center gap-3">
                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary">
@@ -199,16 +161,13 @@ export default function About() {
                   </AccordionTrigger>
                   <AccordionContent>
                     <ul className="space-y-2 pl-1">
-                      {release.changes.map((change, idx) => (
-                        <li key={idx} className="flex items-start gap-2 text-sm text-muted-foreground">
+                      {release.changes.map((change, idx) => <li key={idx} className="flex items-start gap-2 text-sm text-muted-foreground">
                           <span className="text-primary mt-1.5">•</span>
                           {change}
-                        </li>
-                      ))}
+                        </li>)}
                     </ul>
                   </AccordionContent>
-                </AccordionItem>
-              ))}
+                </AccordionItem>)}
             </Accordion>
           </CardContent>
         </Card>
@@ -255,7 +214,7 @@ export default function About() {
               <p className="text-sm text-muted-foreground">Created by</p>
               <div className="space-y-1">
                 <p className="font-display text-xl font-semibold text-foreground">Ramakrishna Krishna</p>
-                <p className="font-display text-lg text-foreground">Alex Quinones</p>
+                <p className="font-display text-lg text-foreground">Assisted by Alex Quinones</p>
               </div>
               
               {/* Dynamic Social Links */}
@@ -275,6 +234,5 @@ export default function About() {
           </Button>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 }
