@@ -2,6 +2,7 @@
 import { BragSheetEntry, BragCategory } from '@/hooks/useBragSheet';
 import { StudentGoal } from '@/hooks/useStudentGoals';
 import { TargetSchool } from '@/hooks/useTargetSchools';
+import { format, addDays, startOfWeek, isWeekend, endOfWeek } from 'date-fns';
 
 // Helper to generate IDs
 const genId = () => `demo-${Math.random().toString(36).substr(2, 9)}`;
@@ -44,7 +45,7 @@ export const dummyBragSheetEntries: BragSheetEntry[] = [
     verification_notes: null,
     suggested_from_task_id: null,
     is_auto_suggested: false,
-    images: null,
+    images: ['https://images.unsplash.com/photo-1523050854058-8df90110c476?w=400&h=300&fit=crop', 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&h=300&fit=crop'],
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
   },
@@ -70,7 +71,7 @@ export const dummyBragSheetEntries: BragSheetEntry[] = [
     verification_notes: null,
     suggested_from_task_id: null,
     is_auto_suggested: false,
-    images: null,
+    images: ['https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=400&h=300&fit=crop'],
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
   },
@@ -122,7 +123,7 @@ export const dummyBragSheetEntries: BragSheetEntry[] = [
     verification_notes: null,
     suggested_from_task_id: null,
     is_auto_suggested: false,
-    images: null,
+    images: ['https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&h=300&fit=crop'],
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
   },
@@ -174,7 +175,7 @@ export const dummyBragSheetEntries: BragSheetEntry[] = [
     verification_notes: null,
     suggested_from_task_id: null,
     is_auto_suggested: false,
-    images: null,
+    images: ['https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=400&h=300&fit=crop', 'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=400&h=300&fit=crop'],
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
   },
@@ -379,13 +380,35 @@ export const dummyTasks = [
   },
 ];
 
-export const dummyClassSchedule = [
-  { id: genId(), class_name: 'AP Calculus BC', teacher_name: 'Mrs. Chen', room_number: '201', start_time: '08:00', end_time: '09:00', day_of_week: 1, color: '#3b82f6' },
-  { id: genId(), class_name: 'AP Physics C', teacher_name: 'Mr. Johnson', room_number: '305', start_time: '09:15', end_time: '10:15', day_of_week: 1, color: '#10b981' },
-  { id: genId(), class_name: 'AP English Literature', teacher_name: 'Ms. Williams', room_number: '102', start_time: '10:30', end_time: '11:30', day_of_week: 1, color: '#f59e0b' },
-  { id: genId(), class_name: 'AP US History', teacher_name: 'Mr. Garcia', room_number: '210', start_time: '12:30', end_time: '13:30', day_of_week: 1, color: '#8b5cf6' },
-  { id: genId(), class_name: 'Spanish IV Honors', teacher_name: 'Sra. Martinez', room_number: '115', start_time: '13:45', end_time: '14:45', day_of_week: 1, color: '#ec4899' },
-];
+// Generate classes for ALL 5 weekdays
+function generateFullWeekClasses() {
+  const classes = [];
+  const schedule = [
+    { class_name: 'AP Calculus BC', teacher_name: 'Mrs. Chen', room_number: '201', start_time: '08:00', end_time: '09:00', color: '#3b82f6' },
+    { class_name: 'AP Physics C', teacher_name: 'Mr. Johnson', room_number: '305', start_time: '09:15', end_time: '10:15', color: '#10b981' },
+    { class_name: 'AP English Literature', teacher_name: 'Ms. Williams', room_number: '102', start_time: '10:30', end_time: '11:30', color: '#f59e0b' },
+    { class_name: 'AP US History', teacher_name: 'Mr. Garcia', room_number: '210', start_time: '12:30', end_time: '13:30', color: '#8b5cf6' },
+    { class_name: 'Spanish IV Honors', teacher_name: 'Sra. Martinez', room_number: '115', start_time: '13:45', end_time: '14:45', color: '#ec4899' },
+  ];
+  
+  for (let day = 1; day <= 5; day++) {
+    for (const cls of schedule) {
+      classes.push({
+        id: genId(),
+        ...cls,
+        day_of_week: day,
+        user_id: 'demo-user',
+        is_club: false,
+        show_every_day: false,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      });
+    }
+  }
+  return classes;
+}
+
+export const dummyClassSchedule = generateFullWeekClasses();
 
 export const dummyStudyHalls = [
   { id: genId(), name: 'Main Library', location: 'Building A', capacity: 50, current_occupancy: 32, is_available: true, periods: ['1', '2', '3', '4'], teacher: 'Mrs. Thompson', school_id: null, created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
@@ -393,25 +416,62 @@ export const dummyStudyHalls = [
   { id: genId(), name: 'Quiet Study Hall', location: 'Building C', capacity: 30, current_occupancy: 30, is_available: false, periods: ['1', '2', '3', '4', '5'], teacher: 'Mr. Brown', school_id: null, created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
 ];
 
-export const dummyMealSchedules = [
-  {
-    id: genId(),
-    school_id: 'demo-school',
-    meal_date: new Date().toISOString().split('T')[0],
-    meal_type: 'lunch',
-    menu_items: [
+// Generate meals for each weekday of the current week
+function generateWeeklyMeals() {
+  const today = new Date();
+  const weekStart = isWeekend(today)
+    ? addDays(endOfWeek(today, { weekStartsOn: 1 }), 1)
+    : startOfWeek(today, { weekStartsOn: 1 });
+
+  const dailyMenus = [
+    [
       { name: 'Chicken Teriyaki Bowl', description: 'Grilled chicken with teriyaki sauce, steamed rice, and vegetables', dietary_tags: ['High Protein', 'Gluten-Free'], calories: 520 },
       { name: 'Vegetarian Pasta', description: 'Penne pasta with marinara sauce and roasted vegetables', dietary_tags: ['Vegetarian', 'Dairy-Free'], calories: 410 },
       { name: 'Caesar Salad', description: 'Fresh romaine lettuce with parmesan, croutons, and caesar dressing', dietary_tags: ['Vegetarian'], calories: 320 },
     ],
+    [
+      { name: 'BBQ Pulled Pork Sandwich', description: 'Slow-cooked pulled pork with coleslaw on a brioche bun', dietary_tags: ['High Protein'], calories: 580 },
+      { name: 'Black Bean Tacos', description: 'Seasoned black beans, pico de gallo, and avocado on corn tortillas', dietary_tags: ['Vegetarian', 'Vegan', 'Gluten-Free'], calories: 390 },
+      { name: 'Garden Salad', description: 'Mixed greens with cherry tomatoes, cucumbers, and balsamic vinaigrette', dietary_tags: ['Vegan', 'Gluten-Free'], calories: 180 },
+    ],
+    [
+      { name: 'Pepperoni Pizza', description: 'Hand-tossed pizza with marinara, mozzarella, and pepperoni', dietary_tags: [], calories: 620 },
+      { name: 'Margherita Flatbread', description: 'Thin crust with fresh mozzarella, basil, and tomato sauce', dietary_tags: ['Vegetarian'], calories: 450 },
+      { name: 'Chicken Noodle Soup', description: 'Classic chicken noodle soup with carrots, celery, and herbs', dietary_tags: ['High Protein'], calories: 280 },
+    ],
+    [
+      { name: 'Grilled Chicken Caesar Wrap', description: 'Grilled chicken, romaine, parmesan, and caesar dressing in a flour tortilla', dietary_tags: ['High Protein'], calories: 490 },
+      { name: 'Veggie Stir Fry', description: 'Mixed vegetables with tofu in a ginger-soy sauce over brown rice', dietary_tags: ['Vegan', 'Dairy-Free'], calories: 380 },
+      { name: 'Fruit & Yogurt Parfait', description: 'Greek yogurt with granola, strawberries, and blueberries', dietary_tags: ['Vegetarian', 'High Protein'], calories: 290 },
+    ],
+    [
+      { name: 'Fish & Chips', description: 'Battered cod with crispy fries and tartar sauce', dietary_tags: [], calories: 650 },
+      { name: 'Mac & Cheese', description: 'Creamy three-cheese macaroni baked to perfection', dietary_tags: ['Vegetarian'], calories: 550 },
+      { name: 'Minestrone Soup', description: 'Hearty Italian vegetable soup with pasta and beans', dietary_tags: ['Vegan'], calories: 240 },
+    ],
+  ];
+
+  return dailyMenus.map((items, i) => ({
+    id: genId(),
+    school_id: 'demo-school',
+    meal_date: format(addDays(weekStart, i), 'yyyy-MM-dd'),
+    meal_type: 'lunch',
+    menu_items: items,
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
-  },
-];
+  }));
+}
+
+export const dummyMealSchedules = generateWeeklyMeals();
+
+// Discussion IDs for linking replies
+const discussionId1 = genId();
+const discussionId2 = genId();
+const discussionId3 = genId();
 
 export const dummyDiscussions = [
   {
-    id: genId(),
+    id: discussionId1,
     user_id: 'demo-user',
     school_id: null,
     title: 'Best study tips for AP exams?',
@@ -419,46 +479,86 @@ export const dummyDiscussions = [
     parent_id: null,
     category: 'academic',
     is_pinned: true,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
+    created_at: new Date(Date.now() - 2 * 86400000).toISOString(),
+    updated_at: new Date(Date.now() - 2 * 86400000).toISOString(),
     author_name: 'Jordan Taylor',
     author_avatar: null,
-    reply_count: 12,
+    reply_count: 4,
   },
   {
-    id: genId(),
+    id: discussionId2,
     user_id: 'demo-user-2',
     school_id: null,
     title: 'Coding Club meeting this Friday!',
     content: 'Reminder: We have a coding club meeting this Friday at 3:30 PM in Room 205. We\'ll be working on our school app project. Snacks provided! 🍕',
     parent_id: null,
-    category: 'clubs',
+    category: 'events',
     is_pinned: false,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
+    created_at: new Date(Date.now() - 86400000).toISOString(),
+    updated_at: new Date(Date.now() - 86400000).toISOString(),
     author_name: 'Alex Chen',
     author_avatar: null,
-    reply_count: 5,
+    reply_count: 3,
   },
   {
-    id: genId(),
+    id: discussionId3,
     user_id: 'demo-user-3',
     school_id: null,
     title: 'College application essay help',
     content: 'Would anyone be interested in forming a peer review group for college essays? I think it would be really helpful to get feedback from classmates.',
     parent_id: null,
-    category: 'college',
+    category: 'general',
     is_pinned: false,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
+    created_at: new Date(Date.now() - 3 * 86400000).toISOString(),
+    updated_at: new Date(Date.now() - 3 * 86400000).toISOString(),
     author_name: 'Maya Patel',
     author_avatar: null,
-    reply_count: 8,
+    reply_count: 5,
   },
 ];
+
+// Replies keyed by parent discussion ID
+export const dummyDiscussionReplies: Record<string, any[]> = {
+  [discussionId1]: [
+    { id: genId(), user_id: 'demo-user-4', content: 'Flashcards and spaced repetition worked great for me! I use Anki for AP History and it makes a huge difference.', parent_id: discussionId1, category: 'academic', is_pinned: false, created_at: new Date(Date.now() - 1.5 * 86400000).toISOString(), updated_at: new Date(Date.now() - 1.5 * 86400000).toISOString(), author_name: 'Sam Rivera', author_avatar: null, school_id: null, title: null },
+    { id: genId(), user_id: 'demo-user-5', content: 'Practice tests are KEY! I do timed practice exams every weekend leading up to the test. CollegeBoard has free ones.', parent_id: discussionId1, category: 'academic', is_pinned: false, created_at: new Date(Date.now() - 1 * 86400000).toISOString(), updated_at: new Date(Date.now() - 1 * 86400000).toISOString(), author_name: 'Taylor Kim', author_avatar: null, school_id: null, title: null },
+    { id: genId(), user_id: 'demo-user-6', content: 'Study groups!! We meet at the library every Tuesday. You should join us 😊', parent_id: discussionId1, category: 'academic', is_pinned: false, created_at: new Date(Date.now() - 0.5 * 86400000).toISOString(), updated_at: new Date(Date.now() - 0.5 * 86400000).toISOString(), author_name: 'Priya Gupta', author_avatar: null, school_id: null, title: null },
+    { id: genId(), user_id: 'demo-user-7', content: 'Don\'t forget to take breaks! The Pomodoro technique (25 min work, 5 min break) helped me a lot. Also get enough sleep - pulling all-nighters is counterproductive.', parent_id: discussionId1, category: 'academic', is_pinned: false, created_at: new Date(Date.now() - 0.2 * 86400000).toISOString(), updated_at: new Date(Date.now() - 0.2 * 86400000).toISOString(), author_name: 'Chris Lee', author_avatar: null, school_id: null, title: null },
+  ],
+  [discussionId2]: [
+    { id: genId(), user_id: 'demo-user-8', content: 'Can\'t wait! I\'ve been working on the homepage design all week.', parent_id: discussionId2, category: 'events', is_pinned: false, created_at: new Date(Date.now() - 0.8 * 86400000).toISOString(), updated_at: new Date(Date.now() - 0.8 * 86400000).toISOString(), author_name: 'Jamie Wong', author_avatar: null, school_id: null, title: null },
+    { id: genId(), user_id: 'demo-user-9', content: 'Is it okay if I bring a friend who wants to learn to code? She\'s interested in joining!', parent_id: discussionId2, category: 'events', is_pinned: false, created_at: new Date(Date.now() - 0.5 * 86400000).toISOString(), updated_at: new Date(Date.now() - 0.5 * 86400000).toISOString(), author_name: 'Lena Martinez', author_avatar: null, school_id: null, title: null },
+    { id: genId(), user_id: 'demo-user-2', content: 'Absolutely! Everyone is welcome. The more the merrier 🎉', parent_id: discussionId2, category: 'events', is_pinned: false, created_at: new Date(Date.now() - 0.3 * 86400000).toISOString(), updated_at: new Date(Date.now() - 0.3 * 86400000).toISOString(), author_name: 'Alex Chen', author_avatar: null, school_id: null, title: null },
+  ],
+  [discussionId3]: [
+    { id: genId(), user_id: 'demo-user-10', content: 'Yes!! I\'d love that. My Common App essay is due soon and I could really use another pair of eyes on it.', parent_id: discussionId3, category: 'general', is_pinned: false, created_at: new Date(Date.now() - 2.5 * 86400000).toISOString(), updated_at: new Date(Date.now() - 2.5 * 86400000).toISOString(), author_name: 'Noah Wilson', author_avatar: null, school_id: null, title: null },
+    { id: genId(), user_id: 'demo-user-11', content: 'Count me in! Maybe we could meet after school on Wednesdays? The writing center is usually open.', parent_id: discussionId3, category: 'general', is_pinned: false, created_at: new Date(Date.now() - 2 * 86400000).toISOString(), updated_at: new Date(Date.now() - 2 * 86400000).toISOString(), author_name: 'Sophia Davis', author_avatar: null, school_id: null, title: null },
+    { id: genId(), user_id: 'demo-user-3', content: 'Great idea! Let\'s do Wednesdays at 3:30pm in the writing center. I\'ll create a sign-up sheet.', parent_id: discussionId3, category: 'general', is_pinned: false, created_at: new Date(Date.now() - 1.8 * 86400000).toISOString(), updated_at: new Date(Date.now() - 1.8 * 86400000).toISOString(), author_name: 'Maya Patel', author_avatar: null, school_id: null, title: null },
+    { id: genId(), user_id: 'demo-user-12', content: 'Can we also share supplemental essays? I\'m applying to some of the same schools and comparing approaches would be super helpful.', parent_id: discussionId3, category: 'general', is_pinned: false, created_at: new Date(Date.now() - 1.5 * 86400000).toISOString(), updated_at: new Date(Date.now() - 1.5 * 86400000).toISOString(), author_name: 'Ethan Park', author_avatar: null, school_id: null, title: null },
+    { id: genId(), user_id: 'demo-user-13', content: 'This is amazing! Our counselor Mrs. Johnson said she\'d be happy to review drafts too if we want professional feedback.', parent_id: discussionId3, category: 'general', is_pinned: false, created_at: new Date(Date.now() - 1 * 86400000).toISOString(), updated_at: new Date(Date.now() - 1 * 86400000).toISOString(), author_name: 'Isabella Torres', author_avatar: null, school_id: null, title: null },
+  ],
+};
 
 export const dummyInsights = [
   { id: genId(), user_id: 'demo-user', question_key: 'adjectives', answer: 'Determined, curious, and compassionate. I\'m determined because I never give up on challenges, curious because I love exploring new ideas in STEM, and compassionate because I believe in giving back through volunteering.', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
   { id: genId(), user_id: 'demo-user', question_key: 'major_goals', answer: 'I plan to major in Computer Science with a minor in Environmental Science. My career goal is to develop sustainable technology solutions that address climate change. I\'m particularly interested in AI applications for renewable energy optimization.', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
   { id: genId(), user_id: 'demo-user', question_key: 'proudest_moment', answer: 'When our debate team made it to state finals for the first time in 5 years. As captain, I spent extra hours coaching our novice members and developing new strategies. Seeing their growth and our collective achievement was incredibly rewarding.', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
 ];
+
+// Strengths Finder dummy results
+export const dummyStrengthsResults = {
+  completed: true,
+  topStrengths: [
+    { name: 'Analytical Thinking', score: 92, description: 'You excel at breaking down complex problems and finding logical solutions. Your science fair success and coding club reflect this strength.', careers: ['Software Engineer', 'Data Scientist', 'Research Analyst', 'Systems Architect'] },
+    { name: 'Leadership', score: 88, description: 'You naturally inspire and guide others. As NHS President and Debate Team Captain, you demonstrate strong organizational and motivational skills.', careers: ['Project Manager', 'Entrepreneur', 'School Administrator', 'Team Lead'] },
+    { name: 'Communication', score: 85, description: 'Your debate experience and ability to mentor others shows excellent verbal and written communication abilities.', careers: ['Marketing Director', 'Public Relations', 'Journalist', 'Attorney'] },
+    { name: 'Empathy & Service', score: 82, description: 'Your extensive hospital volunteering and community service show deep compassion and commitment to helping others.', careers: ['Healthcare Professional', 'Social Worker', 'Nonprofit Director', 'Counselor'] },
+    { name: 'Creativity', score: 78, description: 'Founding a coding club and building school apps demonstrates innovative thinking and the ability to create something from nothing.', careers: ['UX Designer', 'Product Manager', 'Startup Founder', 'Creative Director'] },
+  ],
+  suggestedPaths: [
+    { field: 'Computer Science & Engineering', match: 95, reason: 'Your analytical skills, coding experience, and leadership combine perfectly for tech roles.' },
+    { field: 'Pre-Med / Healthcare', match: 82, reason: 'Your empathy, volunteering, and strong science background align with healthcare careers.' },
+    { field: 'Business & Entrepreneurship', match: 80, reason: 'Your leadership, communication, and creative problem-solving fit well in business.' },
+    { field: 'Environmental Science', match: 75, reason: 'Your science fair research on sustainable energy shows passion for environmental impact.' },
+  ],
+};

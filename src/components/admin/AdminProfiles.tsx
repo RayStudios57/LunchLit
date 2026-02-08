@@ -6,7 +6,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { Users, Loader2, Search, GraduationCap } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Users, Loader2, Search, GraduationCap, Eye } from 'lucide-react';
+import { AdminUserActivity } from './AdminUserActivity';
 
 interface Profile {
   id: string;
@@ -21,6 +23,7 @@ interface Profile {
 
 export function AdminProfiles() {
   const [searchTerm, setSearchTerm] = useState('');
+  const [viewingUser, setViewingUser] = useState<{ id: string; name: string } | null>(null);
 
   const { data: profiles = [], isLoading } = useQuery({
     queryKey: ['admin-profiles'],
@@ -50,6 +53,20 @@ export function AdminProfiles() {
     senior: 'Senior (12th)',
   };
 
+  if (viewingUser) {
+    return (
+      <Card>
+        <CardContent className="pt-6">
+          <AdminUserActivity 
+            userId={viewingUser.id} 
+            userName={viewingUser.name} 
+            onBack={() => setViewingUser(null)} 
+          />
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <Card>
       <CardHeader>
@@ -58,7 +75,7 @@ export function AdminProfiles() {
           All User Profiles
         </CardTitle>
         <CardDescription>
-          View all users who have signed up for LunchLit
+          View all users who have signed up for LunchLit. Click the eye icon to view their activity.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -93,6 +110,7 @@ export function AdminProfiles() {
                   <TableHead>School</TableHead>
                   <TableHead>Grade</TableHead>
                   <TableHead>Joined</TableHead>
+                  <TableHead className="w-[60px]">View</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -132,6 +150,16 @@ export function AdminProfiles() {
                     </TableCell>
                     <TableCell className="text-muted-foreground">
                       {new Date(profile.created_at).toLocaleDateString()}
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => setViewingUser({ id: profile.user_id, name: profile.full_name || 'Anonymous' })}
+                        title="View user activity"
+                      >
+                        <Eye className="h-4 w-4" />
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))}

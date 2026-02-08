@@ -8,12 +8,13 @@ import { useTargetSchools } from '@/hooks/useTargetSchools';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
-import { User, Mail, GraduationCap, Target, School, Trophy, TrendingUp, Lightbulb, Briefcase, ChartBar } from 'lucide-react';
+import { User, Mail, GraduationCap, Target, School, Trophy, TrendingUp, Lightbulb, Briefcase, ChartBar, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { PortfolioOverview } from './PortfolioOverview';
 import { GoalsManager } from './GoalsManager';
 import { TargetSchoolsManager } from './TargetSchoolsManager';
 import { CollegePredictor } from './CollegePredictor';
+import { StrengthsFinder } from './StrengthsFinder';
 
 export function StudentPortfolioView() {
   const { user } = useAuth();
@@ -22,7 +23,7 @@ export function StudentPortfolioView() {
   const { academics } = useBragSheetAcademics();
   const { goals, stats: goalStats } = useStudentGoals();
   const { schools, stats: schoolStats } = useTargetSchools();
-  const [activeTab, setActiveTab] = useState<'overview' | 'goals' | 'schools' | 'predictor'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'goals' | 'schools' | 'predictor' | 'strengths'>('overview');
 
   if (!user) {
     return (
@@ -149,6 +150,10 @@ export function StudentPortfolioView() {
                 <ChartBar className="w-4 h-4" />
                 Predictor
               </TabsTrigger>
+              <TabsTrigger value="strengths" className="flex items-center gap-1">
+                <Sparkles className="w-4 h-4" />
+                Strengths
+              </TabsTrigger>
             </TabsList>
 
             <TabsContent value="overview">
@@ -170,6 +175,10 @@ export function StudentPortfolioView() {
 
             <TabsContent value="predictor">
               <CollegePredictor />
+            </TabsContent>
+
+            <TabsContent value="strengths">
+              <StrengthsFinder />
             </TabsContent>
           </Tabs>
         </CardContent>

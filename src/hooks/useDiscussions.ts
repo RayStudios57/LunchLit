@@ -3,7 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { usePresentationMode } from '@/contexts/PresentationModeContext';
-import { dummyDiscussions } from '@/data/presentationDummyData';
+import { dummyDiscussions, dummyDiscussionReplies } from '@/data/presentationDummyData';
 import { useEffect } from 'react';
 import { z } from 'zod';
 
@@ -165,6 +165,7 @@ export function useDiscussions(category?: string) {
 
 export function useDiscussionReplies(discussionId: string) {
   const { user } = useAuth();
+  const { isPresentationMode } = usePresentationMode();
 
   const { data: replies = [], isLoading } = useQuery({
     queryKey: ['discussion-replies', discussionId],
@@ -198,5 +199,9 @@ export function useDiscussionReplies(discussionId: string) {
     enabled: !!user && !!discussionId,
   });
 
-  return { replies, isLoading };
+  const activeReplies = isPresentationMode 
+    ? (dummyDiscussionReplies[discussionId] || []) as Discussion[]
+    : replies;
+
+  return { replies: activeReplies, isLoading: isPresentationMode ? false : isLoading };
 }
