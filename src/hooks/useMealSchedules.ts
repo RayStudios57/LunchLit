@@ -1,6 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useProfile } from '@/hooks/useProfile';
+import { usePresentationMode } from '@/contexts/PresentationModeContext';
+import { dummyMealSchedules } from '@/data/presentationDummyData';
 import { 
   format, 
   startOfWeek, 
@@ -45,6 +47,7 @@ interface DayMenu {
 
 export function useMealSchedules(monthDate?: Date) {
   const { profile } = useProfile();
+  const { isPresentationMode } = usePresentationMode();
 
   // Weekly menu query
   const { data: mealSchedules = [], isLoading } = useQuery({
@@ -115,6 +118,9 @@ export function useMealSchedules(monthDate?: Date) {
     enabled: true,
   });
 
+  const activeMealSchedules = isPresentationMode ? (dummyMealSchedules as MealSchedule[]) : mealSchedules;
+  const activeMonthlyMealSchedules = isPresentationMode ? (dummyMealSchedules as MealSchedule[]) : monthlyMealSchedules;
+
   // Transform meal schedules into the format expected by MenuView
   const weeklyMenu: DayMenu[] = (() => {
     const today = new Date();
@@ -128,7 +134,7 @@ export function useMealSchedules(monthDate?: Date) {
       const date = addDays(weekStart, i);
       const dateStr = format(date, 'yyyy-MM-dd');
       
-      const daySchedules = mealSchedules.filter(
+      const daySchedules = activeMealSchedules.filter(
         schedule => schedule.meal_date === dateStr
       );
 
@@ -163,7 +169,7 @@ export function useMealSchedules(monthDate?: Date) {
     return allDays.map(date => {
       const dateStr = format(date, 'yyyy-MM-dd');
       
-      const daySchedules = monthlyMealSchedules.filter(
+      const daySchedules = activeMonthlyMealSchedules.filter(
         schedule => schedule.meal_date === dateStr
       );
 
@@ -193,13 +199,13 @@ export function useMealSchedules(monthDate?: Date) {
   };
 
   return {
-    mealSchedules,
+    mealSchedules: activeMealSchedules,
     weeklyMenu,
     monthlyMenu,
     getTodayMenu,
-    isLoading,
-    isLoadingMonthly,
-    hasMenuData: mealSchedules.length > 0,
-    hasMonthlyData: monthlyMealSchedules.length > 0,
+    isLoading: isPresentationMode ? false : isLoading,
+    isLoadingMonthly: isPresentationMode ? false : isLoadingMonthly,
+    hasMenuData: activeMealSchedules.length > 0,
+    hasMonthlyData: activeMonthlyMealSchedules.length > 0,
   };
 }
