@@ -10,7 +10,7 @@ const CURRENT_VERSION = '0.7';
 const changelogData = [{
   version: '0.7',
   date: 'February 2026',
-  changes: ['We finally figured out how to add Google authentication']
+  changes: ['We finally figured out how to add Google authentication, Yippee :)']
 }, {
   version: '0.6',
   date: 'February 2026',
