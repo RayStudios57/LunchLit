@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Code, Shield, Users, Utensils, BookOpen, Calendar, MessageSquare, ClipboardList, GraduationCap, Bell, Palette, History } from 'lucide-react';
+import { Code, Shield, Users, Utensils, BookOpen, Calendar, MessageSquare, ClipboardList, GraduationCap, Bell, Palette, History, ShieldBan } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Helmet } from 'react-helmet';
@@ -158,7 +158,7 @@ export default function About() {
           </CardHeader>
           <CardContent>
             <Accordion type="single" collapsible defaultValue="0.4" className="w-full">
-              {changelogData.map(release => <AccordionItem key={release.version} value={release.version}>
+              {changelogData.map((release) => <AccordionItem key={release.version} value={release.version}>
                   <AccordionTrigger className="hover:no-underline">
                     <div className="flex items-center gap-3">
                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary">
@@ -200,15 +200,15 @@ export default function About() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Shield className="h-5 w-5 text-primary" />
+              <ShieldBan className="h-5 w-5 text-primary" />
               Privacy & Security
             </CardTitle>
           </CardHeader>
           <CardContent className="text-muted-foreground">
-            <p>
-              Your data belongs to you. LunchLit uses secure authentication and follows best practices for data protection. 
-              We never share your personal information with third parties, and you can delete your account at any time.
-            </p>
+            <p>Your data belongs to you. LunchLit uses secure authentication and follows best practices for data protection. We never share your personal information with third parties, and you can delete your account at any time.
+
+
+          </p>
           </CardContent>
         </Card>
 
