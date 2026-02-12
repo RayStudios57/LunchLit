@@ -18,6 +18,8 @@ const dietaryConfig: Record<DietaryType, { label: string; icon: React.ReactNode 
 export function DietaryBadge({ type }: DietaryBadgeProps) {
   const config = dietaryConfig[type];
 
+  if (!config) return null;
+
   return (
     <Badge variant={type} className="gap-1">
       {config.icon}
