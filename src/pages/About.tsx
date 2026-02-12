@@ -45,9 +45,9 @@ export default function About() {
 
       <div className="container py-8 max-w-3xl mx-auto space-y-6">
         <div className="text-center mb-8">
-          <h1 className="font-display text-3xl sm:text-4xl font-bold mb-3 bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-            About LunchLit
-          </h1>
+          <h1 className="font-display text-3xl sm:text-4xl font-bold mb-3 bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">About LunchLIT
+
+        </h1>
           <p className="text-muted-foreground text-lg">Your daily school companion</p>
           <p className="text-sm text-muted-foreground mt-1">
             <strong>LIT</strong> = <strong>L</strong>earning, <strong>I</strong>nsight, <strong>T</strong>racking
@@ -67,10 +67,10 @@ export default function About() {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4 text-muted-foreground">
-            <p>
-              LunchLit is a comprehensive school companion app designed to help students manage their daily school life. 
-              From checking the lunch menu to tracking assignments and finding study halls, we've got you covered.
-            </p>
+            <p>LunchLIT is a comprehensive school companion app designed to help students manage their daily school life. From checking the lunch menu to tracking assignments and finding study halls, we've got you covered.
+
+
+          </p>
             <p>
               Built by a student, for students — LunchLit understands the challenges of staying organized during the school year 
               and aims to make your academic journey smoother and more enjoyable.
@@ -189,10 +189,10 @@ export default function About() {
             </CardTitle>
           </CardHeader>
           <CardContent className="text-muted-foreground">
-            <p>
-              Make LunchLit yours with multiple color themes including Ocean, Forest, Sunset, Midnight, and Lavender. 
-              Each theme is carefully designed to provide a comfortable viewing experience while maintaining accessibility.
-            </p>
+            <p>Make LunchLIT yours with multiple color themes including Ocean, Forest, Sunset, Midnight, and Lavender. Each theme is carefully designed to provide a comfortable viewing experience while maintaining accessibility.
+
+
+          </p>
           </CardContent>
         </Card>
 
