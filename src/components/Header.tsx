@@ -81,7 +81,7 @@ export function Header({
           <button onClick={() => onTabChange('home')} className="flex items-center gap-3 hover:opacity-90 transition-opacity">
             <ThemeLogo size="md" />
             <div className="hidden sm:block">
-              <h1 className="font-display font-bold text-lg text-foreground leading-tight text-left">LunchLit</h1>
+              <h1 className="font-display font-bold text-lg text-foreground leading-tight text-left">LunchLIT</h1>
               <p className="text-xs text-muted-foreground">Your school companion</p>
             </div>
           </button>
@@ -105,17 +105,17 @@ export function Header({
                     <Settings className="w-4 h-4 mr-2" />
                     Settings
                   </DropdownMenuItem>
-                  {canAccessPresentationMode && (
-                    <>
+                  {canAccessPresentationMode &&
+              <>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem onClick={togglePresentationMode}>
                         <Presentation className="w-4 h-4 mr-2" />
                         {isPresentationMode ? '✅ Test Mode On' : 'Test Mode'}
                       </DropdownMenuItem>
                     </>
-                  )}
-                  {isAdmin && (
-                    <>
+              }
+                  {isAdmin &&
+              <>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem asChild>
                         <Link to="/admin">
@@ -124,7 +124,7 @@ export function Header({
                         </Link>
                       </DropdownMenuItem>
                     </>
-                  )}
+              }
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={signOut} className="text-destructive focus:text-destructive">
                     <LogOut className="w-4 h-4 mr-2" />
@@ -142,7 +142,7 @@ export function Header({
         
         {/* Navigation - Primary Tabs */}
         <nav className="flex gap-1 mt-3 bg-secondary/50 p-1 rounded-xl">
-          {primaryTabs.map(tab => {
+          {primaryTabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
           return <button key={tab.id} onClick={() => onTabChange(tab.id)} className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg font-medium text-sm transition-all duration-200 ${isActive ? 'bg-card text-foreground shadow-card' : 'text-muted-foreground hover:text-foreground hover:bg-card/50'}`}>
@@ -154,13 +154,13 @@ export function Header({
           {/* More dropdown for secondary tabs */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className={`flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg font-medium text-sm transition-all duration-200 ${secondaryTabs.some(t => t.id === activeTab) ? 'bg-card text-foreground shadow-card' : 'text-muted-foreground hover:text-foreground hover:bg-card/50'}`}>
+              <button className={`flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg font-medium text-sm transition-all duration-200 ${secondaryTabs.some((t) => t.id === activeTab) ? 'bg-card text-foreground shadow-card' : 'text-muted-foreground hover:text-foreground hover:bg-card/50'}`}>
                 <span className="text-lg">•••</span>
                 <span className="hidden sm:inline">More</span>
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-40">
-              {secondaryTabs.map(tab => {
+              {secondaryTabs.map((tab) => {
               const Icon = tab.icon;
               return <DropdownMenuItem key={tab.id} onClick={() => onTabChange(tab.id)} className={activeTab === tab.id ? 'bg-secondary' : ''}>
                     <Icon className="w-4 h-4 mr-2" />
