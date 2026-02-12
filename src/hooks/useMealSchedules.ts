@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useProfile } from '@/hooks/useProfile';
 import { usePresentationMode } from '@/contexts/PresentationModeContext';
-import { dummyMealSchedules } from '@/data/presentationDummyData';
+import { dummyMealSchedules, dummyMonthlyMealSchedules } from '@/data/presentationDummyData';
 import { 
   format, 
   startOfWeek, 
@@ -119,7 +119,7 @@ export function useMealSchedules(monthDate?: Date) {
   });
 
   const activeMealSchedules = isPresentationMode ? (dummyMealSchedules as MealSchedule[]) : mealSchedules;
-  const activeMonthlyMealSchedules = isPresentationMode ? (dummyMealSchedules as MealSchedule[]) : monthlyMealSchedules;
+  const activeMonthlyMealSchedules = isPresentationMode ? (dummyMonthlyMealSchedules as MealSchedule[]) : monthlyMealSchedules;
 
   // Transform meal schedules into the format expected by MenuView
   const weeklyMenu: DayMenu[] = (() => {

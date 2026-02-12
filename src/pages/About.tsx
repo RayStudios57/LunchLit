@@ -6,8 +6,12 @@ import { Helmet } from 'react-helmet';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { CreatorSocialLinks } from '@/components/about/CreatorSocialLinks';
 import { SuggestionsSection } from '@/components/about/SuggestionsSection';
-const CURRENT_VERSION = '0.6';
+const CURRENT_VERSION = '0.7';
 const changelogData = [{
+  version: '0.7',
+  date: 'February 2026',
+  changes: ['We finally figured out how to add Google authentication']
+}, {
   version: '0.6',
   date: 'February 2026',
   changes: ['Fancy PDF export with embedded images and visual styling', 'Common App format PDF export matching college application layouts', 'Drag-and-drop activity reordering for Brag Sheet priorities', 'Admin-only Presentation Mode with dummy data for demos', 'Student Portfolio with goals, target schools, and college predictor']
