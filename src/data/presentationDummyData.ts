@@ -416,42 +416,42 @@ export const dummyStudyHalls = [
   { id: genId(), name: 'Quiet Study Hall', location: 'Building C', capacity: 30, current_occupancy: 30, is_available: false, periods: ['1', '2', '3', '4', '5'], teacher: 'Mr. Brown', school_id: null, created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
 ];
 
-// Generate meals for each weekday of the current week
+// Generate meals for each weekday of the current week AND the full month
 function generateWeeklyMeals() {
   const today = new Date();
   const weekStart = isWeekend(today)
     ? addDays(endOfWeek(today, { weekStartsOn: 1 }), 1)
     : startOfWeek(today, { weekStartsOn: 1 });
 
-  const dailyMenus = [
+  const dailyMenuRotation = [
     [
-      { name: 'Chicken Teriyaki Bowl', description: 'Grilled chicken with teriyaki sauce, steamed rice, and vegetables', dietary_tags: ['High Protein', 'Gluten-Free'], calories: 520 },
-      { name: 'Vegetarian Pasta', description: 'Penne pasta with marinara sauce and roasted vegetables', dietary_tags: ['Vegetarian', 'Dairy-Free'], calories: 410 },
-      { name: 'Caesar Salad', description: 'Fresh romaine lettuce with parmesan, croutons, and caesar dressing', dietary_tags: ['Vegetarian'], calories: 320 },
+      { name: 'Chicken Teriyaki Bowl', description: 'Grilled chicken with teriyaki sauce, steamed rice, and vegetables', dietary_tags: ['meat', 'gluten-free'], calories: 520 },
+      { name: 'Vegetarian Pasta', description: 'Penne pasta with marinara sauce and roasted vegetables', dietary_tags: ['vegetarian'], calories: 410 },
+      { name: 'Caesar Salad', description: 'Fresh romaine lettuce with parmesan, croutons, and caesar dressing', dietary_tags: ['vegetarian', 'dairy'], calories: 320 },
     ],
     [
-      { name: 'BBQ Pulled Pork Sandwich', description: 'Slow-cooked pulled pork with coleslaw on a brioche bun', dietary_tags: ['High Protein'], calories: 580 },
-      { name: 'Black Bean Tacos', description: 'Seasoned black beans, pico de gallo, and avocado on corn tortillas', dietary_tags: ['Vegetarian', 'Vegan', 'Gluten-Free'], calories: 390 },
-      { name: 'Garden Salad', description: 'Mixed greens with cherry tomatoes, cucumbers, and balsamic vinaigrette', dietary_tags: ['Vegan', 'Gluten-Free'], calories: 180 },
+      { name: 'BBQ Pulled Pork Sandwich', description: 'Slow-cooked pulled pork with coleslaw on a brioche bun', dietary_tags: ['meat'], calories: 580 },
+      { name: 'Black Bean Tacos', description: 'Seasoned black beans, pico de gallo, and avocado on corn tortillas', dietary_tags: ['vegetarian', 'vegan', 'gluten-free'], calories: 390 },
+      { name: 'Garden Salad', description: 'Mixed greens with cherry tomatoes, cucumbers, and balsamic vinaigrette', dietary_tags: ['vegan', 'gluten-free'], calories: 180 },
     ],
     [
-      { name: 'Pepperoni Pizza', description: 'Hand-tossed pizza with marinara, mozzarella, and pepperoni', dietary_tags: [], calories: 620 },
-      { name: 'Margherita Flatbread', description: 'Thin crust with fresh mozzarella, basil, and tomato sauce', dietary_tags: ['Vegetarian'], calories: 450 },
-      { name: 'Chicken Noodle Soup', description: 'Classic chicken noodle soup with carrots, celery, and herbs', dietary_tags: ['High Protein'], calories: 280 },
+      { name: 'Pepperoni Pizza', description: 'Hand-tossed pizza with marinara, mozzarella, and pepperoni', dietary_tags: ['meat', 'dairy'], calories: 620 },
+      { name: 'Margherita Flatbread', description: 'Thin crust with fresh mozzarella, basil, and tomato sauce', dietary_tags: ['vegetarian', 'dairy'], calories: 450 },
+      { name: 'Chicken Noodle Soup', description: 'Classic chicken noodle soup with carrots, celery, and herbs', dietary_tags: ['meat'], calories: 280 },
     ],
     [
-      { name: 'Grilled Chicken Caesar Wrap', description: 'Grilled chicken, romaine, parmesan, and caesar dressing in a flour tortilla', dietary_tags: ['High Protein'], calories: 490 },
-      { name: 'Veggie Stir Fry', description: 'Mixed vegetables with tofu in a ginger-soy sauce over brown rice', dietary_tags: ['Vegan', 'Dairy-Free'], calories: 380 },
-      { name: 'Fruit & Yogurt Parfait', description: 'Greek yogurt with granola, strawberries, and blueberries', dietary_tags: ['Vegetarian', 'High Protein'], calories: 290 },
+      { name: 'Grilled Chicken Caesar Wrap', description: 'Grilled chicken, romaine, parmesan, and caesar dressing in a flour tortilla', dietary_tags: ['meat', 'dairy'], calories: 490 },
+      { name: 'Veggie Stir Fry', description: 'Mixed vegetables with tofu in a ginger-soy sauce over brown rice', dietary_tags: ['vegan', 'vegetarian'], calories: 380 },
+      { name: 'Fruit & Yogurt Parfait', description: 'Greek yogurt with granola, strawberries, and blueberries', dietary_tags: ['vegetarian', 'dairy'], calories: 290 },
     ],
     [
-      { name: 'Fish & Chips', description: 'Battered cod with crispy fries and tartar sauce', dietary_tags: [], calories: 650 },
-      { name: 'Mac & Cheese', description: 'Creamy three-cheese macaroni baked to perfection', dietary_tags: ['Vegetarian'], calories: 550 },
-      { name: 'Minestrone Soup', description: 'Hearty Italian vegetable soup with pasta and beans', dietary_tags: ['Vegan'], calories: 240 },
+      { name: 'Fish & Chips', description: 'Battered cod with crispy fries and tartar sauce', dietary_tags: ['meat'], calories: 650 },
+      { name: 'Mac & Cheese', description: 'Creamy three-cheese macaroni baked to perfection', dietary_tags: ['vegetarian', 'dairy'], calories: 550 },
+      { name: 'Minestrone Soup', description: 'Hearty Italian vegetable soup with pasta and beans', dietary_tags: ['vegan', 'vegetarian'], calories: 240 },
     ],
   ];
 
-  return dailyMenus.map((items, i) => ({
+  return dailyMenuRotation.map((items, i) => ({
     id: genId(),
     school_id: 'demo-school',
     meal_date: format(addDays(weekStart, i), 'yyyy-MM-dd'),
@@ -462,7 +462,66 @@ function generateWeeklyMeals() {
   }));
 }
 
+// Generate meals for the full month (all weekdays)
+function generateMonthlyMeals() {
+  const today = new Date();
+  const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+  const monthEnd = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+  
+  const menuRotation = [
+    [
+      { name: 'Chicken Teriyaki Bowl', description: 'Grilled chicken with teriyaki sauce, steamed rice, and vegetables', dietary_tags: ['meat', 'gluten-free'], calories: 520 },
+      { name: 'Vegetarian Pasta', description: 'Penne pasta with marinara sauce and roasted vegetables', dietary_tags: ['vegetarian'], calories: 410 },
+      { name: 'Caesar Salad', description: 'Fresh romaine lettuce with parmesan, croutons, and caesar dressing', dietary_tags: ['vegetarian', 'dairy'], calories: 320 },
+    ],
+    [
+      { name: 'BBQ Pulled Pork Sandwich', description: 'Slow-cooked pulled pork with coleslaw on a brioche bun', dietary_tags: ['meat'], calories: 580 },
+      { name: 'Black Bean Tacos', description: 'Seasoned black beans, pico de gallo, and avocado on corn tortillas', dietary_tags: ['vegetarian', 'vegan', 'gluten-free'], calories: 390 },
+      { name: 'Garden Salad', description: 'Mixed greens with cherry tomatoes, cucumbers, and balsamic vinaigrette', dietary_tags: ['vegan', 'gluten-free'], calories: 180 },
+    ],
+    [
+      { name: 'Pepperoni Pizza', description: 'Hand-tossed pizza with marinara, mozzarella, and pepperoni', dietary_tags: ['meat', 'dairy'], calories: 620 },
+      { name: 'Margherita Flatbread', description: 'Thin crust with fresh mozzarella, basil, and tomato sauce', dietary_tags: ['vegetarian', 'dairy'], calories: 450 },
+      { name: 'Chicken Noodle Soup', description: 'Classic chicken noodle soup with carrots, celery, and herbs', dietary_tags: ['meat'], calories: 280 },
+    ],
+    [
+      { name: 'Grilled Chicken Caesar Wrap', description: 'Grilled chicken, romaine, parmesan, and caesar dressing in a flour tortilla', dietary_tags: ['meat', 'dairy'], calories: 490 },
+      { name: 'Veggie Stir Fry', description: 'Mixed vegetables with tofu in a ginger-soy sauce over brown rice', dietary_tags: ['vegan', 'vegetarian'], calories: 380 },
+      { name: 'Fruit & Yogurt Parfait', description: 'Greek yogurt with granola, strawberries, and blueberries', dietary_tags: ['vegetarian', 'dairy'], calories: 290 },
+    ],
+    [
+      { name: 'Fish & Chips', description: 'Battered cod with crispy fries and tartar sauce', dietary_tags: ['meat'], calories: 650 },
+      { name: 'Mac & Cheese', description: 'Creamy three-cheese macaroni baked to perfection', dietary_tags: ['vegetarian', 'dairy'], calories: 550 },
+      { name: 'Minestrone Soup', description: 'Hearty Italian vegetable soup with pasta and beans', dietary_tags: ['vegan', 'vegetarian'], calories: 240 },
+    ],
+  ];
+
+  const meals: any[] = [];
+  let current = new Date(monthStart);
+  
+  while (current <= monthEnd) {
+    const dayOfWeek = current.getDay(); // 0=Sun, 6=Sat
+    if (dayOfWeek >= 1 && dayOfWeek <= 5) {
+      // weekday (Mon=1 -> index 0, Fri=5 -> index 4)
+      const menuIndex = (dayOfWeek - 1) % menuRotation.length;
+      meals.push({
+        id: genId(),
+        school_id: 'demo-school',
+        meal_date: format(current, 'yyyy-MM-dd'),
+        meal_type: 'lunch',
+        menu_items: menuRotation[menuIndex],
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      });
+    }
+    current = addDays(current, 1);
+  }
+  
+  return meals;
+}
+
 export const dummyMealSchedules = generateWeeklyMeals();
+export const dummyMonthlyMealSchedules = generateMonthlyMeals();
 
 // Discussion IDs for linking replies
 const discussionId1 = genId();
@@ -562,3 +621,36 @@ export const dummyStrengthsResults = {
     { field: 'Environmental Science', match: 75, reason: 'Your science fair research on sustainable energy shows passion for environmental impact.' },
   ],
 };
+
+// Dummy AI chat history for presentation mode
+export const dummyChatHistory = [
+  {
+    id: 'chat-1',
+    title: 'AP Calculus Study Help',
+    date: new Date(Date.now() - 2 * 86400000).toISOString(),
+    messages: [
+      { role: 'user' as const, content: 'How do I solve integration by parts problems?' },
+      { role: 'assistant' as const, content: 'Integration by parts uses the formula: ∫u dv = uv - ∫v du\n\nHere\'s how to remember which function to pick as "u" — use LIATE:\n\n1. **L**ogarithmic (ln x)\n2. **I**nverse trig (arctan x)\n3. **A**lgebraic (x², x³)\n4. **T**rigonometric (sin x, cos x)\n5. **E**xponential (eˣ)\n\nPick "u" from the top of the list. Let me walk through an example:\n\n**∫ x·eˣ dx**\n- u = x (algebraic), dv = eˣ dx\n- du = dx, v = eˣ\n- = x·eˣ - ∫eˣ dx = x·eˣ - eˣ + C\n\nWant me to do a practice problem with you?' },
+      { role: 'user' as const, content: 'Yes! Try ∫ x·sin(x) dx' },
+      { role: 'assistant' as const, content: 'Great choice! Let\'s solve ∫ x·sin(x) dx step by step:\n\n**Step 1: Choose u and dv**\n- u = x (algebraic beats trig in LIATE)\n- dv = sin(x) dx\n\n**Step 2: Find du and v**\n- du = dx\n- v = -cos(x)\n\n**Step 3: Apply the formula**\n∫ x·sin(x) dx = x·(-cos x) - ∫(-cos x) dx\n= -x·cos(x) + ∫cos(x) dx\n= -x·cos(x) + sin(x) + C\n\n**Answer: -x·cos(x) + sin(x) + C** ✅\n\nYou can verify by differentiating the answer. Want to try another one?' },
+    ],
+  },
+  {
+    id: 'chat-2',
+    title: 'History Essay Outline',
+    date: new Date(Date.now() - 5 * 86400000).toISOString(),
+    messages: [
+      { role: 'user' as const, content: 'Help me outline an essay about the causes of the Civil War' },
+      { role: 'assistant' as const, content: 'Here\'s a strong AP US History essay outline on the causes of the Civil War:\n\n## Thesis\nThe Civil War resulted from the intersection of sectional economic differences, the moral debate over slavery, and the failure of political compromise to resolve these tensions.\n\n## Body Paragraph 1: Economic Divisions\n- Northern industrialization vs. Southern agrarian economy\n- Tariff disputes (Tariff of Abominations, 1828)\n- Dependence on enslaved labor for cotton production\n\n## Body Paragraph 2: Slavery as a Moral Issue\n- Abolitionist movement (Frederick Douglass, Harriet Beecher Stowe)\n- Uncle Tom\'s Cabin (1852) shifting public opinion\n- Dred Scott decision (1857)\n\n## Body Paragraph 3: Political Failures\n- Missouri Compromise (1820) and its collapse\n- Compromise of 1850 and Fugitive Slave Act\n- Kansas-Nebraska Act and "Bleeding Kansas"\n- Election of Lincoln (1860) as final trigger\n\n## Conclusion\nTie back to thesis — these interconnected factors made war inevitable.\n\nWant me to help flesh out any section?' },
+    ],
+  },
+  {
+    id: 'chat-3',
+    title: 'SAT Vocab Tips',
+    date: new Date(Date.now() - 8 * 86400000).toISOString(),
+    messages: [
+      { role: 'user' as const, content: 'What\'s the best way to memorize vocabulary for the SAT?' },
+      { role: 'assistant' as const, content: 'Here are the most effective strategies for SAT vocabulary:\n\n## 1. 🧠 Spaced Repetition\nUse apps like Anki or Quizlet with spaced repetition. Review words at increasing intervals (1 day, 3 days, 7 days, etc.)\n\n## 2. 📖 Context Over Definitions\nDon\'t just memorize definitions. Read the word in context:\n- "The **ubiquitous** smartphone has transformed daily life" → ubiquitous = found everywhere\n\n## 3. 🔗 Word Roots\nLearn Latin/Greek roots to decode unfamiliar words:\n- **bene** = good (benefit, benevolent, benediction)\n- **mal** = bad (malicious, malfunction, malevolent)\n- **chron** = time (chronological, chronic, synchronize)\n\n## 4. ✍️ Use New Words\nWrite sentences using 5 new words daily. Using words actively cements them.\n\n## 5. 📚 Read Challenging Material\nThe Economist, Atlantic, and classic literature expose you to SAT-level words naturally.\n\nAim for 10-15 new words per day. That\'s 300+ words in a month! Want me to quiz you on some common SAT words?' },
+    ],
+  },
+];

@@ -3,6 +3,7 @@ import { useProfile } from '@/hooks/useProfile';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
+import { usePresentationMode } from '@/contexts/PresentationModeContext';
 import { GRADE_PROGRESSION, GRADE_DISPLAY, GRADE_REVERSION } from '@/config/grades';
 
 // Get the current school year start date (August 1st)
@@ -34,9 +35,12 @@ export function useGradeProgression() {
   const { user } = useAuth();
   const { profile, updateProfile } = useProfile();
   const { toast } = useToast();
+  const { isPresentationMode } = usePresentationMode();
   const [hasChecked, setHasChecked] = useState(false);
 
   useEffect(() => {
+    // Skip grade progression in presentation/test mode
+    if (isPresentationMode) return;
     // Only check once per session and when profile is loaded
     if (hasChecked || !profile || profile.is_graduated) return;
     
@@ -96,7 +100,7 @@ export function useGradeProgression() {
     };
 
     checkAndProgressGrade();
-  }, [profile, hasChecked, updateProfile, toast, user?.email]);
+  }, [profile, hasChecked, updateProfile, toast, user?.email, isPresentationMode]);
 
   // Manual grade progression
   const progressGrade = async () => {
