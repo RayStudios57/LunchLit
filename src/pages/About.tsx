@@ -205,7 +205,7 @@ export default function About() {
             </CardTitle>
           </CardHeader>
           <CardContent className="text-muted-foreground">
-            <p>Your data belongs to you. LunchLit uses secure authentication and follows best practices for data protection. We never share your personal information with third parties, and you can delete your account at any time.
+            <p>Your data belongs to you. LunchLIT uses secure authentication and follows best practices for data protection. We never share your personal information with third parties, and you can delete your account at any time.
 
 
           </p>
