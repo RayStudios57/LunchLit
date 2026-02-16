@@ -4,8 +4,8 @@ LunchLit is a student-focused productivity platform designed to help students or
 
 The goal is simple: Make students quality of life more efficient, more engaging, and easier.
 
-🔗 Live App Preview:
-[Coming Soon]
+🔗 Live App:
+lunchlit.lovable.app
 
 
 ✨ Features
