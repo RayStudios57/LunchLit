@@ -7,9 +7,11 @@ import { AdminSchools } from '@/components/admin/AdminSchools';
 import { AdminMealManagement } from '@/components/admin/AdminMealManagement';
 import { AdminProfiles } from '@/components/admin/AdminProfiles';
 import { AdminStudyHalls } from '@/components/admin/AdminStudyHalls';
+import { AdminRoleRequests } from '@/components/admin/AdminRoleRequests';
+import { AdminFeedback } from '@/components/admin/AdminFeedback';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ArrowLeft, Loader2, Shield, Users, Mail, School, Utensils, UserCheck, BookOpen, ShieldCheck } from 'lucide-react';
+import { ArrowLeft, Loader2, Shield, Users, Mail, School, Utensils, UserCheck, BookOpen, ShieldCheck, ArrowUpCircle, MessageSquare } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 
@@ -56,10 +58,18 @@ export default function Admin() {
         
         <main className="container mx-auto px-4 py-8 max-w-6xl">
           <Tabs defaultValue="users" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-7">
+            <TabsList className="grid w-full grid-cols-9">
               <TabsTrigger value="users" className="flex items-center gap-2">
                 <Users className="h-4 w-4" />
                 <span className="hidden sm:inline">Roles</span>
+              </TabsTrigger>
+              <TabsTrigger value="requests" className="flex items-center gap-2">
+                <ArrowUpCircle className="h-4 w-4" />
+                <span className="hidden sm:inline">Requests</span>
+              </TabsTrigger>
+              <TabsTrigger value="feedback" className="flex items-center gap-2">
+                <MessageSquare className="h-4 w-4" />
+                <span className="hidden sm:inline">Feedback</span>
               </TabsTrigger>
               <TabsTrigger value="custom-roles" className="flex items-center gap-2">
                 <ShieldCheck className="h-4 w-4" />
@@ -89,6 +99,14 @@ export default function Admin() {
             
             <TabsContent value="users">
               <AdminUserRoles />
+            </TabsContent>
+
+            <TabsContent value="requests">
+              <AdminRoleRequests />
+            </TabsContent>
+
+            <TabsContent value="feedback">
+              <AdminFeedback />
             </TabsContent>
 
             <TabsContent value="custom-roles">
