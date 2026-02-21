@@ -3,13 +3,29 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
-import { Loader2, CheckCircle, XCircle, Clock } from 'lucide-react';
+import { Loader2, CheckCircle, XCircle, Clock, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { format } from 'date-fns';
+import { supabase } from '@/integrations/supabase/client';
+import { useQueryClient } from '@tanstack/react-query';
+import { useToast } from '@/hooks/use-toast';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 
 export function AdminRoleRequests() {
   const { allRequests, isLoading, reviewRequest } = useRoleRequests();
   const [notesMap, setNotesMap] = useState<Record<string, string>>({});
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
 
   if (isLoading) {
     return (
@@ -33,6 +49,21 @@ export function AdminRoleRequests() {
       delete next[requestId];
       return next;
     });
+  };
+
+  const handleDelete = async (requestId: string) => {
+    const { error } = await supabase
+      .from('role_upgrade_requests')
+      .delete()
+      .eq('id', requestId);
+
+    if (error) {
+      toast({ title: 'Error deleting request', description: error.message, variant: 'destructive' });
+      return;
+    }
+    queryClient.invalidateQueries({ queryKey: ['all-role-requests'] });
+    queryClient.invalidateQueries({ queryKey: ['my-role-requests'] });
+    toast({ title: 'Request deleted' });
   };
 
   return (
@@ -60,9 +91,28 @@ export function AdminRoleRequests() {
                           User: {request.user_id.slice(0, 8)}… · {format(new Date(request.created_at), 'MMM d, yyyy')}
                         </p>
                       </div>
-                      <Badge variant="outline" className="bg-yellow-500/10 text-yellow-700 border-yellow-500/30">
-                        Pending
-                      </Badge>
+                      <div className="flex items-center gap-2">
+                        <Badge variant="outline" className="bg-yellow-500/10 text-yellow-700 border-yellow-500/30">
+                          Pending
+                        </Badge>
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <Button variant="ghost" size="icon" className="h-8 w-8">
+                              <Trash2 className="h-4 w-4 text-destructive" />
+                            </Button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>Delete request?</AlertDialogTitle>
+                              <AlertDialogDescription>This will permanently delete this role upgrade request.</AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Cancel</AlertDialogCancel>
+                              <AlertDialogAction onClick={() => handleDelete(request.id)}>Delete</AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+                      </div>
                     </div>
 
                     <div className="bg-muted/50 rounded-md p-3">
@@ -124,10 +174,29 @@ export function AdminRoleRequests() {
                       <p className="text-xs text-muted-foreground mt-1 italic">"{request.admin_notes}"</p>
                     )}
                   </div>
-                  <Badge variant={request.status === 'approved' ? 'default' : 'destructive'}>
-                    {request.status === 'approved' ? <CheckCircle className="h-3 w-3 mr-1" /> : <XCircle className="h-3 w-3 mr-1" />}
-                    {request.status}
-                  </Badge>
+                  <div className="flex items-center gap-2">
+                    <Badge variant={request.status === 'approved' ? 'default' : 'destructive'}>
+                      {request.status === 'approved' ? <CheckCircle className="h-3 w-3 mr-1" /> : <XCircle className="h-3 w-3 mr-1" />}
+                      {request.status}
+                    </Badge>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button variant="ghost" size="icon" className="h-8 w-8">
+                          <Trash2 className="h-4 w-4 text-destructive" />
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Delete request?</AlertDialogTitle>
+                          <AlertDialogDescription>This will permanently delete this role request record.</AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction onClick={() => handleDelete(request.id)}>Delete</AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </div>
                 </div>
               ))}
             </div>

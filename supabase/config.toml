@@ -17,3 +17,9 @@ verify_jwt = false
 
 [functions.send-grade-notification]
 verify_jwt = false
+
+[functions.send-feedback-notification]
+verify_jwt = false
+
+[functions.admin-delete-account]
+verify_jwt = false
