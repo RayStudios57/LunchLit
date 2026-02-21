@@ -8,3 +8,12 @@ verify_jwt = true
 
 [functions.scrape-mealviewer]
 verify_jwt = false
+
+[functions.send-notifications]
+verify_jwt = false
+
+[functions.send-role-notification]
+verify_jwt = false
+
+[functions.send-grade-notification]
+verify_jwt = false
