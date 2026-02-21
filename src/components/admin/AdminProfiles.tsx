@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -7,8 +7,20 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Users, Loader2, Search, GraduationCap, Eye } from 'lucide-react';
+import { Users, Loader2, Search, GraduationCap, Eye, Trash2 } from 'lucide-react';
 import { AdminUserActivity } from './AdminUserActivity';
+import { useToast } from '@/hooks/use-toast';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 
 interface Profile {
   id: string;
@@ -24,6 +36,9 @@ interface Profile {
 export function AdminProfiles() {
   const [searchTerm, setSearchTerm] = useState('');
   const [viewingUser, setViewingUser] = useState<{ id: string; name: string } | null>(null);
+  const [deletingUserId, setDeletingUserId] = useState<string | null>(null);
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
 
   const { data: profiles = [], isLoading } = useQuery({
     queryKey: ['admin-profiles'],
@@ -53,6 +68,24 @@ export function AdminProfiles() {
     senior: 'Senior (12th)',
   };
 
+  const handleDeleteAccount = async (userId: string) => {
+    setDeletingUserId(userId);
+    try {
+      const { data, error } = await supabase.functions.invoke('admin-delete-account', {
+        body: { targetUserId: userId },
+      });
+
+      if (error) throw error;
+
+      toast({ title: 'Account deleted', description: 'The user account has been permanently deleted.' });
+      queryClient.invalidateQueries({ queryKey: ['admin-profiles'] });
+    } catch (err: any) {
+      toast({ title: 'Error deleting account', description: err.message, variant: 'destructive' });
+    } finally {
+      setDeletingUserId(null);
+    }
+  };
+
   if (viewingUser) {
     return (
       <Card>
@@ -75,7 +108,7 @@ export function AdminProfiles() {
           All User Profiles
         </CardTitle>
         <CardDescription>
-          View all users who have signed up for LunchLit. Click the eye icon to view their activity.
+          View all users. Click the eye icon to view activity, or the trash icon to delete an account.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -110,7 +143,7 @@ export function AdminProfiles() {
                   <TableHead>School</TableHead>
                   <TableHead>Grade</TableHead>
                   <TableHead>Joined</TableHead>
-                  <TableHead className="w-[60px]">View</TableHead>
+                  <TableHead className="w-[100px]">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -152,14 +185,49 @@ export function AdminProfiles() {
                       {new Date(profile.created_at).toLocaleDateString()}
                     </TableCell>
                     <TableCell>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => setViewingUser({ id: profile.user_id, name: profile.full_name || 'Anonymous' })}
-                        title="View user activity"
-                      >
-                        <Eye className="h-4 w-4" />
-                      </Button>
+                      <div className="flex items-center gap-1">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => setViewingUser({ id: profile.user_id, name: profile.full_name || 'Anonymous' })}
+                          title="View user activity"
+                        >
+                          <Eye className="h-4 w-4" />
+                        </Button>
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              title="Delete account"
+                              disabled={deletingUserId === profile.user_id}
+                            >
+                              {deletingUserId === profile.user_id ? (
+                                <Loader2 className="h-4 w-4 animate-spin" />
+                              ) : (
+                                <Trash2 className="h-4 w-4 text-destructive" />
+                              )}
+                            </Button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>Delete this account?</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                This will permanently delete {profile.full_name || 'this user'}'s account and all their data. This action cannot be undone.
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Cancel</AlertDialogCancel>
+                              <AlertDialogAction
+                                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                onClick={() => handleDeleteAccount(profile.user_id)}
+                              >
+                                Delete Account
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}
