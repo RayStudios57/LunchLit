@@ -6,8 +6,12 @@ import { Helmet } from 'react-helmet';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { CreatorSocialLinks } from '@/components/about/CreatorSocialLinks';
 import { SuggestionsSection } from '@/components/about/SuggestionsSection';
-const CURRENT_VERSION = '0.7';
+const CURRENT_VERSION = '0.8';
 const changelogData = [{
+  version: '0.8',
+  date: 'February 2026',
+  changes: ['Interactive 11-step onboarding tutorial for new users', 'Replay tutorial anytime from Settings', 'Admin feedback management with email notifications', 'Admin account deletion and request management', 'Admin user activity tracking']
+}, {
   version: '0.7',
   date: 'February 2026',
   changes: ['We finally figured out how to add Google authentication, Yippee :)']
