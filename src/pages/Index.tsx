@@ -13,6 +13,7 @@ import { SettingsView } from '@/components/settings/SettingsView';
 import { DiscussionView } from '@/components/discussion/DiscussionView';
 import { TodayWidget } from '@/components/dashboard/TodayWidget';
 import { GradeSelectionModal } from '@/components/onboarding/GradeSelectionModal';
+import { OnboardingTutorial } from '@/components/onboarding/OnboardingTutorial';
 import { BragSheetView } from '@/components/bragsheet/BragSheetView';
 import { StudentPortfolioView } from '@/components/portfolio/StudentPortfolioView';
 import { Credits } from '@/components/Credits';
@@ -29,10 +30,21 @@ const Index = () => {
   const { profile } = useProfile();
   const { isGraduated } = useGradeProgression(); // Auto-checks and progresses grade
   const [showGradeModal, setShowGradeModal] = useState(false);
+  const [showTutorial, setShowTutorial] = useState(false);
 
   useEffect(() => {
     if (user && profile && !profile.grade_level) {
       setShowGradeModal(true);
+    }
+  }, [user, profile]);
+
+  // Show tutorial for new users (after grade selection is done)
+  useEffect(() => {
+    if (user && profile && profile.grade_level) {
+      const tutorialKey = `lunchlit_tutorial_seen_${user.id}`;
+      if (!localStorage.getItem(tutorialKey)) {
+        setShowTutorial(true);
+      }
     }
   }, [user, profile]);
 
@@ -75,6 +87,16 @@ const Index = () => {
       <GradeSelectionModal 
         open={showGradeModal} 
         onComplete={() => setShowGradeModal(false)} 
+      />
+
+      <OnboardingTutorial
+        open={showTutorial && !showGradeModal}
+        onComplete={() => {
+          setShowTutorial(false);
+          if (user) {
+            localStorage.setItem(`lunchlit_tutorial_seen_${user.id}`, 'true');
+          }
+        }}
       />
     </>
   );
