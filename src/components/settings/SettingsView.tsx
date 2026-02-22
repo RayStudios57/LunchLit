@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import { OnboardingTutorial } from '@/components/onboarding/OnboardingTutorial';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/hooks/useProfile';
 import { useSchools } from '@/hooks/useSchools';
@@ -16,7 +17,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
-import { Camera, Sun, Moon, Monitor, Check, Palette, School, GraduationCap, User, Calendar, Trash2, Download, AlertTriangle, ChevronUp, ChevronDown, RotateCcw, Presentation } from 'lucide-react';
+import { Camera, Sun, Moon, Monitor, Check, Palette, School, GraduationCap, User, Calendar, Trash2, Download, AlertTriangle, ChevronUp, ChevronDown, RotateCcw, Presentation, HelpCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { Link } from 'react-router-dom';
@@ -68,6 +69,7 @@ export function SettingsView() {
   const [fullName, setFullName] = useState(profile?.full_name || '');
   const [isDeleting, setIsDeleting] = useState(false);
   const [calendarSyncEnabled, setCalendarSyncEnabled] = useState(profile?.calendar_sync_enabled || false);
+  const [showTutorial, setShowTutorial] = useState(false);
   const handleAvatarClick = () => {
     fileInputRef.current?.click();
   };
@@ -438,6 +440,25 @@ export function SettingsView() {
           </CardContent>
         </Card>
       )}
+
+      {/* Help & Tutorial */}
+      <Card className="card-elevated">
+        <CardHeader>
+          <CardTitle className="font-display flex items-center gap-2">
+            <HelpCircle className="w-5 h-5" />
+            Help
+          </CardTitle>
+          <CardDescription>Learn how to use LunchLIT</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Button variant="outline" className="w-full" onClick={() => setShowTutorial(true)}>
+            <RotateCcw className="w-4 h-4 mr-2" />
+            Replay Tutorial
+          </Button>
+        </CardContent>
+      </Card>
+
+      <OnboardingTutorial open={showTutorial} onComplete={() => setShowTutorial(false)} />
 
       {/* Danger Zone */}
       <Card className="card-elevated border-destructive/30">
