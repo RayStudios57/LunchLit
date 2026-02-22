@@ -6,8 +6,12 @@ import { Helmet } from 'react-helmet';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { CreatorSocialLinks } from '@/components/about/CreatorSocialLinks';
 import { SuggestionsSection } from '@/components/about/SuggestionsSection';
-const CURRENT_VERSION = '0.8';
+const CURRENT_VERSION = '0.9';
 const changelogData = [{
+  version: '0.9',
+  date: 'February 2026',
+  changes: ['Installable PWA — add LunchLit to your phone home screen', 'GPA Calculator widget on the Today dashboard', 'Built-in Pomodoro study timer with break reminders and task integration', 'Achievement badges for tasks, Brag Sheet milestones, and more']
+}, {
   version: '0.8',
   date: 'February 2026',
   changes: ['Interactive 11-step onboarding tutorial for new users', 'Replay tutorial anytime from Settings', 'Admin feedback management with email notifications', 'Admin account deletion and request management', 'Admin user activity tracking']

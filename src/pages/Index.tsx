@@ -12,6 +12,9 @@ import { SettingsView } from '@/components/settings/SettingsView';
 // Import/Export removed - replaced with admin meal management
 import { DiscussionView } from '@/components/discussion/DiscussionView';
 import { TodayWidget } from '@/components/dashboard/TodayWidget';
+import { GpaCalculatorWidget } from '@/components/dashboard/GpaCalculatorWidget';
+import { PomodoroTimer } from '@/components/dashboard/PomodoroTimer';
+import { AchievementBadges } from '@/components/dashboard/AchievementBadges';
 import { GradeSelectionModal } from '@/components/onboarding/GradeSelectionModal';
 import { OnboardingTutorial } from '@/components/onboarding/OnboardingTutorial';
 import { BragSheetView } from '@/components/bragsheet/BragSheetView';
@@ -62,6 +65,15 @@ const Index = () => {
           {activeTab === 'home' && (
             <div className="space-y-6">
               {user && <TodayWidget />}
+              {user && (
+                <div className="grid gap-6 md:grid-cols-2">
+                  <PomodoroTimer />
+                  <div className="space-y-6">
+                    <GpaCalculatorWidget />
+                    <AchievementBadges />
+                  </div>
+                </div>
+              )}
               <TodayView 
                 onNavigateToMenu={() => setActiveTab('menu')} 
                 onNavigateToStudy={() => setActiveTab('study')} 
