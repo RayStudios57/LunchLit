@@ -19,18 +19,28 @@ interface BadgeContext {
   completedTasks: number;
   totalTasks: number;
   bragEntries: number;
-  // streak could be calculated from tasks with consecutive due dates completed
 }
 
 export const BADGES: Badge[] = [
+  // Tasks
   { key: 'first_task', name: 'Getting Started', description: 'Complete your first task', icon: '✅', category: 'tasks', check: ctx => ctx.completedTasks >= 1 },
   { key: 'task_5', name: 'Task Master', description: 'Complete 5 tasks', icon: '⭐', category: 'tasks', check: ctx => ctx.completedTasks >= 5 },
+  { key: 'task_10', name: 'On a Roll', description: 'Complete 10 tasks', icon: '🔥', category: 'tasks', check: ctx => ctx.completedTasks >= 10 },
   { key: 'task_25', name: 'Productivity Pro', description: 'Complete 25 tasks', icon: '🏆', category: 'tasks', check: ctx => ctx.completedTasks >= 25 },
+  { key: 'task_50', name: 'Half Century', description: 'Complete 50 tasks', icon: '🎖️', category: 'tasks', check: ctx => ctx.completedTasks >= 50 },
   { key: 'task_100', name: 'Century Club', description: 'Complete 100 tasks', icon: '💯', category: 'tasks', check: ctx => ctx.completedTasks >= 100 },
+  // Brag Sheet
   { key: 'brag_1', name: 'Brag Starter', description: 'Add your first Brag Sheet entry', icon: '📝', category: 'bragsheet', check: ctx => ctx.bragEntries >= 1 },
+  { key: 'brag_3', name: 'Building Up', description: 'Add 3 Brag Sheet entries', icon: '📌', category: 'bragsheet', check: ctx => ctx.bragEntries >= 3 },
   { key: 'brag_5', name: 'Resume Builder', description: 'Add 5 Brag Sheet entries', icon: '📋', category: 'bragsheet', check: ctx => ctx.bragEntries >= 5 },
   { key: 'brag_10', name: 'Achievement Hunter', description: '10 Brag Sheet entries', icon: '🎯', category: 'bragsheet', check: ctx => ctx.bragEntries >= 10 },
+  { key: 'brag_20', name: 'Overachiever', description: '20 Brag Sheet entries', icon: '🌟', category: 'bragsheet', check: ctx => ctx.bragEntries >= 20 },
+  // General
   { key: 'task_creator_10', name: 'Planner', description: 'Create 10 tasks total', icon: '📅', category: 'general', check: ctx => ctx.totalTasks >= 10 },
+  { key: 'task_creator_25', name: 'Organized', description: 'Create 25 tasks total', icon: '🗂️', category: 'general', check: ctx => ctx.totalTasks >= 25 },
+  { key: 'task_creator_50', name: 'Super Planner', description: 'Create 50 tasks total', icon: '🧠', category: 'general', check: ctx => ctx.totalTasks >= 50 },
+  { key: 'well_rounded', name: 'Well-Rounded', description: 'Complete 5 tasks AND have 3 brag entries', icon: '💎', category: 'general', check: ctx => ctx.completedTasks >= 5 && ctx.bragEntries >= 3 },
+  { key: 'scholar', name: 'Scholar', description: 'Complete 25 tasks AND have 10 brag entries', icon: '🎓', category: 'general', check: ctx => ctx.completedTasks >= 25 && ctx.bragEntries >= 10 },
 ];
 
 export function useAchievements() {

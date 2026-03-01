@@ -9,8 +9,18 @@ import { SuggestionsSection } from '@/components/about/SuggestionsSection';
 const CURRENT_VERSION = '0.9';
 const changelogData = [{
   version: '0.9',
-  date: 'February 2026',
-  changes: ['Installable PWA — add LunchLit to your phone home screen', 'GPA Calculator widget on the Today dashboard', 'Built-in Pomodoro study timer with break reminders and task integration', 'Achievement badges for tasks, Brag Sheet milestones, and more']
+  date: 'March 2026',
+  changes: [
+    'Installable PWA — add LunchLit to your phone home screen',
+    'GPA Calculator widget on the Today dashboard',
+    'Built-in Pomodoro study timer with lofi music and break reminders',
+    '16 achievement badges across Tasks, Brag Sheet, and General categories',
+    'Dedicated Badges page in Settings with progress tracking and hover details',
+    'Daily motivational quotes on the Today dashboard',
+    'Quick Links widget for fast navigation',
+    'Updated 15-step onboarding tutorial covering all new features',
+    'PWA install reminder in the tutorial',
+  ]
 }, {
   version: '0.8',
   date: 'February 2026',

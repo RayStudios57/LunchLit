@@ -2,7 +2,9 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Timer, Play, Pause, RotateCcw, Coffee, BookOpen } from 'lucide-react';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
+import { Timer, Play, Pause, RotateCcw, Coffee, BookOpen, Music } from 'lucide-react';
 import { useTasks } from '@/hooks/useTasks';
 import { toast } from 'sonner';
 
@@ -20,6 +22,12 @@ const MODE_LABELS: Record<TimerMode, string> = {
   long_break: 'Long Break',
 };
 
+// Free lofi streams (YouTube Audio Library style royalty-free URLs)
+const LOFI_STREAMS = [
+  { label: 'Chill Beats', url: 'https://streams.ilovemusic.de/iloveradio17.mp3' },
+  { label: 'Lofi Hip Hop', url: 'https://streams.ilovemusic.de/iloveradio21.mp3' },
+];
+
 export function PomodoroTimer() {
   const { tasks } = useTasks();
   const [mode, setMode] = useState<TimerMode>('work');
@@ -27,9 +35,34 @@ export function PomodoroTimer() {
   const [isRunning, setIsRunning] = useState(false);
   const [sessions, setSessions] = useState(0);
   const [selectedTaskId, setSelectedTaskId] = useState<string>('none');
+  const [lofiEnabled, setLofiEnabled] = useState(false);
+  const [lofiStream, setLofiStream] = useState(LOFI_STREAMS[0].url);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const incompleteTasks = tasks.filter(t => !t.is_completed);
+
+  // Manage lofi audio
+  useEffect(() => {
+    if (lofiEnabled && isRunning && mode === 'work') {
+      if (!audioRef.current) {
+        audioRef.current = new Audio(lofiStream);
+        audioRef.current.loop = true;
+        audioRef.current.volume = 0.3;
+      }
+      audioRef.current.src = lofiStream;
+      audioRef.current.play().catch(() => {});
+    } else {
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
+    }
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
+    };
+  }, [lofiEnabled, isRunning, mode, lofiStream]);
 
   const switchMode = useCallback((newMode: TimerMode) => {
     setMode(newMode);
@@ -65,8 +98,6 @@ export function PomodoroTimer() {
   const minutes = Math.floor(timeLeft / 60);
   const seconds = timeLeft % 60;
   const progress = ((DURATIONS[mode] - timeLeft) / DURATIONS[mode]) * 100;
-
-  const selectedTask = incompleteTasks.find(t => t.id === selectedTaskId);
 
   return (
     <Card className="card-elevated">
@@ -122,6 +153,28 @@ export function PomodoroTimer() {
             {isRunning ? 'Pause' : 'Start'}
           </Button>
         </div>
+
+        {/* Lofi Music Toggle */}
+        <div className="flex items-center justify-between p-3 rounded-lg bg-secondary/50">
+          <div className="flex items-center gap-2">
+            <Music className="w-4 h-4 text-primary" />
+            <Label className="text-sm cursor-pointer">Lofi Music</Label>
+          </div>
+          <Switch checked={lofiEnabled} onCheckedChange={setLofiEnabled} />
+        </div>
+
+        {lofiEnabled && (
+          <Select value={lofiStream} onValueChange={setLofiStream}>
+            <SelectTrigger className="h-8 text-xs">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {LOFI_STREAMS.map(s => (
+                <SelectItem key={s.url} value={s.url}>{s.label}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        )}
 
         {/* Task Selector */}
         {incompleteTasks.length > 0 && (
