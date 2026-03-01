@@ -1,5 +1,7 @@
 import { useState, useRef } from 'react';
 import { OnboardingTutorial } from '@/components/onboarding/OnboardingTutorial';
+import { BadgesView } from '@/components/settings/BadgesView';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/hooks/useProfile';
 import { useSchools } from '@/hooks/useSchools';
@@ -17,7 +19,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
-import { Camera, Sun, Moon, Monitor, Check, Palette, School, GraduationCap, User, Calendar, Trash2, Download, AlertTriangle, ChevronUp, ChevronDown, RotateCcw, Presentation, HelpCircle } from 'lucide-react';
+import { Camera, Sun, Moon, Monitor, Check, Palette, School, GraduationCap, User, Calendar, Trash2, Download, AlertTriangle, ChevronUp, ChevronDown, RotateCcw, Presentation, HelpCircle, Award } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { Link } from 'react-router-dom';
@@ -175,8 +177,16 @@ export function SettingsView() {
         <p className="text-muted-foreground">Please sign in to access settings</p>
       </div>;
   }
-  return <div className="space-y-6 max-w-2xl mx-auto animate-fade-up">
-      {/* Profile Section */}
+  return <div className="max-w-2xl mx-auto animate-fade-up">
+    <Tabs defaultValue="settings" className="space-y-6">
+      <TabsList className="grid w-full grid-cols-2">
+        <TabsTrigger value="settings" className="gap-2"><User className="w-4 h-4" /> Settings</TabsTrigger>
+        <TabsTrigger value="badges" className="gap-2"><Award className="w-4 h-4" /> Badges</TabsTrigger>
+      </TabsList>
+      <TabsContent value="badges">
+        <BadgesView />
+      </TabsContent>
+      <TabsContent value="settings" className="space-y-6">
       <Card className="card-elevated">
         <CardHeader>
           <CardTitle className="font-display flex items-center gap-2">
@@ -450,7 +460,7 @@ export function SettingsView() {
           </CardTitle>
           <CardDescription>Learn how to use LunchLIT</CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="space-y-3">
           <Button variant="outline" className="w-full" onClick={() => setShowTutorial(true)}>
             <RotateCcw className="w-4 h-4 mr-2" />
             Replay Tutorial
@@ -495,5 +505,7 @@ export function SettingsView() {
           </AlertDialog>
         </CardContent>
       </Card>
+      </TabsContent>
+    </Tabs>
     </div>;
 }

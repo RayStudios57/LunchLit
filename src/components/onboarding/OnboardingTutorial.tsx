@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Calendar, Utensils, Book, Trophy, Target, CheckSquare, Users, BookOpen, MessageCircle, GraduationCap, ArrowRight, ArrowLeft, Sparkles } from 'lucide-react';
+import { Calendar, Utensils, Book, Trophy, Target, CheckSquare, Users, BookOpen, MessageCircle, GraduationCap, ArrowRight, ArrowLeft, Sparkles, Timer, Calculator, Award, Download } from 'lucide-react';
 
 interface TutorialStep {
   icon: React.ElementType;
@@ -20,7 +20,7 @@ const TUTORIAL_STEPS: TutorialStep[] = [
   {
     icon: Calendar,
     title: 'Today View',
-    description: 'Your daily dashboard shows upcoming classes, tasks due today, and today\'s lunch menu — all at a glance.',
+    description: 'Your daily dashboard shows upcoming classes, tasks due today, today\'s lunch menu, and quick-glance widgets — all in one place.',
     color: 'from-blue-500 to-cyan-500',
   },
   {
@@ -54,6 +54,24 @@ const TUTORIAL_STEPS: TutorialStep[] = [
     color: 'from-red-500 to-rose-500',
   },
   {
+    icon: Timer,
+    title: 'Pomodoro Study Timer',
+    description: 'Stay focused with 25-minute study sessions and timed breaks. Link a task and optionally play lofi music while you study.',
+    color: 'from-emerald-500 to-teal-500',
+  },
+  {
+    icon: Calculator,
+    title: 'GPA Calculator',
+    description: 'Calculate your GPA right from the dashboard. Add courses, grades, and credits to stay on top of your academics.',
+    color: 'from-sky-500 to-blue-500',
+  },
+  {
+    icon: Award,
+    title: 'Achievement Badges',
+    description: 'Earn badges for completing tasks, building your Brag Sheet, and staying consistent. Check your badges in Settings!',
+    color: 'from-amber-500 to-yellow-500',
+  },
+  {
     icon: Users,
     title: 'Community',
     description: 'Join school discussions, share tips, and connect with classmates in your school\'s community board.',
@@ -70,6 +88,12 @@ const TUTORIAL_STEPS: TutorialStep[] = [
     title: 'AI Chat',
     description: 'Got a question? Chat with our AI assistant for homework help, study tips, and more.',
     color: 'from-fuchsia-500 to-pink-500',
+  },
+  {
+    icon: Download,
+    title: 'Install LunchLIT',
+    description: 'Add LunchLIT to your phone\'s home screen for quick access! Go to your browser settings and tap "Add to Home Screen" or "Install App".',
+    color: 'from-violet-500 to-purple-500',
   },
   {
     icon: GraduationCap,

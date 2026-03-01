@@ -9,12 +9,12 @@ import { TasksView } from '@/components/tasks/TasksView';
 import { ClassSchedule } from '@/components/planner/ClassSchedule';
 import { ChatBot } from '@/components/chat/ChatBot';
 import { SettingsView } from '@/components/settings/SettingsView';
-// Import/Export removed - replaced with admin meal management
 import { DiscussionView } from '@/components/discussion/DiscussionView';
 import { TodayWidget } from '@/components/dashboard/TodayWidget';
 import { GpaCalculatorWidget } from '@/components/dashboard/GpaCalculatorWidget';
 import { PomodoroTimer } from '@/components/dashboard/PomodoroTimer';
-import { AchievementBadges } from '@/components/dashboard/AchievementBadges';
+import { MotivationalQuote } from '@/components/dashboard/MotivationalQuote';
+import { QuickLinks } from '@/components/dashboard/QuickLinks';
 import { GradeSelectionModal } from '@/components/onboarding/GradeSelectionModal';
 import { OnboardingTutorial } from '@/components/onboarding/OnboardingTutorial';
 import { BragSheetView } from '@/components/bragsheet/BragSheetView';
@@ -31,7 +31,7 @@ const Index = () => {
   const [activeTab, setActiveTab] = useState<TabType>('home');
   const { user } = useAuth();
   const { profile } = useProfile();
-  const { isGraduated } = useGradeProgression(); // Auto-checks and progresses grade
+  const { isGraduated } = useGradeProgression();
   const [showGradeModal, setShowGradeModal] = useState(false);
   const [showTutorial, setShowTutorial] = useState(false);
 
@@ -64,14 +64,13 @@ const Index = () => {
         <main className="container py-6">
           {activeTab === 'home' && (
             <div className="space-y-6">
+              {user && <MotivationalQuote />}
               {user && <TodayWidget />}
+              {user && <QuickLinks onNavigate={(tab) => setActiveTab(tab as TabType)} />}
               {user && (
                 <div className="grid gap-6 md:grid-cols-2">
                   <PomodoroTimer />
-                  <div className="space-y-6">
-                    <GpaCalculatorWidget />
-                    <AchievementBadges />
-                  </div>
+                  <GpaCalculatorWidget />
                 </div>
               )}
               <TodayView 
@@ -92,7 +91,6 @@ const Index = () => {
           {activeTab === 'bragsheet' && <BragSheetView />}
           {activeTab === 'portfolio' && <StudentPortfolioView />}
           {activeTab === 'settings' && <SettingsView />}
-          
         </main>
       </div>
 
