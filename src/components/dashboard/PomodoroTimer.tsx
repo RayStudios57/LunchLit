@@ -4,7 +4,8 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { Timer, Play, Pause, RotateCcw, Coffee, BookOpen, Music } from 'lucide-react';
+import { Slider } from '@/components/ui/slider';
+import { Timer, Play, Pause, RotateCcw, Coffee, BookOpen, Music, Volume2 } from 'lucide-react';
 import { useTasks } from '@/hooks/useTasks';
 import { toast } from 'sonner';
 
@@ -22,10 +23,18 @@ const MODE_LABELS: Record<TimerMode, string> = {
   long_break: 'Long Break',
 };
 
-// Free lofi streams (YouTube Audio Library style royalty-free URLs)
+// Peaceful lofi/ambient streams - calm and non-distracting
 const LOFI_STREAMS = [
-  { label: 'Chill Beats', url: 'https://streams.ilovemusic.de/iloveradio17.mp3' },
-  { label: 'Lofi Hip Hop', url: 'https://streams.ilovemusic.de/iloveradio21.mp3' },
+  { label: '☕ Lofi Chill', url: 'https://streams.ilovemusic.de/iloveradio17.mp3' },
+  { label: '🌧️ Rain & Jazz', url: 'https://streams.ilovemusic.de/iloveradio21.mp3' },
+  { label: '🌿 Nature Ambient', url: 'https://ice1.somafm.com/dronezone-128-mp3' },
+  { label: '🎹 Piano Focus', url: 'https://ice1.somafm.com/sonicuniverse-128-mp3' },
+  { label: '🌊 Deep Focus', url: 'https://ice1.somafm.com/deepspaceone-128-mp3' },
+  { label: '🌙 Midnight Lofi', url: 'https://ice1.somafm.com/lush-128-mp3' },
+  { label: '📖 Study Beats', url: 'https://ice1.somafm.com/covers-128-mp3' },
+  { label: '🍃 Zen Garden', url: 'https://ice1.somafm.com/suburbsofgoa-128-mp3' },
+  { label: '✨ Ambient Space', url: 'https://ice1.somafm.com/spacestation-128-mp3' },
+  { label: '🎶 Groove Salad', url: 'https://ice1.somafm.com/groovesalad-128-mp3' },
 ];
 
 export function PomodoroTimer() {
@@ -37,6 +46,7 @@ export function PomodoroTimer() {
   const [selectedTaskId, setSelectedTaskId] = useState<string>('none');
   const [lofiEnabled, setLofiEnabled] = useState(false);
   const [lofiStream, setLofiStream] = useState(LOFI_STREAMS[0].url);
+  const [volume, setVolume] = useState(25);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -48,8 +58,8 @@ export function PomodoroTimer() {
       if (!audioRef.current) {
         audioRef.current = new Audio(lofiStream);
         audioRef.current.loop = true;
-        audioRef.current.volume = 0.3;
       }
+      audioRef.current.volume = volume / 100;
       audioRef.current.src = lofiStream;
       audioRef.current.play().catch(() => {});
     } else {
@@ -63,6 +73,13 @@ export function PomodoroTimer() {
       }
     };
   }, [lofiEnabled, isRunning, mode, lofiStream]);
+
+  // Update volume in real-time
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = volume / 100;
+    }
+  }, [volume]);
 
   const switchMode = useCallback((newMode: TimerMode) => {
     setMode(newMode);
@@ -155,26 +172,41 @@ export function PomodoroTimer() {
         </div>
 
         {/* Lofi Music Toggle */}
-        <div className="flex items-center justify-between p-3 rounded-lg bg-secondary/50">
-          <div className="flex items-center gap-2">
-            <Music className="w-4 h-4 text-primary" />
-            <Label className="text-sm cursor-pointer">Lofi Music</Label>
+        <div className="space-y-3 p-3 rounded-lg bg-secondary/50">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Music className="w-4 h-4 text-primary" />
+              <Label className="text-sm cursor-pointer">Lofi Music</Label>
+            </div>
+            <Switch checked={lofiEnabled} onCheckedChange={setLofiEnabled} />
           </div>
-          <Switch checked={lofiEnabled} onCheckedChange={setLofiEnabled} />
-        </div>
 
-        {lofiEnabled && (
-          <Select value={lofiStream} onValueChange={setLofiStream}>
-            <SelectTrigger className="h-8 text-xs">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {LOFI_STREAMS.map(s => (
-                <SelectItem key={s.url} value={s.url}>{s.label}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        )}
+          {lofiEnabled && (
+            <>
+              <Select value={lofiStream} onValueChange={setLofiStream}>
+                <SelectTrigger className="h-8 text-xs">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {LOFI_STREAMS.map(s => (
+                    <SelectItem key={s.url} value={s.url}>{s.label}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <div className="flex items-center gap-2">
+                <Volume2 className="w-3.5 h-3.5 text-muted-foreground" />
+                <Slider
+                  value={[volume]}
+                  onValueChange={([v]) => setVolume(v)}
+                  max={100}
+                  step={5}
+                  className="flex-1"
+                />
+                <span className="text-xs text-muted-foreground w-8 text-right">{volume}%</span>
+              </div>
+            </>
+          )}
+        </div>
 
         {/* Task Selector */}
         {incompleteTasks.length > 0 && (

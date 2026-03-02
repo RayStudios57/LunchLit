@@ -14,7 +14,8 @@ import { TodayWidget } from '@/components/dashboard/TodayWidget';
 import { GpaCalculatorWidget } from '@/components/dashboard/GpaCalculatorWidget';
 import { PomodoroTimer } from '@/components/dashboard/PomodoroTimer';
 import { MotivationalQuote } from '@/components/dashboard/MotivationalQuote';
-import { QuickLinks } from '@/components/dashboard/QuickLinks';
+import { StudyStats } from '@/components/dashboard/StudyStats';
+import { PwaInstallButton } from '@/components/dashboard/PwaInstallButton';
 import { GradeSelectionModal } from '@/components/onboarding/GradeSelectionModal';
 import { OnboardingTutorial } from '@/components/onboarding/OnboardingTutorial';
 import { BragSheetView } from '@/components/bragsheet/BragSheetView';
@@ -41,7 +42,6 @@ const Index = () => {
     }
   }, [user, profile]);
 
-  // Show tutorial for new users (after grade selection is done)
   useEffect(() => {
     if (user && profile && profile.grade_level) {
       const tutorialKey = `lunchlit_tutorial_seen_${user.id}`;
@@ -64,13 +64,18 @@ const Index = () => {
         <main className="container py-6">
           {activeTab === 'home' && (
             <div className="space-y-6">
+              {user && <PwaInstallButton />}
               {user && <MotivationalQuote />}
               {user && <TodayWidget />}
-              {user && <QuickLinks onNavigate={(tab) => setActiveTab(tab as TabType)} />}
               {user && (
                 <div className="grid gap-6 md:grid-cols-2">
-                  <PomodoroTimer />
+                  <StudyStats />
                   <GpaCalculatorWidget />
+                </div>
+              )}
+              {user && (
+                <div className="grid gap-6 md:grid-cols-1">
+                  <PomodoroTimer />
                 </div>
               )}
               <TodayView 
