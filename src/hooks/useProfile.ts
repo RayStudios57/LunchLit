@@ -16,6 +16,7 @@ export interface Profile {
   calendar_sync_enabled: boolean | null;
   last_grade_progression: string | null;
   is_graduated: boolean | null;
+  is_public: boolean | null;
   created_at: string;
   updated_at: string;
 }

@@ -663,6 +663,7 @@ export type Database = {
           grade_level: string | null
           id: string
           is_graduated: boolean | null
+          is_public: boolean | null
           last_grade_progression: string | null
           school_id: string | null
           school_name: string | null
@@ -681,6 +682,7 @@ export type Database = {
           grade_level?: string | null
           id?: string
           is_graduated?: boolean | null
+          is_public?: boolean | null
           last_grade_progression?: string | null
           school_id?: string | null
           school_name?: string | null
@@ -699,6 +701,7 @@ export type Database = {
           grade_level?: string | null
           id?: string
           is_graduated?: boolean | null
+          is_public?: boolean | null
           last_grade_progression?: string | null
           school_id?: string | null
           school_name?: string | null
@@ -993,6 +996,59 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      tutors: {
+        Row: {
+          availability: string | null
+          contact_info: string | null
+          created_at: string
+          created_by: string
+          description: string | null
+          id: string
+          is_online: boolean | null
+          name: string
+          rating: number | null
+          school_id: string | null
+          subject: string
+          updated_at: string
+        }
+        Insert: {
+          availability?: string | null
+          contact_info?: string | null
+          created_at?: string
+          created_by: string
+          description?: string | null
+          id?: string
+          is_online?: boolean | null
+          name: string
+          rating?: number | null
+          school_id?: string | null
+          subject: string
+          updated_at?: string
+        }
+        Update: {
+          availability?: string | null
+          contact_info?: string | null
+          created_at?: string
+          created_by?: string
+          description?: string | null
+          id?: string
+          is_online?: boolean | null
+          name?: string
+          rating?: number | null
+          school_id?: string | null
+          subject?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tutors_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_achievements: {
         Row: {

@@ -33,6 +33,14 @@ export function BadgesView() {
     { key: 'exploration' as const, label: 'Exploration', emoji: '🧭' },
     { key: 'social' as const, label: 'Participation', emoji: '🤝' },
     { key: 'general' as const, label: 'Milestones', emoji: '🏅' },
+    { key: 'menu' as const, label: 'Menu', emoji: '🍽️' },
+    { key: 'studyhall' as const, label: 'Study Halls', emoji: '📖' },
+    { key: 'planner' as const, label: 'Planner', emoji: '📆' },
+    { key: 'discussion' as const, label: 'Discussion', emoji: '💬' },
+    { key: 'portfolio' as const, label: 'Portfolio', emoji: '🎯' },
+    { key: 'settings' as const, label: 'Profile', emoji: '👤' },
+    { key: 'pomodoro' as const, label: 'Focus', emoji: '🍅' },
+    { key: 'tutoring' as const, label: 'Tutoring', emoji: '🎓' },
   ];
 
   return (
@@ -60,7 +68,7 @@ export function BadgesView() {
         </CardContent>
       </Card>
 
-      {/* Master Badge - Special Display */}
+      {/* Master Badge */}
       <Card className={`card-elevated ${hasMaster ? 'bg-gradient-to-br from-yellow-500/10 via-amber-500/5 to-orange-500/10 border-yellow-500/30' : 'opacity-60'}`}>
         <CardContent className="py-6">
           <div className="flex items-center gap-4">

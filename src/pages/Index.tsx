@@ -20,13 +20,14 @@ import { GradeSelectionModal } from '@/components/onboarding/GradeSelectionModal
 import { OnboardingTutorial } from '@/components/onboarding/OnboardingTutorial';
 import { BragSheetView } from '@/components/bragsheet/BragSheetView';
 import { StudentPortfolioView } from '@/components/portfolio/StudentPortfolioView';
+import { PublicProfileView } from '@/components/profile/PublicProfileView';
 import { Credits } from '@/components/Credits';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/hooks/useProfile';
 import { useGradeProgression } from '@/hooks/useGradeProgression';
 import { Helmet } from 'react-helmet';
 
-export type TabType = 'home' | 'menu' | 'study' | 'tutor' | 'planner' | 'chat' | 'discuss' | 'settings' | 'tasks' | 'classes' | 'bragsheet' | 'portfolio';
+export type TabType = 'home' | 'menu' | 'study' | 'tutor' | 'planner' | 'chat' | 'discuss' | 'settings' | 'tasks' | 'classes' | 'bragsheet' | 'portfolio' | 'profiles';
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState<TabType>('home');
@@ -95,6 +96,7 @@ const Index = () => {
           {activeTab === 'discuss' && <DiscussionView />}
           {activeTab === 'bragsheet' && <BragSheetView />}
           {activeTab === 'portfolio' && <StudentPortfolioView />}
+          {activeTab === 'profiles' && <PublicProfileView />}
           {activeTab === 'settings' && <SettingsView />}
         </main>
       </div>

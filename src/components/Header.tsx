@@ -73,6 +73,10 @@ export function Header({
     id: 'tutor' as const,
     label: 'Tutors',
     icon: GraduationCap
+  }, {
+    id: 'profiles' as const,
+    label: 'Profiles',
+    icon: Users
   }];
   return <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border">
       <div className="container py-3">
