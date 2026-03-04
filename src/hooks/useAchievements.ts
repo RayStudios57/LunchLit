@@ -11,7 +11,7 @@ export interface Badge {
   name: string;
   description: string;
   icon: string;
-  category: 'tasks' | 'bragsheet' | 'academic' | 'consistency' | 'exploration' | 'social' | 'general';
+  category: 'tasks' | 'bragsheet' | 'academic' | 'consistency' | 'exploration' | 'social' | 'general' | 'menu' | 'studyhall' | 'planner' | 'discussion' | 'portfolio' | 'settings' | 'pomodoro' | 'tutoring';
   check: (ctx: BadgeContext) => boolean;
 }
 
@@ -66,6 +66,38 @@ export const BADGES: Badge[] = [
   { key: 'scholar', name: 'Scholar', description: 'Complete 25 tasks AND have 10 brag entries', icon: '🎓', category: 'general', check: ctx => ctx.completedTasks >= 25 && ctx.bragEntries >= 10 },
   { key: 'renaissance', name: 'Renaissance Student', description: '50 tasks + 15 brag entries', icon: '🎨', category: 'general', check: ctx => ctx.completedTasks >= 50 && ctx.bragEntries >= 15 },
   { key: 'valedictorian', name: 'Valedictorian', description: '100 tasks + 20 brag entries', icon: '🏛️', category: 'general', check: ctx => ctx.completedTasks >= 100 && ctx.bragEntries >= 20 },
+
+  // ──── Menu (manual unlock) ────
+  { key: 'menu_explorer', name: 'Menu Explorer', description: 'Check the lunch menu for the first time', icon: '🍽️', category: 'menu', check: () => false },
+  { key: 'foodie', name: 'Foodie', description: 'Visit the menu tab 10 times', icon: '🍕', category: 'menu', check: () => false },
+
+  // ──── Study Halls ────
+  { key: 'study_spot', name: 'Study Spot Finder', description: 'Browse study halls for the first time', icon: '📖', category: 'studyhall', check: () => false },
+  { key: 'study_regular', name: 'Study Regular', description: 'Check study halls 10 times', icon: '🏫', category: 'studyhall', check: () => false },
+
+  // ──── Planner / Schedule ────
+  { key: 'schedule_set', name: 'Schedule Set', description: 'Add your first class to your schedule', icon: '📆', category: 'planner', check: () => false },
+  { key: 'full_schedule', name: 'Full Schedule', description: 'Have 5+ classes in your schedule', icon: '🗓️', category: 'planner', check: () => false },
+
+  // ──── Discussion ────
+  { key: 'discussion_starter', name: 'Discussion Starter', description: 'Create your first discussion post', icon: '💬', category: 'discussion', check: () => false },
+  { key: 'active_voice', name: 'Active Voice', description: 'Create 5 discussion posts or replies', icon: '📢', category: 'discussion', check: () => false },
+
+  // ──── Portfolio / Goals ────
+  { key: 'goal_setter', name: 'Goal Setter', description: 'Set your first student goal', icon: '🎯', category: 'portfolio', check: () => false },
+  { key: 'goal_achiever', name: 'Goal Achiever', description: 'Complete a student goal', icon: '🏁', category: 'portfolio', check: () => false },
+
+  // ──── Settings / Profile ────
+  { key: 'profile_complete', name: 'Profile Complete', description: 'Set your name, grade, and school', icon: '👤', category: 'settings', check: () => false },
+  { key: 'customizer', name: 'Customizer', description: 'Change your theme from the default', icon: '🎨', category: 'settings', check: () => false },
+
+  // ──── Pomodoro ────
+  { key: 'focus_starter', name: 'Focus Starter', description: 'Complete your first Pomodoro session', icon: '🍅', category: 'pomodoro', check: () => false },
+  { key: 'focus_master', name: 'Focus Master', description: 'Complete 10 Pomodoro sessions', icon: '🧘', category: 'pomodoro', check: () => false },
+
+  // ──── Tutoring ────
+  { key: 'tutor_helper', name: 'Tutor Helper', description: 'Add yourself as a tutor', icon: '🎓', category: 'tutoring', check: () => false },
+  { key: 'tutor_mentor', name: 'Mentor', description: 'Be available as tutor in 2+ subjects', icon: '🧑‍🏫', category: 'tutoring', check: () => false },
 ];
 
 // Special badge for completing ALL other badges
@@ -75,7 +107,7 @@ export const MASTER_BADGE: Badge = {
   description: 'Unlock every single badge — you are legendary!',
   icon: '👑',
   category: 'general',
-  check: () => false, // checked manually
+  check: () => false,
 };
 
 export const ALL_BADGES_INCLUDING_MASTER = [...BADGES, MASTER_BADGE];
@@ -144,5 +176,6 @@ export function useAchievements() {
     allBadges: ALL_BADGES_INCLUDING_MASTER,
     masterBadge: MASTER_BADGE,
     isLoading,
+    unlockBadge,
   };
 }

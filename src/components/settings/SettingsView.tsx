@@ -19,7 +19,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
-import { Camera, Sun, Moon, Monitor, Check, Palette, School, GraduationCap, User, Calendar, Trash2, Download, AlertTriangle, ChevronUp, ChevronDown, RotateCcw, Presentation, HelpCircle, Award } from 'lucide-react';
+import { Camera, Sun, Moon, Monitor, Check, Palette, School, GraduationCap, User, Calendar, Trash2, Download, AlertTriangle, ChevronUp, ChevronDown, RotateCcw, Presentation, HelpCircle, Award, Eye } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { Link } from 'react-router-dom';
@@ -72,6 +72,17 @@ export function SettingsView() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [calendarSyncEnabled, setCalendarSyncEnabled] = useState(profile?.calendar_sync_enabled || false);
   const [showTutorial, setShowTutorial] = useState(false);
+  const [isPublic, setIsPublic] = useState(profile?.is_public || false);
+
+  const OWNER_EMAIL = 'kutturam0912@gmail.com';
+  const isOwner = user?.email === OWNER_EMAIL;
+
+  const handlePublicToggle = async (enabled: boolean) => {
+    if (isOwner) return; // Owner is always public
+    setIsPublic(enabled);
+    await updateProfile.mutateAsync({ is_public: enabled } as any);
+    toast({ title: enabled ? 'Profile is now public' : 'Profile is now private' });
+  };
   const handleAvatarClick = () => {
     fileInputRef.current?.click();
   };
@@ -316,6 +327,22 @@ export function SettingsView() {
                   </SelectItem>)}
               </SelectContent>
             </Select>
+          </div>
+
+          <Separator />
+
+          {/* Profile Visibility */}
+          <div className="flex items-center justify-between">
+            <div className="space-y-0.5">
+              <Label className="flex items-center gap-2">
+                <Eye className="w-4 h-4" />
+                Public Profile
+              </Label>
+              <p className="text-sm text-muted-foreground">
+                {isOwner ? 'Owner profile is always public' : 'Let others see your profile and badges'}
+              </p>
+            </div>
+            <Switch checked={isOwner ? true : isPublic} onCheckedChange={handlePublicToggle} disabled={isOwner} />
           </div>
         </CardContent>
       </Card>
