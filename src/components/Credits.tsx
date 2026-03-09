@@ -10,8 +10,8 @@ export function Credits() {
         <div className="text-sm">
           <span className="text-muted-foreground">Made by </span>
           <span className="font-semibold text-foreground">Ramakrishna Krishna</span>
-          <span className="text-muted-foreground"> & </span>
-          <span className="font-semibold text-foreground">Alex Quinones</span>
+          <span className="text-muted-foreground"> </span>
+          
         </div>
       </div>
       <Button variant="outline" size="sm" asChild>
@@ -20,6 +20,6 @@ export function Credits() {
           About LunchLit
         </Link>
       </Button>
-    </div>
-  );
+    </div>);
+
 }
