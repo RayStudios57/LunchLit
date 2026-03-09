@@ -23,3 +23,9 @@ verify_jwt = false
 
 [functions.admin-delete-account]
 verify_jwt = false
+
+[functions.check-deadline-reminders]
+verify_jwt = false
+
+[functions.send-welcome-email]
+verify_jwt = false
