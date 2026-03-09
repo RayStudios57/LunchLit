@@ -7,9 +7,11 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { Search, Users, Award, Crown } from 'lucide-react';
+import { Search, Users, Award, Crown, Shield } from 'lucide-react';
 import { ALL_BADGES_INCLUDING_MASTER, MASTER_BADGE } from '@/hooks/useAchievements';
 import { useAuth } from '@/contexts/AuthContext';
+
+const OWNER_USER_ID = '724c21f3-d6ba-497a-8ad9-a80dab24b55d';
 
 interface PublicProfile {
   user_id: string;
