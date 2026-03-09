@@ -7,9 +7,11 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { Search, Users, Award, Crown } from 'lucide-react';
+import { Search, Users, Award, Crown, Shield } from 'lucide-react';
 import { ALL_BADGES_INCLUDING_MASTER, MASTER_BADGE } from '@/hooks/useAchievements';
 import { useAuth } from '@/contexts/AuthContext';
+
+const OWNER_USER_ID = '724c21f3-d6ba-497a-8ad9-a80dab24b55d';
 
 interface PublicProfile {
   user_id: string;
@@ -73,7 +75,14 @@ export function PublicProfileView() {
                 </AvatarFallback>
               </Avatar>
               <div className="text-center">
-                <h2 className="font-display text-2xl font-bold">{selectedProfile.full_name || 'Anonymous'}</h2>
+                <div className="flex items-center justify-center gap-2">
+                  <h2 className="font-display text-2xl font-bold">{selectedProfile.full_name || 'Anonymous'}</h2>
+                  {selectedUserId === OWNER_USER_ID && (
+                    <Badge className="bg-gradient-to-r from-yellow-400 to-amber-500 text-white gap-1">
+                      <Crown className="w-3 h-3" /> Owner
+                    </Badge>
+                  )}
+                </div>
                 {selectedProfile.grade_level && <p className="text-muted-foreground">{selectedProfile.grade_level}</p>}
                 {selectedProfile.school_name && <p className="text-sm text-muted-foreground">{selectedProfile.school_name}</p>}
               </div>
@@ -172,7 +181,14 @@ export function PublicProfileView() {
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex-1 min-w-0">
-                  <p className="font-medium truncate">{p.full_name || 'Anonymous'}</p>
+                  <div className="flex items-center gap-2">
+                    <p className="font-medium truncate">{p.full_name || 'Anonymous'}</p>
+                    {p.user_id === OWNER_USER_ID && (
+                      <Badge variant="outline" className="text-[10px] px-1.5 py-0 border-yellow-400 text-yellow-600 shrink-0">
+                        <Crown className="w-2.5 h-2.5 mr-0.5" />Owner
+                      </Badge>
+                    )}
+                  </div>
                   <p className="text-xs text-muted-foreground truncate">
                     {p.grade_level && `${p.grade_level} · `}{p.school_name || 'No school'}
                   </p>

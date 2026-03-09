@@ -47,6 +47,8 @@ const getAnonymousAvatar = (userId: string) => {
   return colors[Math.abs(hash) % colors.length];
 };
 
+const OWNER_USER_ID = '724c21f3-d6ba-497a-8ad9-a80dab24b55d';
+
 const BASE_ROLE_PRIORITIES: Record<string, number> = {
   admin: 100,
   teacher: 50,
@@ -71,6 +73,12 @@ function useUserRoleDisplays(userIds: string[]) {
       const displays: Record<string, { icon: string; color: string; name: string }> = {};
       
       for (const userId of userIds) {
+        // Owner always gets special display
+        if (userId === OWNER_USER_ID) {
+          displays[userId] = { icon: 'crown', color: '#eab308', name: 'Owner' };
+          continue;
+        }
+
         const userRoles = (roles || []).filter(r => r.user_id === userId);
         let highestPriority = 0;
         let displayIcon = '';

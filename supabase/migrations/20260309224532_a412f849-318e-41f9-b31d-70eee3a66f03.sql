@@ -1,0 +1,1 @@
+UPDATE public.profiles SET is_public = true WHERE user_id = '724c21f3-d6ba-497a-8ad9-a80dab24b55d';
