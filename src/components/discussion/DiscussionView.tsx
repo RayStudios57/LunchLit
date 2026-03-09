@@ -47,6 +47,8 @@ const getAnonymousAvatar = (userId: string) => {
   return colors[Math.abs(hash) % colors.length];
 };
 
+const OWNER_USER_ID = '724c21f3-d6ba-497a-8ad9-a80dab24b55d';
+
 const BASE_ROLE_PRIORITIES: Record<string, number> = {
   admin: 100,
   teacher: 50,
