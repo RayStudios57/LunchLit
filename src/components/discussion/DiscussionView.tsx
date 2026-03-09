@@ -73,6 +73,12 @@ function useUserRoleDisplays(userIds: string[]) {
       const displays: Record<string, { icon: string; color: string; name: string }> = {};
       
       for (const userId of userIds) {
+        // Owner always gets special display
+        if (userId === OWNER_USER_ID) {
+          displays[userId] = { icon: 'crown', color: '#eab308', name: 'Owner' };
+          continue;
+        }
+
         const userRoles = (roles || []).filter(r => r.user_id === userId);
         let highestPriority = 0;
         let displayIcon = '';

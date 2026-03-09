@@ -181,7 +181,14 @@ export function PublicProfileView() {
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex-1 min-w-0">
-                  <p className="font-medium truncate">{p.full_name || 'Anonymous'}</p>
+                  <div className="flex items-center gap-2">
+                    <p className="font-medium truncate">{p.full_name || 'Anonymous'}</p>
+                    {p.user_id === OWNER_USER_ID && (
+                      <Badge variant="outline" className="text-[10px] px-1.5 py-0 border-yellow-400 text-yellow-600 shrink-0">
+                        <Crown className="w-2.5 h-2.5 mr-0.5" />Owner
+                      </Badge>
+                    )}
+                  </div>
                   <p className="text-xs text-muted-foreground truncate">
                     {p.grade_level && `${p.grade_level} · `}{p.school_name || 'No school'}
                   </p>
