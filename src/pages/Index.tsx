@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, ReactNode } from 'react';
 import { Header } from '@/components/Header';
 import { TodayView } from '@/components/TodayView';
 import { MenuView } from '@/components/MenuView';
@@ -28,6 +28,25 @@ import { useGradeProgression } from '@/hooks/useGradeProgression';
 import { Helmet } from 'react-helmet';
 
 export type TabType = 'home' | 'menu' | 'study' | 'tutor' | 'planner' | 'chat' | 'discuss' | 'settings' | 'tasks' | 'classes' | 'bragsheet' | 'portfolio' | 'profiles';
+
+function AuthOverlay({ isAuthenticated, children }: { isAuthenticated: boolean; children: ReactNode }) {
+  if (isAuthenticated) return <>{children}</>;
+  return (
+    <div className="relative">
+      <div className="pointer-events-none select-none blur-[2px] opacity-60">
+        {children}
+      </div>
+      <div className="absolute inset-0 flex items-center justify-center bg-background/40 rounded-xl">
+        <div className="text-center bg-card border border-border rounded-xl px-6 py-4 shadow-lg">
+          <p className="font-medium text-foreground mb-2">Sign in to use this feature</p>
+          <a href="/auth" className="text-sm text-primary hover:underline font-medium">
+            Sign in to access LunchLit →
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState<TabType>('home');
@@ -66,19 +85,23 @@ const Index = () => {
           {activeTab === 'home' && (
             <div className="space-y-6">
               {user && <PwaInstallButton />}
-              {user && <MotivationalQuote />}
-              {user && <TodayWidget />}
-              {user && (
+              <AuthOverlay isAuthenticated={!!user}>
+                <MotivationalQuote />
+              </AuthOverlay>
+              <AuthOverlay isAuthenticated={!!user}>
+                <TodayWidget />
+              </AuthOverlay>
+              <AuthOverlay isAuthenticated={!!user}>
                 <div className="grid gap-6 md:grid-cols-2">
                   <StudyStats />
                   <GpaCalculatorWidget />
                 </div>
-              )}
-              {user && (
+              </AuthOverlay>
+              <AuthOverlay isAuthenticated={!!user}>
                 <div className="grid gap-6 md:grid-cols-1">
                   <PomodoroTimer />
                 </div>
-              )}
+              </AuthOverlay>
               <TodayView 
                 onNavigateToMenu={() => setActiveTab('menu')} 
                 onNavigateToStudy={() => setActiveTab('study')} 
