@@ -66,19 +66,23 @@ const Index = () => {
           {activeTab === 'home' && (
             <div className="space-y-6">
               {user && <PwaInstallButton />}
-              {user && <MotivationalQuote />}
-              {user && <TodayWidget />}
-              {user && (
+              <AuthOverlay isAuthenticated={!!user}>
+                <MotivationalQuote />
+              </AuthOverlay>
+              <AuthOverlay isAuthenticated={!!user}>
+                <TodayWidget />
+              </AuthOverlay>
+              <AuthOverlay isAuthenticated={!!user}>
                 <div className="grid gap-6 md:grid-cols-2">
                   <StudyStats />
                   <GpaCalculatorWidget />
                 </div>
-              )}
-              {user && (
+              </AuthOverlay>
+              <AuthOverlay isAuthenticated={!!user}>
                 <div className="grid gap-6 md:grid-cols-1">
                   <PomodoroTimer />
                 </div>
-              )}
+              </AuthOverlay>
               <TodayView 
                 onNavigateToMenu={() => setActiveTab('menu')} 
                 onNavigateToStudy={() => setActiveTab('study')} 
