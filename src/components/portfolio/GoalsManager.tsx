@@ -211,7 +211,7 @@ export function GoalsManager() {
             <DialogHeader>
               <DialogTitle>Add New Goal</DialogTitle>
             </DialogHeader>
-            <GoalForm />
+            {goalForm}
           </DialogContent>
         </Dialog>
       </div>
@@ -222,7 +222,7 @@ export function GoalsManager() {
           <DialogHeader>
             <DialogTitle>Edit Goal</DialogTitle>
           </DialogHeader>
-          <GoalForm />
+          {goalForm}
         </DialogContent>
       </Dialog>
 
