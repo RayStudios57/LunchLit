@@ -47,7 +47,7 @@ export function PomodoroTimer() {
   const [lofiEnabled, setLofiEnabled] = useState(false);
   const [lofiStream, setLofiStream] = useState(LOFI_STREAMS[0].url);
   const [volume, setVolume] = useState(25);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const incompleteTasks = tasks.filter(t => !t.is_completed);
