@@ -158,7 +158,7 @@ export function DiscussionView() {
       <div className="text-center py-12">
         <MessageSquare className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
         <h2 className="font-display text-xl mb-2">Join the Discussion</h2>
-        <p className="text-muted-foreground mb-4">Sign in to participate in community discussions</p>
+        <p className="text-muted-foreground mb-4">Sign in to access LunchLit</p>
         <Button asChild>
           <a href="/auth">Sign In</a>
         </Button>

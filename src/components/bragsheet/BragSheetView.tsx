@@ -46,7 +46,7 @@ export function BragSheetView() {
           Perfect for college applications!
         </p>
         <Button asChild>
-          <Link to="/auth">Sign in to get started</Link>
+          <Link to="/auth">Sign in to access LunchLit</Link>
         </Button>
       </div>
     );

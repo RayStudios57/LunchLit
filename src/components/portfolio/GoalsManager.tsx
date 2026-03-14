@@ -77,7 +77,7 @@ export function GoalsManager() {
     });
   };
 
-  const GoalForm = () => (
+  const goalForm = (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
         <Label>Goal Title *</Label>
@@ -211,7 +211,7 @@ export function GoalsManager() {
             <DialogHeader>
               <DialogTitle>Add New Goal</DialogTitle>
             </DialogHeader>
-            <GoalForm />
+            {goalForm}
           </DialogContent>
         </Dialog>
       </div>
@@ -222,7 +222,7 @@ export function GoalsManager() {
           <DialogHeader>
             <DialogTitle>Edit Goal</DialogTitle>
           </DialogHeader>
-          <GoalForm />
+          {goalForm}
         </DialogContent>
       </Dialog>
 

@@ -34,7 +34,7 @@ export function StudentPortfolioView() {
           Track your achievements, plan for college, and get insights on your academic journey.
         </p>
         <Button asChild>
-          <Link to="/auth">Sign in to get started</Link>
+          <Link to="/auth">Sign in to access LunchLit</Link>
         </Button>
       </div>
     );

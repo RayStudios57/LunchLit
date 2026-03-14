@@ -96,7 +96,7 @@ export function TargetSchoolsManager() {
     return '';
   };
 
-  const SchoolForm = () => (
+  const schoolForm = (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
         <Label>School Name *</Label>
@@ -288,7 +288,7 @@ export function TargetSchoolsManager() {
             <DialogHeader>
               <DialogTitle>Add Target School</DialogTitle>
             </DialogHeader>
-            <SchoolForm />
+            {schoolForm}
           </DialogContent>
         </Dialog>
       </div>
@@ -317,7 +317,7 @@ export function TargetSchoolsManager() {
           <DialogHeader>
             <DialogTitle>Edit School</DialogTitle>
           </DialogHeader>
-          <SchoolForm />
+          {schoolForm}
         </DialogContent>
       </Dialog>
 
