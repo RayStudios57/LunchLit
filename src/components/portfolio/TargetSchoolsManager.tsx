@@ -288,7 +288,7 @@ export function TargetSchoolsManager() {
             <DialogHeader>
               <DialogTitle>Add Target School</DialogTitle>
             </DialogHeader>
-            <SchoolForm />
+            {schoolForm}
           </DialogContent>
         </Dialog>
       </div>
