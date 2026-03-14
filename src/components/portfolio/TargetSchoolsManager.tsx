@@ -96,7 +96,7 @@ export function TargetSchoolsManager() {
     return '';
   };
 
-  const SchoolForm = () => (
+  const schoolForm = (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
         <Label>School Name *</Label>
