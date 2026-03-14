@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, ReactNode } from 'react';
 import { Header } from '@/components/Header';
 import { TodayView } from '@/components/TodayView';
 import { MenuView } from '@/components/MenuView';
