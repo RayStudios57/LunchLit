@@ -77,7 +77,7 @@ export function GoalsManager() {
     });
   };
 
-  const GoalForm = () => (
+  const goalForm = (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
         <Label>Goal Title *</Label>
