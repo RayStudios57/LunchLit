@@ -14,29 +14,29 @@ const changelogData = [{
   version: '1.0',
   date: 'March 2026',
   changes: [
-    '🎉 LunchLit is officially released — v1.0!',
-    'Stable, polished, and ready for students everywhere',
-  ]
+  '🎉 LunchLit is officially released — v1.0!',
+  'Stable, polished, and ready for students everywhere']
+
 }, {
   version: '0.9',
   date: 'March 2026',
   changes: [
-    'Installable PWA with in-app install button — add LunchLit to phone or desktop',
-    'Study Stats dashboard with weekly productivity, daily streak tracker, and bar chart',
-    'Daily streak counter tracking consecutive days with completed tasks',
-    'GPA Calculator widget on the Today dashboard',
-    'Built-in Pomodoro study timer with 10 peaceful lofi music channels and volume control',
-    'Expanded to 48 achievement badges across 15 categories including Menu, Study Halls, Planner, Discussion, Portfolio, Profile, Pomodoro, and Tutoring',
-    'Special "LunchLit Master" badge for completing all achievements',
-    'Public student profiles — browse other students\' badges and achievements',
-    'Profile visibility toggle in Settings (owner profile always public)',
-    'Database-backed tutor system — add school-specific or online tutors for anyone',
-    'Redesigned Badges page with 15 category sections, progress tracking, and hover details',
-    'Weekly Inspirational Quotes (52+ quotes, rotates each week)',
-    'Redesigned About page with cleaner structure and latest-first changelog',
-    'Redesigned Settings page with organized layout',
-    'Updated onboarding tutorial covering all new features',
-  ]
+  'Installable PWA with in-app install button — add LunchLit to phone or desktop',
+  'Study Stats dashboard with weekly productivity, daily streak tracker, and bar chart',
+  'Daily streak counter tracking consecutive days with completed tasks',
+  'GPA Calculator widget on the Today dashboard',
+  'Built-in Pomodoro study timer with 10 peaceful lofi music channels and volume control',
+  'Expanded to 48 achievement badges across 15 categories including Menu, Study Halls, Planner, Discussion, Portfolio, Profile, Pomodoro, and Tutoring',
+  'Special "LunchLit Master" badge for completing all achievements',
+  'Public student profiles — browse other students\' badges and achievements',
+  'Profile visibility toggle in Settings (owner profile always public)',
+  'Database-backed tutor system — add school-specific or online tutors for anyone',
+  'Redesigned Badges page with 15 category sections, progress tracking, and hover details',
+  'Weekly Inspirational Quotes (52+ quotes, rotates each week)',
+  'Redesigned About page with cleaner structure and latest-first changelog',
+  'Redesigned Settings page with organized layout',
+  'Updated onboarding tutorial covering all new features']
+
 }, {
   version: '0.8',
   date: 'February 2026',
@@ -72,19 +72,19 @@ const changelogData = [{
 }];
 
 const features = [
-  { icon: Utensils, label: 'Daily Menu', desc: 'View lunch menus with dietary info and allergen warnings' },
-  { icon: BookOpen, label: 'Study Halls', desc: 'Find available study spots in real-time' },
-  { icon: ClipboardList, label: 'Task Tracking', desc: 'Manage assignments with due dates and priorities' },
-  { icon: Calendar, label: 'Class Schedule', desc: 'Track daily classes with room numbers and times' },
-  { icon: BarChart3, label: 'Study Stats', desc: 'Productivity trends, streaks, and weekly progress' },
-  { icon: MessageSquare, label: 'AI Study Chat', desc: 'Get homework help from an AI tutor' },
-  { icon: Users, label: 'Discussions', desc: 'Connect with your school community' },
-  { icon: Shield, label: 'Brag Sheet', desc: 'Build your college application profile' },
-  { icon: Award, label: '48 Badges', desc: 'Unlock achievements across 15 categories' },
-  { icon: Bell, label: 'Notifications', desc: 'Task reminders and announcements' },
-  { icon: Flame, label: 'Streak Tracker', desc: 'Track daily consistency' },
-  { icon: Smartphone, label: 'PWA Install', desc: 'Add to your phone home screen' },
-];
+{ icon: Utensils, label: 'Daily Menu', desc: 'View lunch menus with dietary info and allergen warnings' },
+{ icon: BookOpen, label: 'Study Halls', desc: 'Find available study spots in real-time' },
+{ icon: ClipboardList, label: 'Task Tracking', desc: 'Manage assignments with due dates and priorities' },
+{ icon: Calendar, label: 'Class Schedule', desc: 'Track daily classes with room numbers and times' },
+{ icon: BarChart3, label: 'Study Stats', desc: 'Productivity trends, streaks, and weekly progress' },
+{ icon: MessageSquare, label: 'AI Study Chat', desc: 'Get homework help from an AI tutor' },
+{ icon: Users, label: 'Discussions', desc: 'Connect with your school community' },
+{ icon: Shield, label: 'Brag Sheet', desc: 'Build your college application profile' },
+{ icon: Award, label: '48 Badges', desc: 'Unlock achievements across 15 categories' },
+{ icon: Bell, label: 'Notifications', desc: 'Task reminders and announcements' },
+{ icon: Flame, label: 'Streak Tracker', desc: 'Track daily consistency' },
+{ icon: Smartphone, label: 'PWA Install', desc: 'Add to your phone home screen' }];
+
 
 export default function About() {
   return (
@@ -97,8 +97,8 @@ export default function About() {
       <div className="container py-8 max-w-3xl mx-auto space-y-8">
         {/* Header */}
         <div className="text-center space-y-3">
-          <h1 className="font-display text-3xl sm:text-4xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-            About LunchLIT
+          <h1 className="font-display text-3xl sm:text-4xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">Version 1.0
+
           </h1>
           <p className="text-muted-foreground text-lg">Your daily school companion</p>
           <p className="text-sm text-muted-foreground">
@@ -134,15 +134,15 @@ export default function About() {
           </CardHeader>
           <CardContent>
             <div className="grid gap-3 sm:grid-cols-2">
-              {features.map((f, i) => (
-                <div key={i} className="flex items-start gap-3 p-3 rounded-lg bg-secondary/40">
+              {features.map((f, i) =>
+              <div key={i} className="flex items-start gap-3 p-3 rounded-lg bg-secondary/40">
                   <f.icon className="h-4.5 w-4.5 text-primary mt-0.5 shrink-0" />
                   <div>
                     <p className="font-medium text-sm">{f.label}</p>
                     <p className="text-xs text-muted-foreground">{f.desc}</p>
                   </div>
                 </div>
-              ))}
+              )}
             </div>
           </CardContent>
         </Card>
@@ -157,31 +157,31 @@ export default function About() {
           </CardHeader>
           <CardContent>
             <Accordion type="single" collapsible defaultValue={changelogData[0].version} className="w-full">
-              {changelogData.map((release) => (
-                <AccordionItem key={release.version} value={release.version}>
+              {changelogData.map((release) =>
+              <AccordionItem key={release.version} value={release.version}>
                   <AccordionTrigger className="hover:no-underline">
                     <div className="flex items-center gap-3">
                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary">
                         v{release.version}
                       </span>
                       <span className="text-sm text-muted-foreground">{release.date}</span>
-                      {release.version === CURRENT_VERSION && (
-                        <span className="text-[10px] font-medium px-1.5 py-0.5 rounded bg-primary text-primary-foreground">LATEST</span>
-                      )}
+                      {release.version === CURRENT_VERSION &&
+                    <span className="text-[10px] font-medium px-1.5 py-0.5 rounded bg-primary text-primary-foreground">LATEST</span>
+                    }
                     </div>
                   </AccordionTrigger>
                   <AccordionContent>
                     <ul className="space-y-1.5 pl-1">
-                      {release.changes.map((change, idx) => (
-                        <li key={idx} className="flex items-start gap-2 text-sm text-muted-foreground">
+                      {release.changes.map((change, idx) =>
+                    <li key={idx} className="flex items-start gap-2 text-sm text-muted-foreground">
                           <span className="text-primary mt-1">•</span>
                           {change}
                         </li>
-                      ))}
+                    )}
                     </ul>
                   </AccordionContent>
                 </AccordionItem>
-              ))}
+              )}
             </Accordion>
           </CardContent>
         </Card>
@@ -240,6 +240,6 @@ export default function About() {
           </Button>
         </div>
       </div>
-    </div>
-  );
+    </div>);
+
 }
