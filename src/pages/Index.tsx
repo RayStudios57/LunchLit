@@ -84,7 +84,8 @@ const Index = () => {
         
         <main className="container py-6">
           {activeTab === 'home' && (
-            <div className="space-y-6">
+          <div className="space-y-6">
+              <LaunchBanner />
               {user && <PwaInstallButton />}
               <AuthOverlay isAuthenticated={!!user}>
                 <MotivationalQuote />
