@@ -16,6 +16,7 @@ import { PomodoroTimer } from '@/components/dashboard/PomodoroTimer';
 import { MotivationalQuote } from '@/components/dashboard/MotivationalQuote';
 import { StudyStats } from '@/components/dashboard/StudyStats';
 import { PwaInstallButton } from '@/components/dashboard/PwaInstallButton';
+import { LaunchBanner } from '@/components/dashboard/LaunchBanner';
 import { GradeSelectionModal } from '@/components/onboarding/GradeSelectionModal';
 import { OnboardingTutorial } from '@/components/onboarding/OnboardingTutorial';
 import { BragSheetView } from '@/components/bragsheet/BragSheetView';
@@ -83,7 +84,8 @@ const Index = () => {
         
         <main className="container py-6">
           {activeTab === 'home' && (
-            <div className="space-y-6">
+          <div className="space-y-6">
+              <LaunchBanner />
               {user && <PwaInstallButton />}
               <AuthOverlay isAuthenticated={!!user}>
                 <MotivationalQuote />
