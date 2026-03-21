@@ -93,7 +93,7 @@ Advanced personalization based on grade and usage
 
 📦 Status
 
-Current Version: v0.9
-LunchLit is currently in final development. However, Features and APIs may still change as the platform evolves.
+Current Version: v1.0
+LunchLit is officially released! The platform is stable and ready for students everywhere.
 
 
