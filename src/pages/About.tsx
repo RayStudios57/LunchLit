@@ -8,9 +8,16 @@ import { CreatorSocialLinks } from '@/components/about/CreatorSocialLinks';
 import { SuggestionsSection } from '@/components/about/SuggestionsSection';
 import { Separator } from '@/components/ui/separator';
 
-const CURRENT_VERSION = '0.9';
+const CURRENT_VERSION = '1.0';
 
 const changelogData = [{
+  version: '1.0',
+  date: 'March 2026',
+  changes: [
+    '🎉 LunchLit is officially released — v1.0!',
+    'Stable, polished, and ready for students everywhere',
+  ]
+}, {
   version: '0.9',
   date: 'March 2026',
   changes: [
