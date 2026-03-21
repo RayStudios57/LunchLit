@@ -45,7 +45,7 @@ export function LaunchBanner() {
       {particles.map((p) => (
         <span
           key={p.id}
-          className="absolute opacity-0 animate-[confetti-fall_3s_ease-in_forwards]"
+          className="absolute animate-[confetti-fall_3s_ease-in_infinite]"
           style={{
             left: `${p.left}%`,
             top: '-10px',

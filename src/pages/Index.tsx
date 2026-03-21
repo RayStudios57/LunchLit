@@ -105,6 +105,9 @@ const Index = () => {
                   <PomodoroTimer />
                 </div>
               </AuthOverlay>
+              <AuthOverlay isAuthenticated={!!user}>
+                <GraduationCountdown />
+              </AuthOverlay>
               <TodayView 
                 onNavigateToMenu={() => setActiveTab('menu')} 
                 onNavigateToStudy={() => setActiveTab('study')} 
