@@ -1,99 +1,152 @@
 📘 LunchLit
 
-LunchLit is a student-focused productivity platform designed to help students organize their school day in one place. It combines class scheduling, task management, school meal information, and integrations with modern tools like Google Calendar, all wrapped in a fast, customizable interface built for daily use.
+LunchLit is a student-focused productivity platform designed to help students organize, track, and improve every part of their school life in one place. It combines scheduling, task management, study tools, meal tracking, college prep, and community features into a single, streamlined experience built for daily use.
 
-The goal is simple: Make students quality of life more efficient, more engaging, and easier.
+The goal is simple: make students’ quality of life more efficient, more engaging, and easier.
 
-🔗 Live App:
-lunchlit.lovable.app
-
+🔗 Live App: lunchlit.lovable.app
 
 ✨ Features
+
 📅 Daily Planning
 
-Today Dashboard showing upcoming classes and tasks at a glance
+Today Dashboard showing classes, tasks, GPA, study stats, and reminders
 
-Chronologically ordered items for quick decision-making
+Built-in Pomodoro timer with optional lofi music
 
-Optimized for fast load times and short daily check-ins
+Motivational quotes and quick daily overview
+
+Designed for fast check-ins and instant clarity
 
 📝 Tasks & Schedules
 
-Create and manage class schedules and assignments
+Create and manage class schedules with full details
 
-File validation to prevent corrupted or incompatible imports
+Track assignments with due dates, priorities, and categories
 
-🔐 Authentication & Integrations
+Automatic homework reminders and notifications
 
-Google Sign-In for fast, secure authentication
+Import/export data via CSV and JSON
 
-Optional Google Calendar integration to sync classes and tasks
+Optional Google Calendar syncing
 
-User-controlled calendar sync with extensibility for future providers
+🍽️ School Meals
 
-🎨 Customization
+View daily, weekly, or monthly lunch menus
 
-Multiple global UI themes with support for light and dark modes
+Includes dietary and allergen information
 
-Theme system designed for easy expansion without UI refactors
+School-specific data with admin upload support
 
-Profile customization including user-uploaded profile pictures
+Compatible with MealViewer systems
 
-🏫 School-Aware Experience
+📚 Study Tools
 
-Users can select and change their school at any time
+Pomodoro focus timer with music integration
 
-Schools can upload and manage their own meal schedules
+Study stats dashboard with trends and charts
 
-Meals are displayed dynamically based on the user’s selected school
+Daily streak tracking with rewards
 
-🎓 Student Profiles
+Productivity tracking over time
 
-Grade level selection during onboarding (under 5th grade through senior)
+🎓 College Preparation
 
-Grade level stored in user profiles and editable from settings
+Brag Sheet to track achievements (clubs, awards, volunteering, etc.)
 
-Enables future personalization and filtering
+Auto-organized by grade and year
 
-💬 Community
+Exportable as polished PDFs (including Common App format)
 
-Built-in discussion tab for student communication
+Student Portfolio with goals and target colleges
 
-Designed to scale into school-based or class-based channels
+Strengths Finder for career direction insights
 
-Moderation and structure considered for safe, productive use
+💬 Community & AI
+
+Discussion boards with threaded replies and moderation
+
+School-based communication system
+
+AI Study Chat for homework help and explanations
+
+Saved chat history for continued learning
+
+🏆 Achievements & Gamification
+
+48 badges across 15 categories
+
+Streak-based rewards and progress tracking
+
+“LunchLit Master” badge for full completion
+
+Dedicated badges page with detailed progress
+
+🎨 Customization & Profiles
+
+Multiple themes (Ocean, Forest, Sunset, Midnight, Lavender)
+
+Light and dark mode support
+
+Public profiles to showcase achievements
+
+Profile personalization and visibility controls
+
+👨‍🏫 Tutoring
+
+Add and browse tutors by subject and availability
+
+Includes ratings, descriptions, and contact info
+
+Supports both school-based and online tutors
+
+🛠️ Administration
+
+Role management (student, teacher, counselor, admin)
+
+Feedback and request handling system
+
+School and domain management
+
+Study hall and meal schedule configuration
+
+User activity monitoring and audit logs
+
+Presentation mode for demos
 
 🧭 User Experience
 
-Modern, streamlined interface designed for students
+Fast, modern, and student-friendly interface
 
-Responsive layouts optimized for productivity
+Responsive across phone, tablet, and desktop
 
-Focus on clarity, speed, and minimal distractions
+Designed for clarity, speed, and minimal distraction
 
 🧱 Architecture & Tech Notes
 
-Modular, reusable component design
+Installable PWA (works like an app on any device)
 
-Scalable data models supporting multiple schools and users
+Real-time updates for study halls and discussions
 
-Integrations built with future expansion in mind
+Google OAuth authentication
 
-Clean separation between UI, data, and authentication layers
+Push notifications and onboarding emails
+
+Privacy-first with full data control and deletion
+
+Scalable system supporting multiple schools and users
 
 🚀 Roadmap
 
-Enhanced discussion moderation tools
+Advanced moderation tools for discussions
 
-Role-based permissions (students, staff, admins)
+Expanded role-based permissions
 
-Additional calendar and platform integrations
+More integrations beyond Google Calendar
 
-Advanced personalization based on grade and usage
+Smarter personalization based on usage and grade level
 
 📦 Status
 
 Current Version: v1.0
-LunchLit is officially released! The platform is stable and ready for students everywhere.
-
-
+LunchLit is officially released and ready for students everywhere.
