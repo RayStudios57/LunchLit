@@ -205,6 +205,9 @@
     opacity: 1;
     transform: translateY(0) rotate(0deg);
   }
+  50% {
+    opacity: 1;
+  }
   100% {
     opacity: 0;
     transform: translateY(300px) rotate(720deg);

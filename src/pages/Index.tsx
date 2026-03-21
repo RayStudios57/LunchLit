@@ -17,6 +17,7 @@ import { MotivationalQuote } from '@/components/dashboard/MotivationalQuote';
 import { StudyStats } from '@/components/dashboard/StudyStats';
 import { PwaInstallButton } from '@/components/dashboard/PwaInstallButton';
 import { LaunchBanner } from '@/components/dashboard/LaunchBanner';
+import { GraduationCountdown } from '@/components/dashboard/GraduationCountdown';
 import { GradeSelectionModal } from '@/components/onboarding/GradeSelectionModal';
 import { OnboardingTutorial } from '@/components/onboarding/OnboardingTutorial';
 import { BragSheetView } from '@/components/bragsheet/BragSheetView';
@@ -103,6 +104,9 @@ const Index = () => {
                 <div className="grid gap-6 md:grid-cols-1">
                   <PomodoroTimer />
                 </div>
+              </AuthOverlay>
+              <AuthOverlay isAuthenticated={!!user}>
+                <GraduationCountdown />
               </AuthOverlay>
               <TodayView 
                 onNavigateToMenu={() => setActiveTab('menu')} 
