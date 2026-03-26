@@ -222,7 +222,7 @@ export default function About() {
               <p className="text-xs text-muted-foreground uppercase tracking-wider">Created by</p>
               <div className="space-y-1">
                 <p className="font-display text-xl font-semibold text-foreground">Ramakrishna Krishna</p>
-                <p className="font-display text-lg text-foreground">Assisted by Alex Quinones</p>
+                <p className="font-display text-lg text-foreground">     with user insight from Alex Quinones</p>
               </div>
               <CreatorSocialLinks />
               <Separator className="my-3" />
