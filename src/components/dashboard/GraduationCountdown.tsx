@@ -43,6 +43,21 @@ export function GraduationCountdown() {
 
   const isPast = totalDays < 0;
 
+  // Auto-activate summer theme when countdown reaches zero
+  useEffect(() => {
+    if (isPast && theme !== 'summer') {
+      const autoSwitched = localStorage.getItem('lunchlit_summer_auto_switched');
+      if (!autoSwitched) {
+        setTheme('summer');
+        localStorage.setItem('lunchlit_summer_auto_switched', 'true');
+      }
+    }
+    // Reset flag when school is back in session
+    if (!isPast) {
+      localStorage.removeItem('lunchlit_summer_auto_switched');
+    }
+  }, [isPast, theme]);
+
   // Accurate progress: from school year start to end
   const schoolStart = getSchoolYearStart();
   const totalSchoolDays = differenceInDays(endDate, schoolStart);
