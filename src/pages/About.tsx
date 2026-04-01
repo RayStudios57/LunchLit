@@ -15,6 +15,12 @@ const changelogData = [{
   date: 'March 2026',
   changes: [
   '🎉 LunchLit is officially released — v1.0!',
+  'Configurable end-of-school date per student with accurate countdown',
+  'Summer Break theme that auto-activates when school ends',
+  'Theme background customization — use themed backgrounds per color scheme',
+  'Friends system — send friend requests, cheer on friends, search by user ID',
+  'Profiles tab renamed to Friends with full social features',
+  'Fixed signup error preventing new account creation',
   'Stable, polished, and ready for students everywhere']
 
 }, {
