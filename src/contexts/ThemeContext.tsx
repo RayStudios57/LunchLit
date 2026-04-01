@@ -183,6 +183,30 @@ const themeColorSchemes: Record<ThemeName, { light: ThemeColors; dark: ThemeColo
       border: '230 20% 20%',
     },
   },
+  summer: {
+    light: {
+      primary: '45 90% 55%',
+      accent: '180 70% 50%',
+      background: '45 30% 97%',
+      foreground: '45 40% 10%',
+      card: '0 0% 100%',
+      cardForeground: '45 40% 10%',
+      muted: '45 20% 94%',
+      mutedForeground: '45 15% 45%',
+      border: '45 15% 88%',
+    },
+    dark: {
+      primary: '45 85% 60%',
+      accent: '180 65% 55%',
+      background: '45 25% 8%',
+      foreground: '45 20% 95%',
+      card: '45 20% 12%',
+      cardForeground: '45 20% 95%',
+      muted: '45 15% 18%',
+      mutedForeground: '45 10% 60%',
+      border: '45 15% 22%',
+    },
+  },
 };
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
