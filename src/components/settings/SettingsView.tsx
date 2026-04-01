@@ -6,6 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/hooks/useProfile';
 import { useSchools } from '@/hooks/useSchools';
 import { useTheme, ThemeName, ColorMode } from '@/contexts/ThemeContext';
+import { useUserPreferences } from '@/hooks/useUserPreferences';
 import { useGoogleCalendar } from '@/hooks/useGoogleCalendar';
 import { useGradeProgression } from '@/hooks/useGradeProgression';
 import { usePresentationMode } from '@/contexts/PresentationModeContext';

@@ -75,7 +75,7 @@ export function Header({
     icon: GraduationCap
   }, {
     id: 'profiles' as const,
-    label: 'Profiles',
+    label: 'Friends',
     icon: Users
   }];
   return <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border">
