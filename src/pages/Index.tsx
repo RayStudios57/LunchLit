@@ -23,6 +23,7 @@ import { OnboardingTutorial } from '@/components/onboarding/OnboardingTutorial';
 import { BragSheetView } from '@/components/bragsheet/BragSheetView';
 import { StudentPortfolioView } from '@/components/portfolio/StudentPortfolioView';
 import { PublicProfileView } from '@/components/profile/PublicProfileView';
+import { FriendsView } from '@/components/friends/FriendsView';
 import { Credits } from '@/components/Credits';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/hooks/useProfile';
