@@ -126,7 +126,7 @@ const Index = () => {
           {activeTab === 'discuss' && <DiscussionView />}
           {activeTab === 'bragsheet' && <BragSheetView />}
           {activeTab === 'portfolio' && <StudentPortfolioView />}
-          {activeTab === 'profiles' && <PublicProfileView />}
+          {activeTab === 'profiles' && <FriendsView />}
           {activeTab === 'settings' && <SettingsView />}
         </main>
       </div>

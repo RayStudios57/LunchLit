@@ -221,12 +221,16 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme') as ThemeName;
     const savedColorMode = localStorage.getItem('colorMode') as ColorMode;
+    const savedBg = localStorage.getItem('useThemeBackground');
     
     if (savedTheme && themes.some(t => t.id === savedTheme)) {
       setThemeState(savedTheme);
     }
     if (savedColorMode) {
       setColorModeState(savedColorMode);
+    }
+    if (savedBg === 'true') {
+      setUseThemeBackgroundState(true);
     }
   }, []);
 
