@@ -87,6 +87,7 @@ const features = [
 { icon: Users, label: 'Discussions', desc: 'Connect with your school community' },
 { icon: Shield, label: 'Brag Sheet', desc: 'Build your college application profile' },
 { icon: Award, label: '48 Badges', desc: 'Unlock achievements across 15 categories' },
+{ icon: Users, label: 'Friends', desc: 'Connect with classmates, cheer them on' },
 { icon: Bell, label: 'Notifications', desc: 'Task reminders and announcements' },
 { icon: Flame, label: 'Streak Tracker', desc: 'Track daily consistency' },
 { icon: Smartphone, label: 'PWA Install', desc: 'Add to your phone home screen' }];
