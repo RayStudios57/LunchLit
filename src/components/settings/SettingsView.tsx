@@ -43,10 +43,13 @@ export function SettingsView() {
   const {
     theme,
     colorMode,
+    useThemeBackground,
     setTheme,
     setColorMode,
+    setUseThemeBackground,
     themes
   } = useTheme();
+  const { preferences } = useUserPreferences();
   const {
     exportToCalendar,
     isExporting,
