@@ -337,8 +337,18 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const setUseThemeBackground = async (val: boolean) => {
+    setUseThemeBackgroundState(val);
+    localStorage.setItem('useThemeBackground', String(val));
+    if (user) {
+      await supabase
+        .from('user_preferences')
+        .upsert({ user_id: user.id, use_theme_background: val }, { onConflict: 'user_id' });
+    }
+  };
+
   return (
-    <ThemeContext.Provider value={{ theme, colorMode, setTheme, setColorMode, themes }}>
+    <ThemeContext.Provider value={{ theme, colorMode, useThemeBackground, setTheme, setColorMode, setUseThemeBackground, themes }}>
       {children}
     </ThemeContext.Provider>
   );
