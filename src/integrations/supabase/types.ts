@@ -241,6 +241,30 @@ export type Database = {
         }
         Relationships: []
       }
+      cheers: {
+        Row: {
+          created_at: string
+          from_user_id: string
+          id: string
+          message: string | null
+          to_user_id: string
+        }
+        Insert: {
+          created_at?: string
+          from_user_id: string
+          id?: string
+          message?: string | null
+          to_user_id: string
+        }
+        Update: {
+          created_at?: string
+          from_user_id?: string
+          id?: string
+          message?: string | null
+          to_user_id?: string
+        }
+        Relationships: []
+      }
       class_schedules: {
         Row: {
           class_name: string
@@ -458,6 +482,33 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      friends: {
+        Row: {
+          created_at: string
+          friend_user_id: string
+          id: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          friend_user_id: string
+          id?: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          friend_user_id?: string
+          id?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       meal_dietary_tags: {
         Row: {
@@ -1077,8 +1128,10 @@ export type Database = {
           color_mode: string | null
           created_at: string
           id: string
+          school_end_date: string | null
           theme: string | null
           updated_at: string
+          use_theme_background: boolean | null
           user_id: string
         }
         Insert: {
@@ -1086,8 +1139,10 @@ export type Database = {
           color_mode?: string | null
           created_at?: string
           id?: string
+          school_end_date?: string | null
           theme?: string | null
           updated_at?: string
+          use_theme_background?: boolean | null
           user_id: string
         }
         Update: {
@@ -1095,8 +1150,10 @@ export type Database = {
           color_mode?: string | null
           created_at?: string
           id?: string
+          school_end_date?: string | null
           theme?: string | null
           updated_at?: string
+          use_theme_background?: boolean | null
           user_id?: string
         }
         Relationships: []
