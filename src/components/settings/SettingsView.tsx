@@ -408,6 +408,19 @@ export function SettingsView() {
                 </button>)}
             </div>
           </div>
+
+          <Separator />
+
+          {/* Theme Background */}
+          <div className="flex items-center justify-between">
+            <div className="space-y-0.5">
+              <Label>Theme Background</Label>
+              <p className="text-sm text-muted-foreground">
+                Use theme-colored background instead of default
+              </p>
+            </div>
+            <Switch checked={useThemeBackground} onCheckedChange={setUseThemeBackground} />
+          </div>
         </CardContent>
       </Card>
 
