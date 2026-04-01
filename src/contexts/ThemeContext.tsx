@@ -8,8 +8,10 @@ export type ColorMode = 'light' | 'dark' | 'system';
 interface ThemeContextType {
   theme: ThemeName;
   colorMode: ColorMode;
+  useThemeBackground: boolean;
   setTheme: (theme: ThemeName) => void;
   setColorMode: (mode: ColorMode) => void;
+  setUseThemeBackground: (val: boolean) => void;
   themes: { id: ThemeName; name: string; colors: { primary: string; accent: string } }[];
 }
 
