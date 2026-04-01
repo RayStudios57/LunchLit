@@ -24,6 +24,7 @@ function getSchoolYearStart(): Date {
 export function GraduationCountdown() {
   const [now, setNow] = useState(new Date());
   const { preferences, updatePreference } = useUserPreferences();
+  const { theme, setTheme } = useTheme();
   const [customDate, setCustomDate] = useState('');
   
   const endDate = preferences?.school_end_date 
