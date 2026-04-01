@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState, ReactNode } from 'react
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './AuthContext';
 
-export type ThemeName = 'default' | 'ocean' | 'sunset' | 'forest' | 'lavender' | 'midnight';
+export type ThemeName = 'default' | 'ocean' | 'sunset' | 'forest' | 'lavender' | 'midnight' | 'summer';
 export type ColorMode = 'light' | 'dark' | 'system';
 
 interface ThemeContextType {
