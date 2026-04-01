@@ -34,6 +34,7 @@ const themes: ThemeContextType['themes'] = [
   { id: 'forest', name: 'Forest', colors: { primary: '140 50% 35%', accent: '80 60% 45%' } },
   { id: 'lavender', name: 'Lavender', colors: { primary: '270 60% 60%', accent: '300 50% 55%' } },
   { id: 'midnight', name: 'Midnight', colors: { primary: '230 70% 55%', accent: '260 60% 60%' } },
+  { id: 'summer', name: 'Summer', colors: { primary: '45 90% 55%', accent: '180 70% 50%' } },
 ];
 
 // Theme-specific color schemes for light and dark modes

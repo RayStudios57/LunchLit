@@ -1,18 +1,33 @@
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { GraduationCap, Calendar, Clock, PartyPopper } from 'lucide-react';
-import { differenceInDays, differenceInHours, differenceInMinutes, differenceInSeconds } from 'date-fns';
+import { GraduationCap, Calendar, Clock, PartyPopper, Settings } from 'lucide-react';
+import { differenceInDays, differenceInHours, differenceInMinutes, differenceInSeconds, parseISO } from 'date-fns';
+import { useUserPreferences } from '@/hooks/useUserPreferences';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
-function getSchoolYearEnd(): Date {
+function getDefaultSchoolYearEnd(): Date {
   const now = new Date();
   const year = now.getMonth() >= 7 ? now.getFullYear() + 1 : now.getFullYear();
-  // Approximate last day of school: June 6
   return new Date(year, 5, 6, 15, 0, 0);
+}
+
+// School year start: ~September 1
+function getSchoolYearStart(): Date {
+  const now = new Date();
+  const year = now.getMonth() >= 7 ? now.getFullYear() : now.getFullYear() - 1;
+  return new Date(year, 8, 1, 8, 0, 0);
 }
 
 export function GraduationCountdown() {
   const [now, setNow] = useState(new Date());
-  const endDate = getSchoolYearEnd();
+  const { preferences, updatePreference } = useUserPreferences();
+  const [customDate, setCustomDate] = useState('');
+  
+  const endDate = preferences?.school_end_date 
+    ? new Date(parseISO(preferences.school_end_date).setHours(15, 0, 0)) 
+    : getDefaultSchoolYearEnd();
 
   useEffect(() => {
     const timer = setInterval(() => setNow(new Date()), 1000);
@@ -25,6 +40,24 @@ export function GraduationCountdown() {
   const totalSeconds = differenceInSeconds(endDate, now) % 60;
 
   const isPast = totalDays < 0;
+
+  // Accurate progress: from school year start to end
+  const schoolStart = getSchoolYearStart();
+  const totalSchoolDays = differenceInDays(endDate, schoolStart);
+  const daysElapsed = differenceInDays(now, schoolStart);
+  const progress = Math.max(0, Math.min(100, (daysElapsed / totalSchoolDays) * 100));
+
+  const handleSetDate = () => {
+    if (customDate) {
+      updatePreference.mutate({ school_end_date: customDate });
+    }
+  };
+
+  const handleResetDate = () => {
+    updatePreference.mutate({ school_end_date: null });
+  };
+
+  const endDateFormatted = endDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
 
   if (isPast) {
     return (
@@ -45,15 +78,34 @@ export function GraduationCountdown() {
     { label: 'Sec', value: totalSeconds },
   ];
 
-  const progress = Math.max(0, Math.min(100, ((180 - totalDays) / 180) * 100));
-
   return (
     <Card className="card-elevated">
       <CardHeader className="pb-3">
-        <CardTitle className="font-display text-lg flex items-center gap-2">
-          <GraduationCap className="w-5 h-5 text-primary" />
-          End-of-Year Countdown
-        </CardTitle>
+        <div className="flex items-center justify-between">
+          <CardTitle className="font-display text-lg flex items-center gap-2">
+            <GraduationCap className="w-5 h-5 text-primary" />
+            End-of-Year Countdown
+          </CardTitle>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                <Settings className="w-4 h-4" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-64 space-y-3" align="end">
+              <p className="text-sm font-medium">Set your last day of school</p>
+              <Input
+                type="date"
+                value={customDate || preferences?.school_end_date || ''}
+                onChange={e => setCustomDate(e.target.value)}
+              />
+              <div className="flex gap-2">
+                <Button size="sm" className="flex-1" onClick={handleSetDate}>Save</Button>
+                <Button size="sm" variant="outline" onClick={handleResetDate}>Reset</Button>
+              </div>
+            </PopoverContent>
+          </Popover>
+        </div>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="grid grid-cols-4 gap-3">
@@ -88,7 +140,7 @@ export function GraduationCountdown() {
 
         <p className="text-xs text-center text-muted-foreground flex items-center justify-center gap-1">
           <Clock className="w-3 h-3" />
-          Until June 6, {endDate.getFullYear()} · Last day of school
+          Until {endDateFormatted} · Last day of school
         </p>
       </CardContent>
     </Card>
