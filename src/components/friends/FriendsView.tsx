@@ -151,6 +151,8 @@ export function FriendsView() {
     },
     enabled: !!user && isFriendOfSelected && !!selectedUserId,
   });
+
+  const selectedProfile = profiles.find(p => p.user_id === selectedUserId);
   const isFriend = acceptedFriends.some(f => 
     f.friend_profile?.user_id === selectedUserId
   );
