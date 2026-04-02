@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { Plus, Trash2, Calendar, ChevronDown, ChevronRight, ListTodo, CheckCircle2 } from 'lucide-react';
+import { Plus, Trash2, Calendar, ChevronDown, ChevronRight, ListTodo, CheckCircle2, Users } from 'lucide-react';
 import { format, isToday, isTomorrow, isPast, parseISO } from 'date-fns';
 import { useAuth } from '@/contexts/AuthContext';
 
