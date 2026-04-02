@@ -98,7 +98,59 @@ export function FriendsView() {
     enabled: !!user,
   });
 
-  const selectedProfile = profiles.find(p => p.user_id === selectedUserId);
+  // Friend's schedule (only if they are an accepted friend)
+  const isFriendOfSelected = acceptedFriends.some(f => f.friend_profile?.user_id === selectedUserId);
+  
+  const { data: friendSchedule = [] } = useQuery({
+    queryKey: ['friend-schedule', selectedUserId],
+    queryFn: async () => {
+      if (!selectedUserId) return [];
+      const { data, error } = await supabase
+        .from('class_schedules')
+        .select('*')
+        .eq('user_id', selectedUserId)
+        .order('day_of_week')
+        .order('start_time');
+      if (error) return [];
+      return data;
+    },
+    enabled: !!selectedUserId && isFriendOfSelected,
+  });
+
+  // Friend's shared tasks
+  const { data: friendSharedTasks = [] } = useQuery({
+    queryKey: ['friend-shared-tasks', selectedUserId],
+    queryFn: async () => {
+      if (!selectedUserId) return [];
+      const { data, error } = await supabase
+        .from('tasks')
+        .select('*')
+        .eq('user_id', selectedUserId)
+        .eq('shared_with_friends', true)
+        .eq('is_completed', false)
+        .order('due_date', { ascending: true });
+      if (error) return [];
+      return data;
+    },
+    enabled: !!selectedUserId && isFriendOfSelected,
+  });
+
+  // My own schedule for comparison
+  const { data: mySchedule = [] } = useQuery({
+    queryKey: ['my-schedule-compare'],
+    queryFn: async () => {
+      if (!user) return [];
+      const { data, error } = await supabase
+        .from('class_schedules')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('day_of_week')
+        .order('start_time');
+      if (error) return [];
+      return data;
+    },
+    enabled: !!user && isFriendOfSelected && !!selectedUserId,
+  });
   const isFriend = acceptedFriends.some(f => 
     f.friend_profile?.user_id === selectedUserId
   );
