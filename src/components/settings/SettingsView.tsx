@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { OnboardingTutorial } from '@/components/onboarding/OnboardingTutorial';
 import { BadgesView } from '@/components/settings/BadgesView';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -10,6 +10,7 @@ import { useUserPreferences } from '@/hooks/useUserPreferences';
 import { useGoogleCalendar } from '@/hooks/useGoogleCalendar';
 import { useGradeProgression } from '@/hooks/useGradeProgression';
 import { usePresentationMode } from '@/contexts/PresentationModeContext';
+import { getNavLayout, setNavLayout, NavLayout } from '@/components/Header';
 import { GRADE_OPTIONS, GRADE_DISPLAY } from '@/config/grades';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -20,7 +21,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
-import { Camera, Sun, Moon, Monitor, Check, Palette, School, GraduationCap, User, Calendar, Trash2, Download, AlertTriangle, ChevronUp, ChevronDown, RotateCcw, Presentation, HelpCircle, Award, Eye } from 'lucide-react';
+import { Camera, Sun, Moon, Monitor, Check, Palette, School, GraduationCap, User, Calendar, Trash2, Download, AlertTriangle, ChevronUp, ChevronDown, RotateCcw, Presentation, HelpCircle, Award, Eye, LayoutGrid, Menu } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { Link } from 'react-router-dom';
@@ -77,6 +78,7 @@ export function SettingsView() {
   const [calendarSyncEnabled, setCalendarSyncEnabled] = useState(profile?.calendar_sync_enabled || false);
   const [showTutorial, setShowTutorial] = useState(false);
   const [isPublic, setIsPublic] = useState(profile?.is_public || false);
+  const [currentNavLayout, setCurrentNavLayout] = useState<NavLayout>(getNavLayout());
 
   const OWNER_EMAIL = 'kutturam0912@gmail.com';
   const isOwner = user?.email === OWNER_EMAIL;
@@ -411,7 +413,7 @@ export function SettingsView() {
 
           <Separator />
 
-          {/* Theme Background */}
+           {/* Theme Background */}
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
               <Label>Theme Background</Label>
@@ -420,6 +422,39 @@ export function SettingsView() {
               </p>
             </div>
             <Switch checked={useThemeBackground} onCheckedChange={setUseThemeBackground} />
+          </div>
+
+          <Separator />
+
+          {/* Navigation Style */}
+          <div className="space-y-3">
+            <Label className="flex items-center gap-2">
+              <LayoutGrid className="w-4 h-4" />
+              Navigation Style
+            </Label>
+            <div className="flex gap-2">
+              <Button
+                variant={currentNavLayout === 'tabs' ? 'default' : 'outline'}
+                size="sm"
+                className="flex-1"
+                onClick={() => { setNavLayout('tabs'); setCurrentNavLayout('tabs'); }}
+              >
+                <LayoutGrid className="w-4 h-4 mr-1" />
+                Tabs
+              </Button>
+              <Button
+                variant={currentNavLayout === 'sidebar' ? 'default' : 'outline'}
+                size="sm"
+                className="flex-1"
+                onClick={() => { setNavLayout('sidebar'); setCurrentNavLayout('sidebar'); }}
+              >
+                <Menu className="w-4 h-4 mr-1" />
+                Sidebar
+              </Button>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              {currentNavLayout === 'tabs' ? 'Classic tab bar across the top' : 'Hamburger menu with side navigation'}
+            </p>
           </div>
         </CardContent>
       </Card>
