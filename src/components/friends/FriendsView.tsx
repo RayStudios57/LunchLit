@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { Search, Users, Award, Crown, UserPlus, Heart, Check, X, PartyPopper } from 'lucide-react';
+import { Search, Users, Award, Crown, UserPlus, Heart, Check, X, PartyPopper, Calendar, CheckSquare } from 'lucide-react';
 import { ALL_BADGES_INCLUDING_MASTER, MASTER_BADGE } from '@/hooks/useAchievements';
 import { useAuth } from '@/contexts/AuthContext';
 import { useFriends } from '@/hooks/useFriends';
@@ -96,6 +96,60 @@ export function FriendsView() {
       return data;
     },
     enabled: !!user,
+  });
+
+  // Friend's schedule (only if they are an accepted friend)
+  const isFriendOfSelected = acceptedFriends.some(f => f.friend_profile?.user_id === selectedUserId);
+  
+  const { data: friendSchedule = [] } = useQuery({
+    queryKey: ['friend-schedule', selectedUserId],
+    queryFn: async () => {
+      if (!selectedUserId) return [];
+      const { data, error } = await supabase
+        .from('class_schedules')
+        .select('*')
+        .eq('user_id', selectedUserId)
+        .order('day_of_week')
+        .order('start_time');
+      if (error) return [];
+      return data;
+    },
+    enabled: !!selectedUserId && isFriendOfSelected,
+  });
+
+  // Friend's shared tasks
+  const { data: friendSharedTasks = [] } = useQuery({
+    queryKey: ['friend-shared-tasks', selectedUserId],
+    queryFn: async () => {
+      if (!selectedUserId) return [];
+      const { data, error } = await supabase
+        .from('tasks')
+        .select('*')
+        .eq('user_id', selectedUserId)
+        .eq('shared_with_friends', true)
+        .eq('is_completed', false)
+        .order('due_date', { ascending: true });
+      if (error) return [];
+      return data;
+    },
+    enabled: !!selectedUserId && isFriendOfSelected,
+  });
+
+  // My own schedule for comparison
+  const { data: mySchedule = [] } = useQuery({
+    queryKey: ['my-schedule-compare'],
+    queryFn: async () => {
+      if (!user) return [];
+      const { data, error } = await supabase
+        .from('class_schedules')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('day_of_week')
+        .order('start_time');
+      if (error) return [];
+      return data;
+    },
+    enabled: !!user && isFriendOfSelected && !!selectedUserId,
   });
 
   const selectedProfile = profiles.find(p => p.user_id === selectedUserId);
@@ -202,6 +256,87 @@ export function FriendsView() {
             </TooltipProvider>
           </CardContent>
         </Card>
+
+        {/* Schedule Comparison - Only for accepted friends */}
+        {isFriend && friendSchedule.length > 0 && (
+          <Card className="card-elevated">
+            <CardHeader>
+              <CardTitle className="font-display text-lg flex items-center gap-2">
+                <Calendar className="w-5 h-5 text-primary" />
+                Schedule Comparison
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {(() => {
+                const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                const sharedClasses = friendSchedule.filter(fc =>
+                  mySchedule.some(mc =>
+                    mc.day_of_week === fc.day_of_week &&
+                    mc.start_time === fc.start_time &&
+                    mc.class_name.toLowerCase() === fc.class_name.toLowerCase()
+                  )
+                );
+                return (
+                  <div className="space-y-4">
+                    {sharedClasses.length > 0 && (
+                      <div className="p-3 rounded-lg bg-primary/10 border border-primary/20">
+                        <p className="text-sm font-medium text-primary mb-2">
+                          🎉 You share {sharedClasses.length} class{sharedClasses.length > 1 ? 'es' : ''}!
+                        </p>
+                        <div className="flex flex-wrap gap-2">
+                          {sharedClasses.map(c => (
+                            <Badge key={c.id} variant="outline">{c.class_name}</Badge>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                    <div className="space-y-2">
+                      <p className="text-sm font-medium text-muted-foreground">Their Schedule</p>
+                      <div className="grid gap-1.5">
+                        {friendSchedule.slice(0, 10).map(cls => (
+                          <div key={cls.id} className="flex items-center gap-2 text-sm p-2 rounded bg-secondary/50">
+                            <span className="text-xs text-muted-foreground w-16">{DAYS[cls.day_of_week]?.slice(0, 3)}</span>
+                            <span className="font-medium flex-1">{cls.class_name}</span>
+                            <span className="text-xs text-muted-foreground">{cls.start_time?.slice(0, 5)} - {cls.end_time?.slice(0, 5)}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })()}
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Friend's Shared Tasks */}
+        {isFriend && friendSharedTasks.length > 0 && (
+          <Card className="card-elevated">
+            <CardHeader>
+              <CardTitle className="font-display text-lg flex items-center gap-2">
+                <CheckSquare className="w-5 h-5 text-primary" />
+                Shared Tasks
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                {friendSharedTasks.map(task => (
+                  <div key={task.id} className="flex items-center gap-3 p-2.5 rounded-lg bg-secondary/50">
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium truncate">{task.title}</p>
+                      {task.due_date && (
+                        <p className="text-xs text-muted-foreground">Due: {new Date(task.due_date).toLocaleDateString()}</p>
+                      )}
+                    </div>
+                    <Badge variant="outline" className="text-xs shrink-0">
+                      {task.priority || 'medium'}
+                    </Badge>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
       </div>
     );
   }

@@ -1016,6 +1016,7 @@ export type Database = {
           id: string
           is_completed: boolean | null
           priority: string | null
+          shared_with_friends: boolean | null
           title: string
           updated_at: string
           user_id: string
@@ -1029,6 +1030,7 @@ export type Database = {
           id?: string
           is_completed?: boolean | null
           priority?: string | null
+          shared_with_friends?: boolean | null
           title: string
           updated_at?: string
           user_id: string
@@ -1042,6 +1044,7 @@ export type Database = {
           id?: string
           is_completed?: boolean | null
           priority?: string | null
+          shared_with_friends?: boolean | null
           title?: string
           updated_at?: string
           user_id?: string

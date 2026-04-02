@@ -21,7 +21,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
-import { Camera, Sun, Moon, Monitor, Check, Palette, School, GraduationCap, User, Calendar, Trash2, Download, AlertTriangle, ChevronUp, ChevronDown, RotateCcw, Presentation, HelpCircle, Award, Eye, LayoutGrid, Menu } from 'lucide-react';
+import { Camera, Sun, Moon, Monitor, Check, Palette, School, GraduationCap, User, Users, Calendar, Trash2, Download, AlertTriangle, ChevronUp, ChevronDown, RotateCcw, Presentation, HelpCircle, Award, Eye, LayoutGrid, Menu } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { Link } from 'react-router-dom';
@@ -349,6 +349,26 @@ export function SettingsView() {
               </p>
             </div>
             <Switch checked={isOwner ? true : isPublic} onCheckedChange={handlePublicToggle} disabled={isOwner} />
+          </div>
+
+          <Separator />
+
+          {/* Friend Code */}
+          <div className="space-y-2">
+            <Label className="flex items-center gap-2">
+              <Users className="w-4 h-4" />
+              Your Friend Code
+            </Label>
+            <p className="text-xs text-muted-foreground">Share this code so friends can find you</p>
+            <div className="flex gap-2">
+              <Input value={user.id} readOnly className="font-mono text-xs" />
+              <Button variant="outline" size="sm" onClick={() => {
+                navigator.clipboard.writeText(user.id);
+                toast({ title: 'Friend code copied!' });
+              }}>
+                Copy
+              </Button>
+            </div>
           </div>
         </CardContent>
       </Card>

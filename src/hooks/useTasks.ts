@@ -15,6 +15,7 @@ export interface Task {
   is_completed: boolean;
   priority: 'low' | 'medium' | 'high';
   category: 'homework' | 'test' | 'project' | 'general';
+  shared_with_friends?: boolean;
   created_at: string;
   updated_at: string;
 }

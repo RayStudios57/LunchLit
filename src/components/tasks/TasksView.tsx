@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { Plus, Trash2, Calendar, ChevronDown, ChevronRight, ListTodo, CheckCircle2 } from 'lucide-react';
+import { Plus, Trash2, Calendar, ChevronDown, ChevronRight, ListTodo, CheckCircle2, Users } from 'lucide-react';
 import { format, isToday, isTomorrow, isPast, parseISO } from 'date-fns';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -235,6 +235,17 @@ export function TasksView() {
                             {formatDueDate(task.due_date)}
                           </Badge>
                         )}
+                        <button
+                          onClick={() => updateTask.mutate({ id: task.id, shared_with_friends: !task.shared_with_friends })}
+                          className={`text-xs flex items-center gap-1 px-2 py-0.5 rounded-full border transition-colors ${
+                            task.shared_with_friends
+                              ? 'bg-primary/10 border-primary/30 text-primary'
+                              : 'border-border text-muted-foreground hover:border-primary/30'
+                          }`}
+                        >
+                          <Users className="h-3 w-3" />
+                          {task.shared_with_friends ? 'Shared' : 'Share'}
+                        </button>
                       </div>
                     </div>
                     <Button
