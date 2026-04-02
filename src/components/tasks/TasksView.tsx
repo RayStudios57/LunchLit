@@ -235,6 +235,17 @@ export function TasksView() {
                             {formatDueDate(task.due_date)}
                           </Badge>
                         )}
+                        <button
+                          onClick={() => updateTask.mutate({ id: task.id, shared_with_friends: !task.shared_with_friends })}
+                          className={`text-xs flex items-center gap-1 px-2 py-0.5 rounded-full border transition-colors ${
+                            task.shared_with_friends
+                              ? 'bg-primary/10 border-primary/30 text-primary'
+                              : 'border-border text-muted-foreground hover:border-primary/30'
+                          }`}
+                        >
+                          <Users className="h-3 w-3" />
+                          {task.shared_with_friends ? 'Shared' : 'Share'}
+                        </button>
                       </div>
                     </div>
                     <Button
