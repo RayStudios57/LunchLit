@@ -218,6 +218,24 @@ export function FriendsView() {
         </div>
       </div>
 
+      {/* Your Friend Code */}
+      {user && (
+        <Card className="border-primary/20 bg-primary/5">
+          <CardContent className="py-3 flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium">Your Friend Code</p>
+              <p className="text-xs text-muted-foreground font-mono select-all">{user.id}</p>
+            </div>
+            <Button variant="outline" size="sm" onClick={() => {
+              navigator.clipboard.writeText(user.id);
+              toast({ title: 'Friend code copied!' });
+            }}>
+              Copy
+            </Button>
+          </CardContent>
+        </Card>
+      )}
+
       <Tabs defaultValue="browse" className="space-y-4">
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="browse">Browse</TabsTrigger>
