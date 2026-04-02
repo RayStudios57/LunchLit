@@ -413,7 +413,7 @@ export function SettingsView() {
 
           <Separator />
 
-          {/* Theme Background */}
+           {/* Theme Background */}
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
               <Label>Theme Background</Label>
@@ -422,6 +422,39 @@ export function SettingsView() {
               </p>
             </div>
             <Switch checked={useThemeBackground} onCheckedChange={setUseThemeBackground} />
+          </div>
+
+          <Separator />
+
+          {/* Navigation Style */}
+          <div className="space-y-3">
+            <Label className="flex items-center gap-2">
+              <LayoutGrid className="w-4 h-4" />
+              Navigation Style
+            </Label>
+            <div className="flex gap-2">
+              <Button
+                variant={currentNavLayout === 'tabs' ? 'default' : 'outline'}
+                size="sm"
+                className="flex-1"
+                onClick={() => { setNavLayout('tabs'); setCurrentNavLayout('tabs'); }}
+              >
+                <LayoutGrid className="w-4 h-4 mr-1" />
+                Tabs
+              </Button>
+              <Button
+                variant={currentNavLayout === 'sidebar' ? 'default' : 'outline'}
+                size="sm"
+                className="flex-1"
+                onClick={() => { setNavLayout('sidebar'); setCurrentNavLayout('sidebar'); }}
+              >
+                <Menu className="w-4 h-4 mr-1" />
+                Sidebar
+              </Button>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              {currentNavLayout === 'tabs' ? 'Classic tab bar across the top' : 'Hamburger menu with side navigation'}
+            </p>
           </div>
         </CardContent>
       </Card>
