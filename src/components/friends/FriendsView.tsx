@@ -8,10 +8,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { Search, Users, Award, Crown, UserPlus, Heart, Check, X, PartyPopper, Calendar, CheckSquare } from 'lucide-react';
+import { Search, Users, Award, Crown, UserPlus, Heart, Check, X, PartyPopper, Calendar, CheckSquare, MessageCircle } from 'lucide-react';
 import { ALL_BADGES_INCLUDING_MASTER, MASTER_BADGE } from '@/hooks/useAchievements';
 import { useAuth } from '@/contexts/AuthContext';
 import { useFriends } from '@/hooks/useFriends';
+import { FriendChat } from './FriendChat';
 import { useToast } from '@/hooks/use-toast';
 
 const OWNER_USER_ID = '724c21f3-d6ba-497a-8ad9-a80dab24b55d';
@@ -33,6 +34,7 @@ export function FriendsView() {
   const [search, setSearch] = useState('');
   const [friendSearch, setFriendSearch] = useState('');
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+  const [chatWith, setChatWith] = useState<{ userId: string; name: string; avatar?: string | null } | null>(null);
   const { acceptedFriends, pendingReceived, pendingSent, sendRequest, acceptRequest, removeFriend, sendCheer } = useFriends();
 
   // Public profiles for browsing
@@ -167,6 +169,18 @@ export function FriendsView() {
     )
   );
 
+  // Chat view
+  if (chatWith) {
+    return (
+      <FriendChat
+        friendUserId={chatWith.userId}
+        friendName={chatWith.name}
+        friendAvatar={chatWith.avatar}
+        onBack={() => setChatWith(null)}
+      />
+    );
+  }
+
   // Selected profile detail view
   if (selectedUserId && selectedProfile) {
     const hasMaster = selectedBadges.includes(MASTER_BADGE.key);
@@ -204,7 +218,10 @@ export function FriendsView() {
               <div className="flex gap-2 mt-2">
                 {user && selectedUserId !== user.id && (
                   isFriend ? (
-                    <div className="flex gap-2">
+                    <div className="flex flex-wrap gap-2">
+                      <Button variant="default" size="sm" onClick={() => setChatWith({ userId: selectedUserId, name: selectedProfile.full_name || 'Friend', avatar: selectedProfile.avatar_url })}>
+                        <MessageCircle className="w-4 h-4 mr-1" /> Chat
+                      </Button>
                       {CHEER_OPTIONS.map(cheer => (
                         <Button key={cheer} variant="outline" size="sm" onClick={() => sendCheer.mutate({ toUserId: selectedUserId, message: cheer })}>
                           {cheer.split(' ')[0]}
@@ -492,6 +509,9 @@ export function FriendsView() {
                       </p>
                     </div>
                     <div className="flex gap-1">
+                      <Button variant="outline" size="sm" className="gap-1" onClick={() => setChatWith({ userId: f.friend_profile?.user_id || '', name: f.friend_profile?.full_name || 'Friend', avatar: f.friend_profile?.avatar_url })}>
+                        <MessageCircle className="w-3.5 h-3.5" />
+                      </Button>
                       {CHEER_OPTIONS.slice(0, 3).map(cheer => (
                         <Button key={cheer} variant="ghost" size="sm" className="text-lg p-1 h-8 w-8" onClick={() => sendCheer.mutate({ toUserId: f.friend_profile?.user_id || '', message: cheer })}>
                           {cheer.split(' ')[0]}
