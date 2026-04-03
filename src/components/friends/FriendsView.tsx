@@ -34,6 +34,7 @@ export function FriendsView() {
   const [search, setSearch] = useState('');
   const [friendSearch, setFriendSearch] = useState('');
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+  const [chatWith, setChatWith] = useState<{ userId: string; name: string; avatar?: string | null } | null>(null);
   const { acceptedFriends, pendingReceived, pendingSent, sendRequest, acceptRequest, removeFriend, sendCheer } = useFriends();
 
   // Public profiles for browsing
