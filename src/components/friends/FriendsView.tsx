@@ -509,6 +509,9 @@ export function FriendsView() {
                       </p>
                     </div>
                     <div className="flex gap-1">
+                      <Button variant="outline" size="sm" className="gap-1" onClick={() => setChatWith({ userId: f.friend_profile?.user_id || '', name: f.friend_profile?.full_name || 'Friend', avatar: f.friend_profile?.avatar_url })}>
+                        <MessageCircle className="w-3.5 h-3.5" />
+                      </Button>
                       {CHEER_OPTIONS.slice(0, 3).map(cheer => (
                         <Button key={cheer} variant="ghost" size="sm" className="text-lg p-1 h-8 w-8" onClick={() => sendCheer.mutate({ toUserId: f.friend_profile?.user_id || '', message: cheer })}>
                           {cheer.split(' ')[0]}
