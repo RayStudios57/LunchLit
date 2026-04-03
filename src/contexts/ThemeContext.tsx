@@ -316,7 +316,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       mediaQuery.addEventListener('change', handler);
       return () => mediaQuery.removeEventListener('change', handler);
     }
-  }, [theme, colorMode]);
+  }, [theme, colorMode, useThemeBackground]);
 
   // Apply color mode
   useEffect(() => {
