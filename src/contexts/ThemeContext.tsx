@@ -51,6 +51,7 @@ const themeColorSchemes: Record<ThemeName, { light: ThemeColors; dark: ThemeColo
       muted: '45 20% 94%',
       mutedForeground: '160 15% 45%',
       border: '160 15% 88%',
+      themedBackground: '160 25% 93%',
     },
     dark: {
       primary: '160 55% 50%',
@@ -62,6 +63,7 @@ const themeColorSchemes: Record<ThemeName, { light: ThemeColors; dark: ThemeColo
       muted: '160 15% 20%',
       mutedForeground: '160 10% 60%',
       border: '160 15% 22%',
+      themedBackground: '160 30% 6%',
     },
   },
   ocean: {
@@ -75,6 +77,7 @@ const themeColorSchemes: Record<ThemeName, { light: ThemeColors; dark: ThemeColo
       muted: '200 20% 94%',
       mutedForeground: '200 15% 45%',
       border: '200 20% 88%',
+      themedBackground: '200 40% 92%',
     },
     dark: {
       primary: '200 75% 55%',
@@ -86,6 +89,7 @@ const themeColorSchemes: Record<ThemeName, { light: ThemeColors; dark: ThemeColo
       muted: '200 20% 18%',
       mutedForeground: '200 15% 60%',
       border: '200 20% 22%',
+      themedBackground: '200 35% 10%',
     },
   },
   sunset: {
@@ -99,6 +103,7 @@ const themeColorSchemes: Record<ThemeName, { light: ThemeColors; dark: ThemeColo
       muted: '30 25% 94%',
       mutedForeground: '20 15% 45%',
       border: '30 20% 88%',
+      themedBackground: '25 45% 93%',
     },
     dark: {
       primary: '20 75% 55%',
@@ -110,6 +115,7 @@ const themeColorSchemes: Record<ThemeName, { light: ThemeColors; dark: ThemeColo
       muted: '20 15% 18%',
       mutedForeground: '20 10% 60%',
       border: '20 15% 22%',
+      themedBackground: '20 30% 10%',
     },
   },
   forest: {
@@ -123,6 +129,7 @@ const themeColorSchemes: Record<ThemeName, { light: ThemeColors; dark: ThemeColo
       muted: '80 15% 94%',
       mutedForeground: '140 15% 45%',
       border: '80 15% 88%',
+      themedBackground: '120 25% 93%',
     },
     dark: {
       primary: '140 45% 45%',
@@ -134,6 +141,7 @@ const themeColorSchemes: Record<ThemeName, { light: ThemeColors; dark: ThemeColo
       muted: '140 15% 18%',
       mutedForeground: '140 10% 60%',
       border: '140 15% 22%',
+      themedBackground: '140 30% 8%',
     },
   },
   lavender: {
@@ -147,6 +155,7 @@ const themeColorSchemes: Record<ThemeName, { light: ThemeColors; dark: ThemeColo
       muted: '270 20% 94%',
       mutedForeground: '270 15% 45%',
       border: '270 15% 88%',
+      themedBackground: '270 35% 93%',
     },
     dark: {
       primary: '270 55% 65%',
@@ -158,6 +167,7 @@ const themeColorSchemes: Record<ThemeName, { light: ThemeColors; dark: ThemeColo
       muted: '270 15% 18%',
       mutedForeground: '270 10% 60%',
       border: '270 15% 22%',
+      themedBackground: '270 30% 10%',
     },
   },
   midnight: {
@@ -171,6 +181,7 @@ const themeColorSchemes: Record<ThemeName, { light: ThemeColors; dark: ThemeColo
       muted: '230 20% 94%',
       mutedForeground: '230 15% 45%',
       border: '230 15% 88%',
+      themedBackground: '225 40% 93%',
     },
     dark: {
       primary: '230 65% 60%',
@@ -182,6 +193,7 @@ const themeColorSchemes: Record<ThemeName, { light: ThemeColors; dark: ThemeColo
       muted: '230 20% 15%',
       mutedForeground: '230 15% 60%',
       border: '230 20% 20%',
+      themedBackground: '230 35% 8%',
     },
   },
   summer: {
@@ -195,6 +207,7 @@ const themeColorSchemes: Record<ThemeName, { light: ThemeColors; dark: ThemeColo
       muted: '45 20% 94%',
       mutedForeground: '45 15% 45%',
       border: '45 15% 88%',
+      themedBackground: '45 40% 92%',
     },
     dark: {
       primary: '45 85% 60%',
@@ -206,6 +219,7 @@ const themeColorSchemes: Record<ThemeName, { light: ThemeColors; dark: ThemeColo
       muted: '45 15% 18%',
       mutedForeground: '45 10% 60%',
       border: '45 15% 22%',
+      themedBackground: '45 30% 10%',
     },
   },
 };
