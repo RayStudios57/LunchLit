@@ -218,7 +218,10 @@ export function FriendsView() {
               <div className="flex gap-2 mt-2">
                 {user && selectedUserId !== user.id && (
                   isFriend ? (
-                    <div className="flex gap-2">
+                    <div className="flex flex-wrap gap-2">
+                      <Button variant="default" size="sm" onClick={() => setChatWith({ userId: selectedUserId, name: selectedProfile.full_name || 'Friend', avatar: selectedProfile.avatar_url })}>
+                        <MessageCircle className="w-4 h-4 mr-1" /> Chat
+                      </Button>
                       {CHEER_OPTIONS.map(cheer => (
                         <Button key={cheer} variant="outline" size="sm" onClick={() => sendCheer.mutate({ toUserId: selectedUserId, message: cheer })}>
                           {cheer.split(' ')[0]}
