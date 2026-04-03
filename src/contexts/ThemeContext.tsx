@@ -25,6 +25,7 @@ interface ThemeColors {
   muted: string;
   mutedForeground: string;
   border: string;
+  themedBackground?: string; // tinted bg when "Theme Background" is on
 }
 
 // Themes shown in the picker (summer is excluded — it's a temporary auto-theme)
