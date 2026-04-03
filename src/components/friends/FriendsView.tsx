@@ -169,6 +169,18 @@ export function FriendsView() {
     )
   );
 
+  // Chat view
+  if (chatWith) {
+    return (
+      <FriendChat
+        friendUserId={chatWith.userId}
+        friendName={chatWith.name}
+        friendAvatar={chatWith.avatar}
+        onBack={() => setChatWith(null)}
+      />
+    );
+  }
+
   // Selected profile detail view
   if (selectedUserId && selectedProfile) {
     const hasMaster = selectedBadges.includes(MASTER_BADGE.key);
