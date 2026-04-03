@@ -282,7 +282,10 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       
       document.documentElement.style.setProperty('--primary', colors.primary);
       document.documentElement.style.setProperty('--accent', colors.accent);
-      document.documentElement.style.setProperty('--background', colors.background);
+      
+      // Use themed background when toggle is on
+      const bg = useThemeBackground && colors.themedBackground ? colors.themedBackground : colors.background;
+      document.documentElement.style.setProperty('--background', bg);
       document.documentElement.style.setProperty('--foreground', colors.foreground);
       document.documentElement.style.setProperty('--card', colors.card);
       document.documentElement.style.setProperty('--card-foreground', colors.cardForeground);
