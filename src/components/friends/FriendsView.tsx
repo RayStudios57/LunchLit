@@ -12,6 +12,7 @@ import { Search, Users, Award, Crown, UserPlus, Heart, Check, X, PartyPopper, Ca
 import { ALL_BADGES_INCLUDING_MASTER, MASTER_BADGE } from '@/hooks/useAchievements';
 import { useAuth } from '@/contexts/AuthContext';
 import { useFriends } from '@/hooks/useFriends';
+import { FriendChat } from './FriendChat';
 import { useToast } from '@/hooks/use-toast';
 
 const OWNER_USER_ID = '724c21f3-d6ba-497a-8ad9-a80dab24b55d';
