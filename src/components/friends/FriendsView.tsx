@@ -26,6 +26,7 @@ interface PublicProfile {
   grade_level: string | null;
   school_name: string | null;
   is_public: boolean;
+  allow_friend_requests: boolean | null;
 }
 
 export function FriendsView() {
