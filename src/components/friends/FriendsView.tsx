@@ -260,6 +260,10 @@ export function FriendsView() {
                     </div>
                   ) : hasPending ? (
                     <Badge variant="outline">Request Pending</Badge>
+                  ) : selectedProfile.allow_friend_requests === false ? (
+                    <Badge variant="outline" className="gap-1">
+                      <ShieldOff className="w-3 h-3" /> Not accepting requests
+                    </Badge>
                   ) : (
                     <Button onClick={() => sendRequest.mutate(selectedUserId)} size="sm">
                       <UserPlus className="w-4 h-4 mr-1" /> Add Friend
