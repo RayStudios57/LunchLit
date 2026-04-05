@@ -45,12 +45,40 @@ export function FriendsView() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('profiles')
-        .select('user_id, full_name, avatar_url, grade_level, school_name, is_public')
+        .select('user_id, full_name, avatar_url, grade_level, school_name, is_public, allow_friend_requests')
         .eq('is_public', true);
       if (error) throw error;
       return data as PublicProfile[];
     },
   });
+
+  // Online presence tracking
+  useEffect(() => {
+    if (!user) return;
+    const friendIds = acceptedFriends.map(f => f.friend_profile?.user_id).filter(Boolean) as string[];
+    if (friendIds.length === 0) return;
+
+    const channel = supabase.channel('online-friends', {
+      config: { presence: { key: user.id } },
+    });
+
+    channel
+      .on('presence', { event: 'sync' }, () => {
+        const state = channel.presenceState();
+        const online = new Set<string>();
+        for (const key of Object.keys(state)) {
+          if (friendIds.includes(key)) online.add(key);
+        }
+        setOnlineUsers(online);
+      })
+      .subscribe(async (status) => {
+        if (status === 'SUBSCRIBED') {
+          await channel.track({ online: true });
+        }
+      });
+
+    return () => { supabase.removeChannel(channel); };
+  }, [user, acceptedFriends]);
 
   // Search by user_id (for private profiles)
   const handleSearchById = async () => {
