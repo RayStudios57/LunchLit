@@ -187,7 +187,7 @@ export function FriendChat({ friendUserId, friendName, friendAvatar, onBack }: F
 
   const handleSend = (e: React.FormEvent) => {
     e.preventDefault();
-    if (message.trim()) sendMessage.mutate();
+    if (message.trim()) sendMessage.mutate({});
   };
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
