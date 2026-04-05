@@ -530,14 +530,24 @@ export function FriendsView() {
               {acceptedFriends.map(f => (
                 <Card key={f.id} className="card-interactive">
                   <CardContent className="p-4 flex items-center gap-3">
-                    <Avatar className="cursor-pointer" onClick={() => setSelectedUserId(f.friend_profile?.user_id || null)}>
-                      <AvatarImage src={f.friend_profile?.avatar_url || undefined} />
-                      <AvatarFallback className="bg-primary text-primary-foreground">
-                        {f.friend_profile?.full_name?.charAt(0) || '?'}
-                      </AvatarFallback>
-                    </Avatar>
+                    <div className="relative">
+                      <Avatar className="cursor-pointer" onClick={() => setSelectedUserId(f.friend_profile?.user_id || null)}>
+                        <AvatarImage src={f.friend_profile?.avatar_url || undefined} />
+                        <AvatarFallback className="bg-primary text-primary-foreground">
+                          {f.friend_profile?.full_name?.charAt(0) || '?'}
+                        </AvatarFallback>
+                      </Avatar>
+                      {onlineUsers.has(f.friend_profile?.user_id || '') && (
+                        <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-green-500 border-2 border-background" title="Online" />
+                      )}
+                    </div>
                     <div className="flex-1 min-w-0 cursor-pointer" onClick={() => setSelectedUserId(f.friend_profile?.user_id || null)}>
-                      <p className="font-medium truncate">{f.friend_profile?.full_name || 'Anonymous'}</p>
+                      <div className="flex items-center gap-2">
+                        <p className="font-medium truncate">{f.friend_profile?.full_name || 'Anonymous'}</p>
+                        {onlineUsers.has(f.friend_profile?.user_id || '') && (
+                          <Badge variant="outline" className="text-[10px] px-1.5 py-0 text-green-600 border-green-300">Online</Badge>
+                        )}
+                      </div>
                       <p className="text-xs text-muted-foreground truncate">
                         {f.friend_profile?.school_name || 'No school'}
                       </p>
