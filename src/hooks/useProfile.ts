@@ -17,6 +17,7 @@ export interface Profile {
   last_grade_progression: string | null;
   is_graduated: boolean | null;
   is_public: boolean | null;
+  allow_friend_requests: boolean | null;
   created_at: string;
   updated_at: string;
 }

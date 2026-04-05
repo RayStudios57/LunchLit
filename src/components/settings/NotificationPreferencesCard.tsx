@@ -2,7 +2,7 @@ import { useNotificationPreferences } from '@/hooks/useNotificationPreferences';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { Bell, Utensils, Users, GraduationCap, MessageSquare, Clock } from 'lucide-react';
+import { Bell, Utensils, Users, GraduationCap, MessageSquare, Clock, Mail } from 'lucide-react';
 
 const notificationTypes = [
   {
@@ -34,6 +34,12 @@ const notificationTypes = [
     label: 'Task Reminders',
     description: 'Reminders for upcoming due dates',
     icon: Clock,
+  },
+  {
+    key: 'direct_messages' as const,
+    label: 'Direct Messages',
+    description: 'Get notified when a friend sends you a message',
+    icon: Mail,
   },
 ];
 

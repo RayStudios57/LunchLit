@@ -78,6 +78,7 @@ export function SettingsView() {
   const [calendarSyncEnabled, setCalendarSyncEnabled] = useState(profile?.calendar_sync_enabled || false);
   const [showTutorial, setShowTutorial] = useState(false);
   const [isPublic, setIsPublic] = useState(profile?.is_public || false);
+  const [allowFriendRequests, setAllowFriendRequests] = useState(profile?.allow_friend_requests !== false);
   const [currentNavLayout, setCurrentNavLayout] = useState<NavLayout>(getNavLayout());
 
   const OWNER_EMAIL = 'kutturam0912@gmail.com';
