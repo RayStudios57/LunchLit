@@ -392,21 +392,33 @@ export type Database = {
         Row: {
           content: string
           created_at: string
+          flag_reason: string | null
           id: string
+          image_url: string | null
+          is_flagged: boolean | null
+          read_at: string | null
           receiver_id: string
           sender_id: string
         }
         Insert: {
           content: string
           created_at?: string
+          flag_reason?: string | null
           id?: string
+          image_url?: string | null
+          is_flagged?: boolean | null
+          read_at?: string | null
           receiver_id: string
           sender_id: string
         }
         Update: {
           content?: string
           created_at?: string
+          flag_reason?: string | null
           id?: string
+          image_url?: string | null
+          is_flagged?: boolean | null
+          read_at?: string | null
           receiver_id?: string
           sender_id?: string
         }
