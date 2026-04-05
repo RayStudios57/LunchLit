@@ -352,6 +352,27 @@ export function SettingsView() {
             <Switch checked={isOwner ? true : isPublic} onCheckedChange={handlePublicToggle} disabled={isOwner} />
           </div>
 
+          {/* Allow Friend Requests */}
+          <div className="flex items-center justify-between">
+            <div className="space-y-0.5">
+              <Label className="flex items-center gap-2">
+                <Users className="w-4 h-4" />
+                Allow Friend Requests
+              </Label>
+              <p className="text-sm text-muted-foreground">
+                Let other students send you friend requests
+              </p>
+            </div>
+            <Switch 
+              checked={allowFriendRequests} 
+              onCheckedChange={async (enabled) => {
+                setAllowFriendRequests(enabled);
+                await updateProfile.mutateAsync({ allow_friend_requests: enabled } as any);
+                toast({ title: enabled ? 'Friend requests enabled' : 'Friend requests disabled' });
+              }} 
+            />
+          </div>
+
           <Separator />
 
           {/* Friend Code */}
