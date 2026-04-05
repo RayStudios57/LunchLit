@@ -78,6 +78,7 @@ export function SettingsView() {
   const [calendarSyncEnabled, setCalendarSyncEnabled] = useState(profile?.calendar_sync_enabled || false);
   const [showTutorial, setShowTutorial] = useState(false);
   const [isPublic, setIsPublic] = useState(profile?.is_public || false);
+  const [allowFriendRequests, setAllowFriendRequests] = useState(profile?.allow_friend_requests !== false);
   const [currentNavLayout, setCurrentNavLayout] = useState<NavLayout>(getNavLayout());
 
   const OWNER_EMAIL = 'kutturam0912@gmail.com';
@@ -349,6 +350,27 @@ export function SettingsView() {
               </p>
             </div>
             <Switch checked={isOwner ? true : isPublic} onCheckedChange={handlePublicToggle} disabled={isOwner} />
+          </div>
+
+          {/* Allow Friend Requests */}
+          <div className="flex items-center justify-between">
+            <div className="space-y-0.5">
+              <Label className="flex items-center gap-2">
+                <Users className="w-4 h-4" />
+                Allow Friend Requests
+              </Label>
+              <p className="text-sm text-muted-foreground">
+                Let other students send you friend requests
+              </p>
+            </div>
+            <Switch 
+              checked={allowFriendRequests} 
+              onCheckedChange={async (enabled) => {
+                setAllowFriendRequests(enabled);
+                await updateProfile.mutateAsync({ allow_friend_requests: enabled } as any);
+                toast({ title: enabled ? 'Friend requests enabled' : 'Friend requests disabled' });
+              }} 
+            />
           </div>
 
           <Separator />

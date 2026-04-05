@@ -672,6 +672,7 @@ export type Database = {
       notification_preferences: {
         Row: {
           created_at: string
+          direct_messages: boolean | null
           discussion_replies: boolean
           grade_progression: boolean
           id: string
@@ -683,6 +684,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          direct_messages?: boolean | null
           discussion_replies?: boolean
           grade_progression?: boolean
           id?: string
@@ -694,6 +696,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          direct_messages?: boolean | null
           discussion_replies?: boolean
           grade_progression?: boolean
           id?: string
@@ -740,6 +743,7 @@ export type Database = {
       }
       profiles: {
         Row: {
+          allow_friend_requests: boolean | null
           avatar_url: string | null
           calendar_sync_enabled: boolean | null
           created_at: string
@@ -759,6 +763,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          allow_friend_requests?: boolean | null
           avatar_url?: string | null
           calendar_sync_enabled?: boolean | null
           created_at?: string
@@ -778,6 +783,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          allow_friend_requests?: boolean | null
           avatar_url?: string | null
           calendar_sync_enabled?: boolean | null
           created_at?: string

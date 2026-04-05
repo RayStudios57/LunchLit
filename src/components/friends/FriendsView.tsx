@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { Search, Users, Award, Crown, UserPlus, Heart, Check, X, PartyPopper, Calendar, CheckSquare, MessageCircle } from 'lucide-react';
+import { Search, Users, Award, Crown, UserPlus, Heart, Check, X, PartyPopper, Calendar, CheckSquare, MessageCircle, ShieldOff } from 'lucide-react';
 import { ALL_BADGES_INCLUDING_MASTER, MASTER_BADGE } from '@/hooks/useAchievements';
 import { useAuth } from '@/contexts/AuthContext';
 import { useFriends } from '@/hooks/useFriends';
@@ -26,6 +26,7 @@ interface PublicProfile {
   grade_level: string | null;
   school_name: string | null;
   is_public: boolean;
+  allow_friend_requests: boolean | null;
 }
 
 export function FriendsView() {
@@ -35,6 +36,7 @@ export function FriendsView() {
   const [friendSearch, setFriendSearch] = useState('');
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   const [chatWith, setChatWith] = useState<{ userId: string; name: string; avatar?: string | null } | null>(null);
+  const [onlineUsers, setOnlineUsers] = useState<Set<string>>(new Set());
   const { acceptedFriends, pendingReceived, pendingSent, sendRequest, acceptRequest, removeFriend, sendCheer } = useFriends();
 
   // Public profiles for browsing
@@ -43,12 +45,40 @@ export function FriendsView() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('profiles')
-        .select('user_id, full_name, avatar_url, grade_level, school_name, is_public')
+        .select('user_id, full_name, avatar_url, grade_level, school_name, is_public, allow_friend_requests')
         .eq('is_public', true);
       if (error) throw error;
       return data as PublicProfile[];
     },
   });
+
+  // Online presence tracking
+  useEffect(() => {
+    if (!user) return;
+    const friendIds = acceptedFriends.map(f => f.friend_profile?.user_id).filter(Boolean) as string[];
+    if (friendIds.length === 0) return;
+
+    const channel = supabase.channel('online-friends', {
+      config: { presence: { key: user.id } },
+    });
+
+    channel
+      .on('presence', { event: 'sync' }, () => {
+        const state = channel.presenceState();
+        const online = new Set<string>();
+        for (const key of Object.keys(state)) {
+          if (friendIds.includes(key)) online.add(key);
+        }
+        setOnlineUsers(online);
+      })
+      .subscribe(async (status) => {
+        if (status === 'SUBSCRIBED') {
+          await channel.track({ online: true });
+        }
+      });
+
+    return () => { supabase.removeChannel(channel); };
+  }, [user, acceptedFriends]);
 
   // Search by user_id (for private profiles)
   const handleSearchById = async () => {
@@ -230,6 +260,10 @@ export function FriendsView() {
                     </div>
                   ) : hasPending ? (
                     <Badge variant="outline">Request Pending</Badge>
+                  ) : selectedProfile.allow_friend_requests === false ? (
+                    <Badge variant="outline" className="gap-1">
+                      <ShieldOff className="w-3 h-3" /> Not accepting requests
+                    </Badge>
                   ) : (
                     <Button onClick={() => sendRequest.mutate(selectedUserId)} size="sm">
                       <UserPlus className="w-4 h-4 mr-1" /> Add Friend
@@ -496,14 +530,24 @@ export function FriendsView() {
               {acceptedFriends.map(f => (
                 <Card key={f.id} className="card-interactive">
                   <CardContent className="p-4 flex items-center gap-3">
-                    <Avatar className="cursor-pointer" onClick={() => setSelectedUserId(f.friend_profile?.user_id || null)}>
-                      <AvatarImage src={f.friend_profile?.avatar_url || undefined} />
-                      <AvatarFallback className="bg-primary text-primary-foreground">
-                        {f.friend_profile?.full_name?.charAt(0) || '?'}
-                      </AvatarFallback>
-                    </Avatar>
+                    <div className="relative">
+                      <Avatar className="cursor-pointer" onClick={() => setSelectedUserId(f.friend_profile?.user_id || null)}>
+                        <AvatarImage src={f.friend_profile?.avatar_url || undefined} />
+                        <AvatarFallback className="bg-primary text-primary-foreground">
+                          {f.friend_profile?.full_name?.charAt(0) || '?'}
+                        </AvatarFallback>
+                      </Avatar>
+                      {onlineUsers.has(f.friend_profile?.user_id || '') && (
+                        <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-green-500 border-2 border-background" title="Online" />
+                      )}
+                    </div>
                     <div className="flex-1 min-w-0 cursor-pointer" onClick={() => setSelectedUserId(f.friend_profile?.user_id || null)}>
-                      <p className="font-medium truncate">{f.friend_profile?.full_name || 'Anonymous'}</p>
+                      <div className="flex items-center gap-2">
+                        <p className="font-medium truncate">{f.friend_profile?.full_name || 'Anonymous'}</p>
+                        {onlineUsers.has(f.friend_profile?.user_id || '') && (
+                          <Badge variant="outline" className="text-[10px] px-1.5 py-0 text-green-600 border-green-300">Online</Badge>
+                        )}
+                      </div>
                       <p className="text-xs text-muted-foreground truncate">
                         {f.friend_profile?.school_name || 'No school'}
                       </p>

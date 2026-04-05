@@ -11,6 +11,7 @@ export interface NotificationPreferences {
   grade_progression: boolean;
   discussion_replies: boolean;
   task_reminders: boolean;
+  direct_messages: boolean;
   created_at: string;
   updated_at: string;
 }
@@ -21,6 +22,7 @@ const defaultPreferences = {
   grade_progression: true,
   discussion_replies: true,
   task_reminders: true,
+  direct_messages: true,
 };
 
 export function useNotificationPreferences() {
