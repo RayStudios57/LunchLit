@@ -118,7 +118,7 @@ const Index = () => {
         
         <main className="container py-6">
           {activeTab === 'home' && (
-          <div className="space-y-6">
+            <div className="space-y-6">
               <WellnessBanner />
               {user && <PwaInstallButton />}
               <AuthOverlay isAuthenticated={!!user}>
@@ -127,11 +127,13 @@ const Index = () => {
               <AuthOverlay isAuthenticated={!!user}>
                 <TodayWidget />
               </AuthOverlay>
-              <TodayView 
-                onNavigateToMenu={() => setActiveTab('menu')} 
-                onNavigateToStudy={() => setActiveTab('study')} 
-                onNavigate={(tab) => setActiveTab(tab as TabType)}
-              />
+              <AuthOverlay isAuthenticated={!!user}>
+                <TodayView 
+                  onNavigateToMenu={() => setActiveTab('menu')} 
+                  onNavigateToStudy={() => setActiveTab('study')} 
+                  onNavigate={(tab) => setActiveTab(tab as TabType)}
+                />
+              </AuthOverlay>
               <AuthOverlay isAuthenticated={!!user}>
                 <WellnessStats />
               </AuthOverlay>
@@ -144,25 +146,71 @@ const Index = () => {
               <Credits />
             </div>
           )}
-          {activeTab === 'tasks' && <TasksView />}
+          {activeTab === 'tasks' && (
+            <AuthOverlay isAuthenticated={!!user}>
+              <TasksView />
+            </AuthOverlay>
+          )}
           {activeTab === 'classes' && (
             <div className="space-y-6">
-              <ClassSchedule />
+              <AuthOverlay isAuthenticated={!!user}>
+                <ClassSchedule />
+              </AuthOverlay>
               <AuthOverlay isAuthenticated={!!user}>
                 <GpaCalculatorWidget />
               </AuthOverlay>
             </div>
           )}
-          {activeTab === 'menu' && <WellnessView />}
-          {activeTab === 'study' && <StudyHallsRealtime />}
-          {activeTab === 'tutor' && <TutorSection />}
-          {activeTab === 'planner' && <PlannerView />}
-          {activeTab === 'chat' && <ChatBot />}
-          {activeTab === 'discuss' && <DiscussionView />}
-          {activeTab === 'bragsheet' && <BragSheetView />}
-          {activeTab === 'portfolio' && <StudentPortfolioView />}
-          {activeTab === 'profiles' && <FriendsView />}
-          {activeTab === 'settings' && <SettingsView />}
+          {activeTab === 'menu' && (
+            <AuthOverlay isAuthenticated={!!user}>
+              <WellnessView />
+            </AuthOverlay>
+          )}
+          {activeTab === 'study' && (
+            <AuthOverlay isAuthenticated={!!user}>
+              <StudyHallsRealtime />
+            </AuthOverlay>
+          )}
+          {activeTab === 'tutor' && (
+            <AuthOverlay isAuthenticated={!!user}>
+              <TutorSection />
+            </AuthOverlay>
+          )}
+          {activeTab === 'planner' && (
+            <AuthOverlay isAuthenticated={!!user}>
+              <PlannerView />
+            </AuthOverlay>
+          )}
+          {activeTab === 'chat' && (
+            <AuthOverlay isAuthenticated={!!user}>
+              <ChatBot />
+            </AuthOverlay>
+          )}
+          {activeTab === 'discuss' && (
+            <AuthOverlay isAuthenticated={!!user}>
+              <DiscussionView />
+            </AuthOverlay>
+          )}
+          {activeTab === 'bragsheet' && (
+            <AuthOverlay isAuthenticated={!!user}>
+              <BragSheetView />
+            </AuthOverlay>
+          )}
+          {activeTab === 'portfolio' && (
+            <AuthOverlay isAuthenticated={!!user}>
+              <StudentPortfolioView />
+            </AuthOverlay>
+          )}
+          {activeTab === 'profiles' && (
+            <AuthOverlay isAuthenticated={!!user}>
+              <FriendsView />
+            </AuthOverlay>
+          )}
+          {activeTab === 'settings' && (
+            <AuthOverlay isAuthenticated={!!user}>
+              <SettingsView />
+            </AuthOverlay>
+          )}
         </main>
       </div>
 
