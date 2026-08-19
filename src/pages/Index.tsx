@@ -96,18 +96,7 @@ const Index = () => {
     }
   }, [user, profile]);
 
-  // Show the marketing landing page to signed-out visitors
-  if (!authLoading && !user) {
-    return (
-      <>
-        <Helmet>
-          <title>LunchLit — Your All-in-One Student Companion</title>
-          <meta name="description" content="LunchLit helps students manage classes, track wellness and fitness, plan their day, find study halls, and get instant AI study help." />
-        </Helmet>
-        <LandingPage onGetStarted={() => navigate('/auth')} />
-      </>
-    );
-  }
+
 
   return (
     <>
