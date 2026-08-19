@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta http-equiv="X-Frame-Options" content="DENY" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <title>LunchLIT</title>
+    <meta name="description" content="LunchLit is an all-in-one student planner app that helps students manage class schedules, view school meals, plan their day, create a brag sheet, etc.">
+    <meta name="author" content="Lovable" />
+    <meta name="theme-color" content="#6366f1" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="LunchLIT" />
+    <link rel="apple-touch-icon" href="/logos/logo-default.png" />
+
+    <!-- TODO: Update og:title to match your application name -->
+    
+    
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://storage.googleapis.com/gpt-engineer-file-uploads/JnCwZoQAIXddfmXPp4Dx51R43lE2/social-images/social-1771716200742-6.webp">
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@Lovable" />
+    <meta name="twitter:image" content="https://storage.googleapis.com/gpt-engineer-file-uploads/JnCwZoQAIXddfmXPp4Dx51R43lE2/social-images/social-1771716200742-6.webp">
+    <meta property="og:title" content="LunchLIT">
+  <meta name="twitter:title" content="LunchLIT">
+  <meta property="og:description" content="LunchLit is an all-in-one student planner app that helps students manage class schedules, view school meals, plan their day, create a brag sheet, etc.">
+  <meta name="twitter:description" content="LunchLit is an all-in-one student planner app that helps students manage class schedules, view school meals, plan their day, create a brag sheet, etc.">
+</head>
+
+  <body>
+    <div id="root"></div>
+    <script>
+      // Recovery shim: if the page can't load (often Safari/Mac with stale service worker),
+      // visiting ?reset=sw will unregister the SW and clear caches.
+      // Also auto-recover if a fatal error happens before React mounts.
+      (function () {
+        try {
+          if (location.search.includes('reset=sw') && 'serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations().then(function (regs) {
+              regs.forEach(function (r) { r.unregister(); });
+              if (window.caches) caches.keys().then(function (keys) {
+                Promise.all(keys.map(function (k) { return caches.delete(k); }))
+                  .then(function () { location.replace(location.pathname); });
+              }); else { location.replace(location.pathname); }
+            });
+          }
+          var booted = false;
+          window.addEventListener('load', function () {
+            setTimeout(function () {
+              var root = document.getElementById('root');
+              if (!root || root.childElementCount === 0) {
+                if ('serviceWorker' in navigator) {
+                  navigator.serviceWorker.getRegistrations().then(function (regs) {
+                    if (regs.length && !sessionStorage.getItem('lunchlit_sw_recovered')) {
+                      sessionStorage.setItem('lunchlit_sw_recovered', '1');
+                      regs.forEach(function (r) { r.unregister(); });
+                      if (window.caches) caches.keys().then(function (keys) {
+                        Promise.all(keys.map(function (k) { return caches.delete(k); }))
+                          .then(function () { location.reload(); });
+                      });
+                    }
+                  });
+                }
+              } else { booted = true; }
+            }, 4000);
+          });
+        } catch (e) { /* no-op */ }
+      })();
+    </script>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

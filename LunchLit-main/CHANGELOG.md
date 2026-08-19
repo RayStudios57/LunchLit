@@ -1,0 +1,102 @@
+📦 v0.4
+✨ Added
+
+Introduced a real-time Brag Sheet system for tracking student achievements across their academic career, including volunteering, jobs, awards, internships, leadership roles, clubs, and extracurricular activities.
+
+Linked Brag Sheet entries to grade level progression, automatically organizing accomplishments by school year while preserving a complete historical record.
+
+Added manual Brag Sheet entry management, allowing users to create, edit, and delete entries with structured fields such as category, dates, description, and impact.
+
+Implemented auto-suggested Brag Sheet entries based on completed tasks and long-term activities, with user confirmation required before saving.
+
+Designed the Brag Sheet system with future counselor/teacher verification support in mind, enabling later approval workflows without requiring data restructuring.
+
+Added Google Sign-In authentication using Google OAuth to streamline account access.
+
+🧭Updated
+
+Updated grade level selection in onboarding and settings:
+
+Removed the “Under 5th grade” option.
+
+Replaced the “Middle School” option with individual grade selections for 5th through 8th grade.
+
+Improved data structures to support multi-year student records tied to grade progression.
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+📦 v0.3
+✨ Added
+
+Theme customization system with multiple light, dark, and color-based themes.
+
+Theme-aware app logos that automatically update based on the selected theme.
+
+Dedicated Tasks / To-Do tab with a fillable input for creating and editing tasks.
+
+Centralized Settings page for managing themes, preferences, and account deletion.
+
+Google Calendar export and syncing for classes and tasks with enable/disable toggle.
+
+🧭Improved
+
+Updated navigation to prioritize fast access to Today, Tasks, and Classes.
+
+Improved UI layout, spacing, and visual consistency across the app.
+
+Enhanced accessibility and readability for student users.
+
+⚠️Fixed
+
+Fixed an issue where interacting with Settings resulted in a white screen crash.
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+📦 v0.2
+✨ Added
+
+Introduced a Today dashboard widget displaying upcoming classes and tasks for the logged-in user, ordered chronologically for quick at-a-glance planning.
+
+Added import and export functionality for class schedules and tasks with support for .CSV and .JSON formats, including validation to prevent invalid or corrupted data.
+
+Added grade level selection during onboarding, with options ranging from under 5th grade through senior year, stored in user profiles and editable from settings.
+
+Introduced a discussion/community tab enabling user communication, designed with scalability in mind for future features such as school-based or class-based channels.
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+📦 v0.1
+✨ Added
+
+Core student dashboard for viewing daily information in a single interface.
+
+Class schedule viewer allowing students to see class times and periods.
+
+School meal display based on the user’s selected school.
+
+Basic task and planning functionality to help students organize their day.
+
+Initial study tools and resources to support academic planning.
+
+Ability to find available study halls and open periods.
+
+Foundational UI layout and navigation for the application.
+
+🧭 User Experience
+
+Designed the initial interface with a focus on simplicity and ease of use.
+
+Optimized core views for fast access to daily school information.
+
+🧱 Architecture
+
+Established the initial project structure and component layout.
+
+Set up core data models for schedules, meals, and tasks.
+
+Built the foundation for future authentication, integrations, and customization features.
+
+⚠️ Known Limitations
+
+No user authentication or account syncing.
+
+Limited customization and personalization options.
+
+Features and data are not yet portable across accounts.

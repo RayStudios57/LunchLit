@@ -1,0 +1,31 @@
+project_id = "jpbofqcjfsbwlnbqptvb"
+
+[functions.study-chat]
+verify_jwt = true
+
+[functions.delete-account]
+verify_jwt = true
+
+[functions.scrape-mealviewer]
+verify_jwt = false
+
+[functions.send-notifications]
+verify_jwt = false
+
+[functions.send-role-notification]
+verify_jwt = false
+
+[functions.send-grade-notification]
+verify_jwt = false
+
+[functions.send-feedback-notification]
+verify_jwt = false
+
+[functions.admin-delete-account]
+verify_jwt = false
+
+[functions.check-deadline-reminders]
+verify_jwt = false
+
+[functions.send-welcome-email]
+verify_jwt = false

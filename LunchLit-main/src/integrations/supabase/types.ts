@@ -1,0 +1,1643 @@
+export type Json =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json | undefined }
+  | Json[]
+
+export type Database = {
+  // Allows to automatically instantiate createClient with right options
+  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
+  __InternalSupabase: {
+    PostgrestVersion: "14.1"
+  }
+  public: {
+    Tables: {
+      allowed_email_domains: {
+        Row: {
+          auto_assign_role: Database["public"]["Enums"]["app_role"]
+          created_at: string
+          created_by: string | null
+          description: string | null
+          domain: string
+          id: string
+          school_id: string | null
+        }
+        Insert: {
+          auto_assign_role?: Database["public"]["Enums"]["app_role"]
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          domain: string
+          id?: string
+          school_id?: string | null
+        }
+        Update: {
+          auto_assign_role?: Database["public"]["Enums"]["app_role"]
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          domain?: string
+          id?: string
+          school_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "allowed_email_domains_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      brag_sheet_academics: {
+        Row: {
+          colleges_applying: string[] | null
+          courses: Json | null
+          created_at: string
+          gpa_unweighted: number | null
+          gpa_weighted: number | null
+          id: string
+          test_scores: Json | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          colleges_applying?: string[] | null
+          courses?: Json | null
+          created_at?: string
+          gpa_unweighted?: number | null
+          gpa_weighted?: number | null
+          id?: string
+          test_scores?: Json | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          colleges_applying?: string[] | null
+          courses?: Json | null
+          created_at?: string
+          gpa_unweighted?: number | null
+          gpa_weighted?: number | null
+          id?: string
+          test_scores?: Json | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      brag_sheet_entries: {
+        Row: {
+          category: Database["public"]["Enums"]["brag_category"]
+          colleges_applying_to: string[] | null
+          courses_taken: Json | null
+          created_at: string
+          description: string | null
+          end_date: string | null
+          gpa_unweighted: number | null
+          gpa_weighted: number | null
+          grade_level: string
+          grades_participated: string[] | null
+          hours_spent: number | null
+          id: string
+          images: string[] | null
+          impact: string | null
+          is_auto_suggested: boolean | null
+          is_ongoing: boolean | null
+          position_role: string | null
+          school_year: string
+          start_date: string | null
+          suggested_from_task_id: string | null
+          test_scores: Json | null
+          title: string
+          updated_at: string
+          user_id: string
+          verification_notes: string | null
+          verification_status:
+            | Database["public"]["Enums"]["verification_status"]
+            | null
+          verified_at: string | null
+          verified_by: string | null
+          year_received: string | null
+        }
+        Insert: {
+          category?: Database["public"]["Enums"]["brag_category"]
+          colleges_applying_to?: string[] | null
+          courses_taken?: Json | null
+          created_at?: string
+          description?: string | null
+          end_date?: string | null
+          gpa_unweighted?: number | null
+          gpa_weighted?: number | null
+          grade_level: string
+          grades_participated?: string[] | null
+          hours_spent?: number | null
+          id?: string
+          images?: string[] | null
+          impact?: string | null
+          is_auto_suggested?: boolean | null
+          is_ongoing?: boolean | null
+          position_role?: string | null
+          school_year: string
+          start_date?: string | null
+          suggested_from_task_id?: string | null
+          test_scores?: Json | null
+          title: string
+          updated_at?: string
+          user_id: string
+          verification_notes?: string | null
+          verification_status?:
+            | Database["public"]["Enums"]["verification_status"]
+            | null
+          verified_at?: string | null
+          verified_by?: string | null
+          year_received?: string | null
+        }
+        Update: {
+          category?: Database["public"]["Enums"]["brag_category"]
+          colleges_applying_to?: string[] | null
+          courses_taken?: Json | null
+          created_at?: string
+          description?: string | null
+          end_date?: string | null
+          gpa_unweighted?: number | null
+          gpa_weighted?: number | null
+          grade_level?: string
+          grades_participated?: string[] | null
+          hours_spent?: number | null
+          id?: string
+          images?: string[] | null
+          impact?: string | null
+          is_auto_suggested?: boolean | null
+          is_ongoing?: boolean | null
+          position_role?: string | null
+          school_year?: string
+          start_date?: string | null
+          suggested_from_task_id?: string | null
+          test_scores?: Json | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+          verification_notes?: string | null
+          verification_status?:
+            | Database["public"]["Enums"]["verification_status"]
+            | null
+          verified_at?: string | null
+          verified_by?: string | null
+          year_received?: string | null
+        }
+        Relationships: []
+      }
+      brag_sheet_insights: {
+        Row: {
+          answer: string | null
+          created_at: string
+          id: string
+          question_key: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          answer?: string | null
+          created_at?: string
+          id?: string
+          question_key: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          answer?: string | null
+          created_at?: string
+          id?: string
+          question_key?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      chat_messages: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          role: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          role: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          role?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      cheers: {
+        Row: {
+          created_at: string
+          from_user_id: string
+          id: string
+          message: string | null
+          to_user_id: string
+        }
+        Insert: {
+          created_at?: string
+          from_user_id: string
+          id?: string
+          message?: string | null
+          to_user_id: string
+        }
+        Update: {
+          created_at?: string
+          from_user_id?: string
+          id?: string
+          message?: string | null
+          to_user_id?: string
+        }
+        Relationships: []
+      }
+      class_schedules: {
+        Row: {
+          class_name: string
+          color: string | null
+          created_at: string
+          day_of_week: number
+          end_time: string
+          id: string
+          is_club: boolean | null
+          room_number: string | null
+          show_every_day: boolean | null
+          start_time: string
+          teacher_name: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          class_name: string
+          color?: string | null
+          created_at?: string
+          day_of_week: number
+          end_time: string
+          id?: string
+          is_club?: boolean | null
+          room_number?: string | null
+          show_every_day?: boolean | null
+          start_time: string
+          teacher_name?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          class_name?: string
+          color?: string | null
+          created_at?: string
+          day_of_week?: number
+          end_time?: string
+          id?: string
+          is_club?: boolean | null
+          room_number?: string | null
+          show_every_day?: boolean | null
+          start_time?: string
+          teacher_name?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      creator_social_links: {
+        Row: {
+          created_at: string
+          display_order: number | null
+          icon: string
+          id: string
+          platform: string
+          updated_at: string
+          url: string
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number | null
+          icon: string
+          id?: string
+          platform: string
+          updated_at?: string
+          url: string
+        }
+        Update: {
+          created_at?: string
+          display_order?: number | null
+          icon?: string
+          id?: string
+          platform?: string
+          updated_at?: string
+          url?: string
+        }
+        Relationships: []
+      }
+      custom_roles: {
+        Row: {
+          color: string | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          display_name: string
+          icon: string | null
+          id: string
+          is_active: boolean | null
+          name: string
+          permissions: Json | null
+          priority: number | null
+          updated_at: string
+        }
+        Insert: {
+          color?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          display_name: string
+          icon?: string | null
+          id?: string
+          is_active?: boolean | null
+          name: string
+          permissions?: Json | null
+          priority?: number | null
+          updated_at?: string
+        }
+        Update: {
+          color?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          display_name?: string
+          icon?: string | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          permissions?: Json | null
+          priority?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      direct_messages: {
+        Row: {
+          content: string
+          created_at: string
+          flag_reason: string | null
+          id: string
+          image_url: string | null
+          is_flagged: boolean | null
+          read_at: string | null
+          receiver_id: string
+          sender_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          flag_reason?: string | null
+          id?: string
+          image_url?: string | null
+          is_flagged?: boolean | null
+          read_at?: string | null
+          receiver_id: string
+          sender_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          flag_reason?: string | null
+          id?: string
+          image_url?: string | null
+          is_flagged?: boolean | null
+          read_at?: string | null
+          receiver_id?: string
+          sender_id?: string
+        }
+        Relationships: []
+      }
+      discussion_categories: {
+        Row: {
+          color: string | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          icon: string | null
+          id: string
+          name: string
+          school_id: string | null
+        }
+        Insert: {
+          color?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name: string
+          school_id?: string | null
+        }
+        Update: {
+          color?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name?: string
+          school_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "discussion_categories_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      discussions: {
+        Row: {
+          category: string | null
+          content: string
+          created_at: string
+          id: string
+          is_pinned: boolean | null
+          parent_id: string | null
+          school_id: string | null
+          title: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category?: string | null
+          content: string
+          created_at?: string
+          id?: string
+          is_pinned?: boolean | null
+          parent_id?: string | null
+          school_id?: string | null
+          title?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          category?: string | null
+          content?: string
+          created_at?: string
+          id?: string
+          is_pinned?: boolean | null
+          parent_id?: string | null
+          school_id?: string | null
+          title?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "discussions_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "discussions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "discussions_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      fitness_profiles: {
+        Row: {
+          age: number
+          created_at: string
+          days_per_week: number
+          goal: string | null
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          age?: number
+          created_at?: string
+          days_per_week?: number
+          goal?: string | null
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          age?: number
+          created_at?: string
+          days_per_week?: number
+          goal?: string | null
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      friends: {
+        Row: {
+          created_at: string
+          friend_user_id: string
+          id: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          friend_user_id: string
+          id?: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          friend_user_id?: string
+          id?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      gym_routines: {
+        Row: {
+          created_at: string
+          exercises: Json
+          id: string
+          name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          exercises?: Json
+          id?: string
+          name?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          exercises?: Json
+          id?: string
+          name?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      meal_dietary_tags: {
+        Row: {
+          color: string | null
+          created_at: string
+          icon: string | null
+          id: string
+          name: string
+          school_id: string | null
+        }
+        Insert: {
+          color?: string | null
+          created_at?: string
+          icon?: string | null
+          id?: string
+          name: string
+          school_id?: string | null
+        }
+        Update: {
+          color?: string | null
+          created_at?: string
+          icon?: string | null
+          id?: string
+          name?: string
+          school_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "meal_dietary_tags_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      meal_schedules: {
+        Row: {
+          created_at: string
+          id: string
+          meal_date: string
+          meal_type: string
+          menu_items: Json
+          school_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          meal_date: string
+          meal_type?: string
+          menu_items?: Json
+          school_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          meal_date?: string
+          meal_type?: string
+          menu_items?: Json
+          school_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "meal_schedules_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      menu_uploads: {
+        Row: {
+          created_at: string
+          id: string
+          review_notes: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          school_email: string
+          school_id: string | null
+          school_name: string
+          status: string | null
+          updated_at: string
+          upload_data: Json
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          school_email: string
+          school_id?: string | null
+          school_name: string
+          status?: string | null
+          updated_at?: string
+          upload_data: Json
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          school_email?: string
+          school_id?: string | null
+          school_name?: string
+          status?: string | null
+          updated_at?: string
+          upload_data?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "menu_uploads_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notification_preferences: {
+        Row: {
+          created_at: string
+          direct_messages: boolean | null
+          discussion_replies: boolean
+          grade_progression: boolean
+          id: string
+          new_menu_items: boolean
+          study_hall_availability: boolean
+          task_reminders: boolean
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          direct_messages?: boolean | null
+          discussion_replies?: boolean
+          grade_progression?: boolean
+          id?: string
+          new_menu_items?: boolean
+          study_hall_availability?: boolean
+          task_reminders?: boolean
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          direct_messages?: boolean | null
+          discussion_replies?: boolean
+          grade_progression?: boolean
+          id?: string
+          new_menu_items?: boolean
+          study_hall_availability?: boolean
+          task_reminders?: boolean
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      notifications: {
+        Row: {
+          created_at: string
+          data: Json | null
+          id: string
+          is_read: boolean | null
+          message: string | null
+          title: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          data?: Json | null
+          id?: string
+          is_read?: boolean | null
+          message?: string | null
+          title: string
+          type?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          data?: Json | null
+          id?: string
+          is_read?: boolean | null
+          message?: string | null
+          title?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          allow_friend_requests: boolean | null
+          avatar_url: string | null
+          calendar_sync_enabled: boolean | null
+          created_at: string
+          custom_status: string | null
+          display_role_color: string | null
+          display_role_icon: string | null
+          display_role_priority: number | null
+          full_name: string | null
+          grade_level: string | null
+          id: string
+          is_graduated: boolean | null
+          is_public: boolean | null
+          last_grade_progression: string | null
+          school_id: string | null
+          school_name: string | null
+          showcase_badge: string | null
+          theme: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          allow_friend_requests?: boolean | null
+          avatar_url?: string | null
+          calendar_sync_enabled?: boolean | null
+          created_at?: string
+          custom_status?: string | null
+          display_role_color?: string | null
+          display_role_icon?: string | null
+          display_role_priority?: number | null
+          full_name?: string | null
+          grade_level?: string | null
+          id?: string
+          is_graduated?: boolean | null
+          is_public?: boolean | null
+          last_grade_progression?: string | null
+          school_id?: string | null
+          school_name?: string | null
+          showcase_badge?: string | null
+          theme?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          allow_friend_requests?: boolean | null
+          avatar_url?: string | null
+          calendar_sync_enabled?: boolean | null
+          created_at?: string
+          custom_status?: string | null
+          display_role_color?: string | null
+          display_role_icon?: string | null
+          display_role_priority?: number | null
+          full_name?: string | null
+          grade_level?: string | null
+          id?: string
+          is_graduated?: boolean | null
+          is_public?: boolean | null
+          last_grade_progression?: string | null
+          school_id?: string | null
+          school_name?: string | null
+          showcase_badge?: string | null
+          theme?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profiles_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      referrals: {
+        Row: {
+          created_at: string
+          id: string
+          invitee_id: string
+          inviter_id: string
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          invitee_id: string
+          inviter_id: string
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          invitee_id?: string
+          inviter_id?: string
+          status?: string
+        }
+        Relationships: []
+      }
+      role_audit_logs: {
+        Row: {
+          action_type: string
+          created_at: string
+          custom_role_id: string | null
+          details: Json | null
+          id: string
+          performed_by: string
+          target_role_id: string | null
+          target_user_id: string | null
+        }
+        Insert: {
+          action_type: string
+          created_at?: string
+          custom_role_id?: string | null
+          details?: Json | null
+          id?: string
+          performed_by: string
+          target_role_id?: string | null
+          target_user_id?: string | null
+        }
+        Update: {
+          action_type?: string
+          created_at?: string
+          custom_role_id?: string | null
+          details?: Json | null
+          id?: string
+          performed_by?: string
+          target_role_id?: string | null
+          target_user_id?: string | null
+        }
+        Relationships: []
+      }
+      role_upgrade_requests: {
+        Row: {
+          admin_notes: string | null
+          created_at: string
+          id: string
+          reason: string
+          requested_role: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          created_at?: string
+          id?: string
+          reason: string
+          requested_role: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          admin_notes?: string | null
+          created_at?: string
+          id?: string
+          reason?: string
+          requested_role?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      routine_shares: {
+        Row: {
+          created_at: string
+          from_user_id: string
+          id: string
+          routine_id: string
+          to_user_id: string
+        }
+        Insert: {
+          created_at?: string
+          from_user_id: string
+          id?: string
+          routine_id: string
+          to_user_id: string
+        }
+        Update: {
+          created_at?: string
+          from_user_id?: string
+          id?: string
+          routine_id?: string
+          to_user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "routine_shares_routine_id_fkey"
+            columns: ["routine_id"]
+            isOneToOne: false
+            referencedRelation: "gym_routines"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      schools: {
+        Row: {
+          address: string | null
+          created_at: string
+          id: string
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          created_at?: string
+          id?: string
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      student_goals: {
+        Row: {
+          created_at: string
+          description: string | null
+          goal_type: string
+          id: string
+          notes: string | null
+          priority: string | null
+          status: string
+          target_date: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          goal_type?: string
+          id?: string
+          notes?: string | null
+          priority?: string | null
+          status?: string
+          target_date?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          goal_type?: string
+          id?: string
+          notes?: string | null
+          priority?: string | null
+          status?: string
+          target_date?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      study_halls: {
+        Row: {
+          capacity: number
+          created_at: string
+          current_occupancy: number
+          id: string
+          is_available: boolean
+          location: string
+          name: string
+          periods: string[]
+          school_id: string | null
+          teacher: string | null
+          updated_at: string
+        }
+        Insert: {
+          capacity?: number
+          created_at?: string
+          current_occupancy?: number
+          id?: string
+          is_available?: boolean
+          location: string
+          name: string
+          periods?: string[]
+          school_id?: string | null
+          teacher?: string | null
+          updated_at?: string
+        }
+        Update: {
+          capacity?: number
+          created_at?: string
+          current_occupancy?: number
+          id?: string
+          is_available?: boolean
+          location?: string
+          name?: string
+          periods?: string[]
+          school_id?: string | null
+          teacher?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "study_halls_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      target_schools: {
+        Row: {
+          admission_type: string | null
+          application_deadline: string | null
+          created_at: string
+          id: string
+          is_match: boolean | null
+          is_reach: boolean | null
+          is_safety: boolean | null
+          location: string | null
+          notes: string | null
+          school_name: string
+          status: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          admission_type?: string | null
+          application_deadline?: string | null
+          created_at?: string
+          id?: string
+          is_match?: boolean | null
+          is_reach?: boolean | null
+          is_safety?: boolean | null
+          location?: string | null
+          notes?: string | null
+          school_name: string
+          status?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          admission_type?: string | null
+          application_deadline?: string | null
+          created_at?: string
+          id?: string
+          is_match?: boolean | null
+          is_reach?: boolean | null
+          is_safety?: boolean | null
+          location?: string | null
+          notes?: string | null
+          school_name?: string
+          status?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      tasks: {
+        Row: {
+          category: string | null
+          created_at: string
+          description: string | null
+          due_date: string | null
+          due_time: string | null
+          id: string
+          is_completed: boolean | null
+          priority: string | null
+          shared_with_friends: boolean | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          due_time?: string | null
+          id?: string
+          is_completed?: boolean | null
+          priority?: string | null
+          shared_with_friends?: boolean | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          due_time?: string | null
+          id?: string
+          is_completed?: boolean | null
+          priority?: string | null
+          shared_with_friends?: boolean | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      tutors: {
+        Row: {
+          availability: string | null
+          contact_info: string | null
+          created_at: string
+          created_by: string
+          description: string | null
+          id: string
+          is_online: boolean | null
+          name: string
+          rating: number | null
+          school_id: string | null
+          subject: string
+          updated_at: string
+        }
+        Insert: {
+          availability?: string | null
+          contact_info?: string | null
+          created_at?: string
+          created_by: string
+          description?: string | null
+          id?: string
+          is_online?: boolean | null
+          name: string
+          rating?: number | null
+          school_id?: string | null
+          subject: string
+          updated_at?: string
+        }
+        Update: {
+          availability?: string | null
+          contact_info?: string | null
+          created_at?: string
+          created_by?: string
+          description?: string | null
+          id?: string
+          is_online?: boolean | null
+          name?: string
+          rating?: number | null
+          school_id?: string | null
+          subject?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tutors_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_achievements: {
+        Row: {
+          badge_key: string
+          id: string
+          unlocked_at: string
+          user_id: string
+        }
+        Insert: {
+          badge_key: string
+          id?: string
+          unlocked_at?: string
+          user_id: string
+        }
+        Update: {
+          badge_key?: string
+          id?: string
+          unlocked_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_preferences: {
+        Row: {
+          calendar_sync_enabled: boolean | null
+          color_mode: string | null
+          created_at: string
+          id: string
+          school_end_date: string | null
+          theme: string | null
+          updated_at: string
+          use_theme_background: boolean | null
+          user_id: string
+        }
+        Insert: {
+          calendar_sync_enabled?: boolean | null
+          color_mode?: string | null
+          created_at?: string
+          id?: string
+          school_end_date?: string | null
+          theme?: string | null
+          updated_at?: string
+          use_theme_background?: boolean | null
+          user_id: string
+        }
+        Update: {
+          calendar_sync_enabled?: boolean | null
+          color_mode?: string | null
+          created_at?: string
+          id?: string
+          school_end_date?: string | null
+          theme?: string | null
+          updated_at?: string
+          use_theme_background?: boolean | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          custom_role_id: string | null
+          email_domain: string | null
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          school_id: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          custom_role_id?: string | null
+          email_domain?: string | null
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          school_id?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          custom_role_id?: string | null
+          email_domain?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          school_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_roles_custom_role_id_fkey"
+            columns: ["custom_role_id"]
+            isOneToOne: false
+            referencedRelation: "custom_roles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_roles_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_suggestions: {
+        Row: {
+          category: string | null
+          created_at: string
+          description: string | null
+          id: string
+          status: string | null
+          title: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          status?: string | null
+          title: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          status?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      wellness_logs: {
+        Row: {
+          created_at: string
+          id: string
+          log_date: string
+          mood: string | null
+          updated_at: string
+          user_id: string
+          water_count: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          log_date?: string
+          mood?: string | null
+          updated_at?: string
+          user_id: string
+          water_count?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          log_date?: string
+          mood?: string | null
+          updated_at?: string
+          user_id?: string
+          water_count?: number
+        }
+        Relationships: []
+      }
+      workout_logs: {
+        Row: {
+          created_at: string
+          id: string
+          log_date: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          log_date?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          log_date?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      award_achievement: {
+        Args: { _badge_key: string; _user_id: string }
+        Returns: undefined
+      }
+      get_role_for_email_domain: {
+        Args: { _email: string }
+        Returns: Database["public"]["Enums"]["app_role"]
+      }
+      get_user_school_id: { Args: { _user_id: string }; Returns: string }
+      get_verifier_school_id: { Args: { _user_id: string }; Returns: string }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      is_admin: { Args: { _user_id: string }; Returns: boolean }
+      is_verifier: { Args: { _user_id: string }; Returns: boolean }
+      record_referral: { Args: { _inviter_id: string }; Returns: undefined }
+      routine_shared_with: {
+        Args: { _routine_id: string; _user_id: string }
+        Returns: boolean
+      }
+      toggle_discussion_pin: {
+        Args: { _discussion_id: string }
+        Returns: undefined
+      }
+    }
+    Enums: {
+      app_role: "admin" | "teacher" | "counselor" | "student"
+      brag_category:
+        | "volunteering"
+        | "job"
+        | "award"
+        | "internship"
+        | "leadership"
+        | "club"
+        | "extracurricular"
+        | "academic"
+        | "other"
+      verification_status: "pending" | "verified" | "rejected"
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
+}
+
+type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
+
+type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
+
+export type Tables<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
+    : never = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+      Row: infer R
+    }
+    ? R
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])
+    ? (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
+        Row: infer R
+      }
+      ? R
+      : never
+    : never
+
+export type TablesInsert<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    : never = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Insert: infer I
+    }
+    ? I
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+        Insert: infer I
+      }
+      ? I
+      : never
+    : never
+
+export type TablesUpdate<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    : never = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Update: infer U
+    }
+    ? U
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+        Update: infer U
+      }
+      ? U
+      : never
+    : never
+
+export type Enums<
+  DefaultSchemaEnumNameOrOptions extends
+    | keyof DefaultSchema["Enums"]
+    | { schema: keyof DatabaseWithoutInternals },
+  EnumName extends DefaultSchemaEnumNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
+    : never = never,
+> = DefaultSchemaEnumNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
+    ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
+    : never
+
+export type CompositeTypes<
+  PublicCompositeTypeNameOrOptions extends
+    | keyof DefaultSchema["CompositeTypes"]
+    | { schema: keyof DatabaseWithoutInternals },
+  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    : never = never,
+> = PublicCompositeTypeNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
+    ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
+    : never
+
+export const Constants = {
+  public: {
+    Enums: {
+      app_role: ["admin", "teacher", "counselor", "student"],
+      brag_category: [
+        "volunteering",
+        "job",
+        "award",
+        "internship",
+        "leadership",
+        "club",
+        "extracurricular",
+        "academic",
+        "other",
+      ],
+      verification_status: ["pending", "verified", "rejected"],
+    },
+  },
+} as const

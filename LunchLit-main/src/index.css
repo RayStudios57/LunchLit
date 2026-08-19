@@ -1,0 +1,265 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Space+Grotesk:wght@300..700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 45 20% 97%;
+    --foreground: 160 30% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 160 30% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 160 30% 10%;
+
+    --primary: 160 60% 40%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 45 30% 92%;
+    --secondary-foreground: 160 30% 15%;
+
+    --muted: 45 20% 94%;
+    --muted-foreground: 160 15% 45%;
+
+    --accent: 35 90% 55%;
+    --accent-foreground: 35 90% 15%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 160 15% 88%;
+    --input: 160 15% 88%;
+    --ring: 160 60% 40%;
+
+    --radius: 0.75rem;
+
+    /* Custom tokens */
+    --success: 145 60% 45%;
+    --success-foreground: 0 0% 100%;
+    
+    --warning: 35 90% 55%;
+    --warning-foreground: 35 90% 15%;
+    
+    --info: 200 80% 50%;
+    --info-foreground: 0 0% 100%;
+
+    /* Dietary badge colors */
+    --vegetarian: 145 70% 40%;
+    --vegan: 160 80% 35%;
+    --dairy: 35 80% 55%;
+    --meat: 0 65% 50%;
+    --gluten-free: 270 50% 55%;
+    --halal: 200 70% 45%;
+
+    /* Gradients */
+    --gradient-hero: linear-gradient(135deg, hsl(160, 60%, 40%) 0%, hsl(160, 70%, 30%) 100%);
+    --gradient-card: linear-gradient(180deg, hsl(0, 0%, 100%) 0%, hsl(45, 20%, 98%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(35, 90%, 55%) 0%, hsl(25, 85%, 50%) 100%);
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 hsl(160 30% 10% / 0.03);
+    --shadow-md: 0 4px 12px -2px hsl(160 30% 10% / 0.08);
+    --shadow-lg: 0 12px 32px -8px hsl(160 30% 10% / 0.12);
+    --shadow-glow: 0 0 24px hsl(160 60% 40% / 0.15);
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 160 20% 8%;
+    --foreground: 45 20% 95%;
+
+    --card: 160 20% 12%;
+    --card-foreground: 45 20% 95%;
+
+    --popover: 160 20% 12%;
+    --popover-foreground: 45 20% 95%;
+
+    --primary: 160 55% 50%;
+    --primary-foreground: 160 30% 5%;
+
+    --secondary: 160 15% 18%;
+    --secondary-foreground: 45 20% 90%;
+
+    --muted: 160 15% 20%;
+    --muted-foreground: 160 10% 60%;
+
+    --accent: 35 85% 55%;
+    --accent-foreground: 35 90% 10%;
+
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 160 15% 22%;
+    --input: 160 15% 22%;
+    --ring: 160 55% 50%;
+
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Space Grotesk', sans-serif;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: var(--gradient-hero);
+  }
+
+  .card-elevated {
+    @apply bg-card rounded-xl border border-border;
+    box-shadow: var(--shadow-md);
+  }
+
+  .card-interactive {
+    @apply card-elevated transition-all duration-300;
+  }
+
+  .card-interactive:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+  }
+
+  .animate-fade-up {
+    animation: fadeUp 0.5s ease-out forwards;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.3s ease-out forwards;
+  }
+
+  .stagger-1 { animation-delay: 0.1s; }
+  .stagger-2 { animation-delay: 0.2s; }
+  .stagger-3 { animation-delay: 0.3s; }
+  .stagger-4 { animation-delay: 0.4s; }
+  .stagger-5 { animation-delay: 0.5s; }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse-soft {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 2s ease-in-out infinite;
+}
+
+@keyframes confetti-fall {
+  0% {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(300px) rotate(720deg);
+  }
+}
+
+/* ── LunchLIT Master: animated gold username ── */
+@keyframes gold-shine {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+.gold-name {
+  background: linear-gradient(90deg, #b8860b, #ffd700, #fff6c0, #ffd700, #b8860b);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: gold-shine 3s linear infinite;
+  font-weight: 700;
+}
+@keyframes crown-pulse {
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 2px rgba(255,215,0,0.6)); }
+  50% { transform: scale(1.18); filter: drop-shadow(0 0 8px rgba(255,215,0,0.95)); }
+}
+.crown-aura {
+  color: #ffd700;
+  animation: crown-pulse 1.8s ease-in-out infinite;
+}
+
+/* ── Persona-5 angular tile hover ── */
+@keyframes p5-jitter {
+  0% { transform: skewX(0deg) translateX(0); }
+  25% { transform: skewX(-6deg) translateX(-2px); }
+  50% { transform: skewX(4deg) translateX(2px); }
+  100% { transform: skewX(0deg) translateX(0); }
+}
+.p5-tile {
+  clip-path: polygon(6% 0, 100% 0, 100% 86%, 94% 100%, 0 100%, 0 14%);
+  transition: transform 0.12s ease-out, box-shadow 0.12s ease-out;
+}
+.p5-tile:hover {
+  animation: p5-jitter 0.28s steps(2) 1;
+  transform: skewX(-4deg) scale(1.05);
+  box-shadow: 0 0 0 2px #fff, 0 8px 24px -6px rgba(0,0,0,0.6);
+  z-index: 2;
+}
+
+/* ── Grandmaster congrats overlay ── */
+@keyframes gm-zoom {
+  0% { transform: scale(0.6) rotate(-8deg); opacity: 0; }
+  60% { transform: scale(1.08) rotate(2deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+.gm-pop { animation: gm-zoom 0.6s cubic-bezier(.18,.89,.32,1.28) both; }
