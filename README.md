@@ -34,7 +34,6 @@
 ### 📝 Tasks & Schedules
 * **Schedule Management:** Create and track class schedules with full details.
 * **Assignment Tracker:** Organize tasks by due date, priority, and category with auto-reminders.
-* **Data Portability:** Seamless CSV/JSON data import/export and optional Google Calendar syncing.
 
 ### 💚 Wellness & Fitness
 * **Nutrition & Mindset:** Healthy snack ideas, brain-food tips, daily mood trend charts, and guided breathing exercises.
