@@ -82,4 +82,4 @@
 
 <p align="center">
   <sub>Built with ❤️ for students everywhere.</sub>
-</p>
+</p> 
