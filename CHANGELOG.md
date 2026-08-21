@@ -1,3 +1,152 @@
+Here is your changelog formatted to match the exact style, structure, and emoji design of your v0.1–v0.4 release notes:
+
+📦 v1.1
+May 2026
+
+✨ Added
+
+🌱 Introduced a dedicated Wellness tab (replacing the former Menu tab) featuring complete Nutrition and Fitness subtabs.
+
+🍎 Added Easy Snack of the Day with quick, healthy, and tasty recipes including estimated prep times.
+
+💪 Built a tailored Fitness Hub that generates custom recommendations based on user age, athletic goals, and weekly commitment.
+
+📸 Integrated an AI Gym Machine Scanner allowing students to snap a photo of exercise equipment to instantly receive step-by-step safe usage instructions.
+
+🏋️ Added custom gym routine creation, saving, and direct in-app sharing so routines appear in friends' Fitness tabs.
+
+✨ Implemented AI workout routine generation based on user goals, age, and available equipment.
+
+⏱️ Added a built-in rest timer between sets with presets for 30s, 60s, 90s, and 120s.
+
+🔥 Added workout logging with daily streak tracking and 6 new Fitness achievement badges.
+
+📊 Built a comprehensive Wellness dashboard featuring mood trend tracking, hydration charts, and monthly water totals.
+
+💧 Implemented periodic hydration reminders alongside interactive mood check-ins and a box-breathing reset tool on the Nutrition tab.
+
+🏫 Expanded school selection during onboarding and settings to include Generic Middle School, Generic High School, and No School options.
+
+💬 Integrated real student names with clickable profiles and seeded 4 new anonymous question prompts in the Community tab to spark discussion.
+
+🧭 Improved & Updated
+
+🔒 Enhanced privacy controls: hidden private profiles from directories, added Public/Private badge indicators with tooltips, and added confirmation prompts when switching account visibility.
+
+👑 Permanently secured owner account permissions with admin-level protections.
+
+Profiles now default to public with a simple opt-out toggle to go private in Settings.
+
+📦 v1.0
+March 2026
+
+✨ Added
+
+🎉 Officially released LunchLIT v1.0!
+
+📸 Introduced AI grade scanning—snap a photo of grades to auto-fill the GPA calculator.
+
+🎓 Renamed Portfolio to "College Prep" and added a live web-researched scholarship finder.
+
+🔄 Implemented persistent sign-in to keep users logged in across sessions and updated Google Sign-In to always display the account picker.
+
+🛠️ Hardened service worker resilience with auto-recovery and a ?reset=sw escape hatch to fix macOS launch issues.
+
+🎂 Added an 8th-grade option to Brag Sheet entry selectors.
+
+📅 Added configurable end-of-school dates per student with an accurate countdown timer.
+
+☀️ Introduced a automatic Summer Break theme that activates when the school year ends, along with custom themed backgrounds per color scheme.
+
+🤝 Implemented a full Friends system allowing users to send requests, cheer on peers, and search by user ID.
+
+🟢 Added real-time friend presence indicators (green/yellow/grey status dots, custom statuses, last-seen timestamps, and live activity badges like "in Brag Sheet").
+
+🧭 Improved & Updated
+
+Relocated the GPA calculator directly into the Classes tab for better contextual planning.
+
+Cleaned up the Today tab layout by removing placeholder menus and placing "Today's Menu" directly below Today at a Glance.
+
+Renamed the Profiles tab to Friends to highlight social features.
+
+⚠️ Fixed & Secured
+
+Fixed a critical sign-up bug that prevented new account creations.
+
+🔒 Hardened application security: secured private Brag Sheet file uploads using signed URLs, enforced server-side achievement awards, and applied strict Row Level Security (RLS) policies.
+
+📦 v0.9
+March 2026
+
+✨ Added
+
+📲 Made LunchLIT an installable Progressive Web App (PWA) with a dedicated in-app install button for mobile and desktop.
+
+📊 Added a Study Stats dashboard featuring weekly productivity metrics, daily streak counters, and visual bar charts.
+
+📈 Integrated a live GPA Calculator widget onto the Today dashboard.
+
+⏱️ Built an in-app Pomodoro study timer with 10 lofi music audio channels and custom volume controls.
+
+🏆 Expanded achievements to 48 total badges across 15 categories, including a special "LunchLIT Master" badge for 100% completion.
+
+🌐 Added public student profiles enabling users to view peers' unlocked badges and achievements, with a toggle in Settings.
+
+👩‍🏫 Implemented a database-backed tutoring system to list school-specific or online tutors.
+
+🧭 Improved & Updated
+
+Redesigned the Badges page with 15 category sections, hover details, and visual progress tracking.
+
+Added Weekly Inspirational Quotes with a rotating library of 52+ entries.
+
+Redesigned the About and Settings pages with cleaner visual hierarchy and a latest-first changelog view.
+
+Updated the interactive onboarding tutorial to cover all newly introduced feature suites.
+
+📦 v0.8
+February 2026
+
+✨ Added
+
+🎓 Created an interactive 11-step onboarding tutorial for new users, replayable at any time from Settings.
+
+🛠️ Added admin-level feedback management with automated email notifications, user account deletion tools, and user activity monitoring.
+
+📦 v0.7
+February 2026
+
+✨ Added
+
+🔑 Implemented full Google Authentication sign-in support across the app.
+
+📦 v0.6
+February 2026
+
+✨ Added
+
+📄 Enhanced PDF exports for the Brag Sheet with custom visual styling, embedded images, and a layout matching the official Common App format.
+
+🖐️ Added drag-and-drop activity reordering to prioritize Brag Sheet entries.
+
+🏫 Introduced a Student Portfolio feature including goal setting, target school tracking, and a college admission predictor.
+
+🛠️ Added an admin-only Presentation Mode populated with dummy data for live feature demonstrations.
+
+📦 v0.5
+January 2026
+
+✨ Added
+
+📄 Added PDF export functionality for the complete Brag Sheet and student profile.
+
+🎓 Added an Academics section to track cumulative GPA, standardized test scores, and course history.
+
+🧭 Improved
+
+Linked Brag Sheet entries to historical grade level progression for multi-year tracking.
+
 📦 v0.4
 ✨ Added
 
