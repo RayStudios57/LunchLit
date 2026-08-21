@@ -10,7 +10,7 @@ LunchLit is a student-focused productivity and wellness platform designed to hel
 
 The goal is simple: make students' quality of life more efficient, more engaging, and easier.
 
-🔗 **Live App:** [LunchLIT]((https://lunch-lit.vercel.app))
+🔗 **Live App:** [LunchLIT]( [(https://lunch-lit.vercel.app)])
 
 ## ✨ Features
 
