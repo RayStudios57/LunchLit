@@ -2,7 +2,7 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/Version-1.1-blue?style=for-the-badge&logo=appveyor" alt="Version 1.1">
-  <img src="https://img.shields.io/badge/Platform-PWA-green?style=for-the-badge" alt="Platform PWA">
+  <img src="https://img.shields.io/badge/Platform-Web-green?style=for-the-badge" alt="Platform Web">
   <img src="https://img.shields.io/badge/Status-Live-success?style=for-the-badge" alt="Status Live">
 </p>
 
@@ -66,7 +66,7 @@
 
 ## ⚡ Technical Highlights
 
-* 📱 **Installable PWA** — Works like a native app across phone, tablet, and desktop.
+* 🌐 **Responsive Web Application** — Accessible across phone, tablet, and desktop browsers.
 * 🔐 **Google OAuth** — Quick and secure sign-in experience.
 * ⚡ **Real-Time Data** — Live synchronization for study halls and discussion boards.
 * 🔒 **Privacy-First** — Full user control over data management and deletion.
