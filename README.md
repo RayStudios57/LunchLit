@@ -1,104 +1,86 @@
 # 📘 LunchLit
 
-**Short summary (GitHub description):**
+<p align="center">
+  <img src="https://img.shields.io/badge/Version-1.1-blue?style=for-the-badge&logo=appveyor" alt="Version 1.1">
+  <img src="https://img.shields.io/badge/Platform-PWA-green?style=for-the-badge" alt="Platform PWA">
+  <img src="https://img.shields.io/badge/Status-Live-success?style=for-the-badge" alt="Status Live">
+</p>
 
-> LunchLit is an all-in-one student life platform that brings scheduling, tasks, study tools, wellness & fitness, college prep, and community together in one fast, student-friendly app — built to make everyday school life simpler, healthier, and more productive.
+<p align="center">
+  <b>The all-in-one student life platform that brings scheduling, study tools, wellness, and college prep together.</b>
+</p>
+
+<p align="center">
+  <a href="https://lunch-lit.vercel.app"><b>🚀 Open Live App</b></a>
+</p>
 
 ---
 
-LunchLit is a student-focused productivity and wellness platform designed to help students organize, track, and improve every part of their school life in one place. It combines scheduling, task management, study tools, daily wellness, fitness coaching, college prep, and community features into a single, streamlined experience built for daily use.
+## 🌟 Overview
 
-The goal is simple: make students' quality of life more efficient, more engaging, and easier.
+**LunchLit** is a student-focused productivity and wellness platform designed to help students organize, track, and improve every part of their school life in one place. It combines scheduling, task management, study tools, daily wellness, fitness coaching, college prep, and community features into a single, streamlined experience built for daily use.
 
-🔗 **Live App:** [LunchLIT]( [(https://lunch-lit.vercel.app)])
+> **Goal:** Make students' quality of life more efficient, engaging, and easier.
+
+---
 
 ## ✨ Features
 
 ### 📅 Daily Planning
-- Today Dashboard showing classes, tasks, GPA, wellness stats, and reminders
-- Built-in Pomodoro timer with optional lofi music
-- Motivational quotes and quick daily overview
-- Designed for fast check-ins and instant clarity
+* **Today Dashboard:** Displays classes, tasks, GPA, wellness stats, and reminders at a glance.
+* **Focus Engine:** Built-in Pomodoro timer with optional lofi music streams.
+* **Quick Overview:** Daily motivational quotes and instant clarity for fast check-ins.
 
 ### 📝 Tasks & Schedules
-- Create and manage class schedules with full details
-- Track assignments with due dates, priorities, and categories
-- Automatic homework reminders and notifications
-- Import/export data via CSV and JSON
-- Optional Google Calendar syncing
+* **Schedule Management:** Create and track class schedules with full details.
+* **Assignment Tracker:** Organize tasks by due date, priority, and category with auto-reminders.
+* **Data Portability:** Seamless CSV/JSON data import/export and optional Google Calendar syncing.
 
 ### 💚 Wellness & Fitness
-- **Nutrition:** easy, healthy snack-of-the-day ideas, brain-food tips, and breathing exercises
-- **Mood Check-In** with a daily mood trend chart
-- **Hydration tracker** with periodic reminders and monthly water totals
-- **Fitness hub:** AI gym-machine scanner that explains how to use equipment from a photo
-- Build custom gym routines, set goals by age, and get AI-generated workout plans
-- Share routines with friends, rest timers, and workout streak rewards
+* **Nutrition & Mindset:** Healthy snack ideas, brain-food tips, daily mood trend charts, and guided breathing exercises.
+* **Hydration Tracker:** Log daily intake with periodic reminders and monthly totals.
+* **AI Gym Scanner:** Scan gym equipment with your camera to instantly learn how to use it.
+* **Custom Routines:** AI-generated workout plans, age-adjusted goals, rest timers, and streak rewards.
 
-### 📚 Study Tools
-- Pomodoro focus timer with music integration
-- Study stats dashboard with trends and charts
-- Daily streak tracking with rewards
-- Productivity tracking over time
+### 📚 Study Tools & Gamification
+* **Productivity Analytics:** Study stats dashboard with visual charts and trends over time.
+* **54 Unlockable Badges:** Progress tracking across 16 categories, including the *LunchLit Master* milestone.
+* **Streak Rewards:** Earn badges and stay motivated with daily activity tracking.
 
 ### 🎓 College Preparation
-- Brag Sheet to track achievements (clubs, awards, volunteering, etc.)
-- Auto-organized by grade and year
-- Exportable as polished PDFs (including Common App format)
-- Student Portfolio with goals and target colleges
-- Strengths Finder for career direction insights
+* **Brag Sheet Builder:** Auto-organize achievements, clubs, and volunteering by grade level.
+* **PDF Export:** Export polished portfolios ready for the Common App.
+* **Future Planning:** Target college lists, goal setting, and a Strengths Finder tool.
 
-### 💬 Community & AI
-- Discussion boards with threaded replies and moderation
-- School-based communication system
-- AI Study Chat for homework help and explanations
-- Saved chat history for continued learning
+### 💬 Community & AI Support
+* **AI Study Chat:** Context-aware homework helper with saved conversation history.
+* **Discussion Boards:** School-based communication system with threaded replies.
+* **Tutor Directory:** Browse and filter school or online tutors by subject, ratings, and availability.
 
-### 🏆 Achievements & Gamification
-- 54 badges across 16 categories, including fitness rewards
-- Streak-based rewards and progress tracking
-- "LunchLit Master" badge for full completion
-- Dedicated badges page with detailed progress
+### 🎨 Customization & System Controls
+* **6 Custom Themes:** Choose from *Ocean, Forest, Sunset, Midnight, Lavender,* and *Emerald* in light or dark mode.
+* **Role Management:** Built-in views for Students, Teachers, Counselors, and Admins.
+* **Multi-School Ready:** Domain management, study hall controls, and presentation modes.
 
-### 🎨 Customization & Profiles
-- Multiple themes (Ocean, Forest, Sunset, Midnight, Lavender, Emerald)
-- Light and dark mode support
-- Public profiles to showcase achievements
-- Profile personalization and visibility controls
+---
 
-### 👨‍🏫 Tutoring
-- Add and browse tutors by subject and availability
-- Includes ratings, descriptions, and contact info
-- Supports both school-based and online tutors
+## ⚡ Technical Highlights
 
-### 🛠️ Administration
-- Role management (student, teacher, counselor, admin)
-- Feedback and request handling system
-- School and domain management
-- Study hall and meal schedule configuration
-- User activity monitoring and audit logs
-- Presentation mode for demos
+* 📱 **Installable PWA** — Works like a native app across phone, tablet, and desktop.
+* 🔐 **Google OAuth** — Quick and secure sign-in experience.
+* ⚡ **Real-Time Data** — Live synchronization for study halls and discussion boards.
+* 🔒 **Privacy-First** — Full user control over data management and deletion.
 
-### 🧭 User Experience
-- Fast, modern, and student-friendly interface
-- Responsive across phone, tablet, and desktop
-- Designed for clarity, speed, and minimal distraction
-
-## 🧱 Architecture & Tech Notes
-- Installable PWA (works like an app on any device)
-- Real-time updates for study halls and discussions
-- Google OAuth authentication
-- Push notifications and onboarding emails
-- Privacy-first with full data control and deletion
-- Scalable system supporting multiple schools and users
+---
 
 ## 🚀 Roadmap
-- Connecting Wellness nutrition data back to live school meal menus
-- Advanced moderation tools for discussions
-- Expanded role-based permissions
-- More integrations beyond Google Calendar
-- Smarter personalization based on usage and grade level
 
-## 📦 Status
+- [ ] **Deeper Google Workspace Integration:** Sync with Google Classroom and Google Calendar to automatically import assignment due dates into LunchLit and export class schedules directly to student calendars.
+- [ ] **Dedicated Landing Page:** Build a full public homepage before the login screen to showcase core features (Brag Sheet Builder, college prep, wellness tools) so new users understand the value before signing up.
+- [ ] **Google Play Store Mobile App:** Expand beyond the web browser by publishing LunchLit to the Google Play Store for direct native mobile downloads.
 
-**Current Version: v1.1** — LunchLit is officially released, now with the new Wellness + Fitness experience.
+---
+
+<p align="center">
+  <sub>Built with ❤️ for students everywhere.</sub>
+</p>
