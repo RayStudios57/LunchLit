@@ -2,15 +2,15 @@
 
 ## Supported Versions
 
-We actively issue security updates and patches exclusively for the latest Vercel deployment of LunchLIT:
+We issue security updates and patches for official LunchLIT deployments, prioritizing the Vercel production build:
 
-| Version | Supported | Deployment Platform |
-| --- | --- | --- |
-| 1.1.x | :white_check_mark: | Vercel Only |
-| Lovable Versions (All) | :x: | Unverified / Unsupported |
-| < 1.1 | :x: | Legacy Deployments |
+| Version | Supported | Deployment Platform | Patch Frequency |
+| --- | --- | --- | --- |
+| 1.1.x | :white_check_mark: | Vercel | Active & Priority |
+| 1.1.x | :warning: | Lovable | Limited / Periodic |
+| < 1.1 | :x: | Legacy Deployments | Unsupported |
 
-> **Note:** Only official builds hosted on **Vercel** are supported. Legacy development prototypes or versions generated via **Lovable** are explicitly unsupported and do not receive security updates.
+> **Note:** Builds hosted on **Lovable** remain fully functional, but security patches and updates are deployed less frequently compared to official builds on **Vercel**. For the most up-to-date and secure experience, use the main Vercel deployment.
 
 ---
 
@@ -40,4 +40,4 @@ If you discover a security vulnerability or data exposure risk, please report it
 
 * **Acknowledgment:** Expect an initial response confirming receipt within **48 hours**.
 * **Updates:** Progress updates will be provided every **3 to 5 business days** during investigation and fix development.
-* **Resolution:** Valid vulnerabilities will be patched immediately in supported releases prior to public disclosure.
+* **Resolution:** Valid vulnerabilities will be patched in supported releases prior to public disclosure.
