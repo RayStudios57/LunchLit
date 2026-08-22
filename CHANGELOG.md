@@ -1,5 +1,3 @@
-Here is your changelog formatted to match the exact style, structure, and emoji design of your v0.1–v0.4 release notes:
-
 📦 v1.1
 May 2026
 
