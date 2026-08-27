@@ -400,6 +400,7 @@ function generateFullWeekClasses() {
         user_id: 'demo-user',
         is_club: false,
         show_every_day: false,
+        rotation_day: 'all',
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       });

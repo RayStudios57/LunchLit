@@ -275,6 +275,7 @@ export type Database = {
           id: string
           is_club: boolean | null
           room_number: string | null
+          rotation_day: string
           show_every_day: boolean | null
           start_time: string
           teacher_name: string | null
@@ -290,6 +291,7 @@ export type Database = {
           id?: string
           is_club?: boolean | null
           room_number?: string | null
+          rotation_day?: string
           show_every_day?: boolean | null
           start_time: string
           teacher_name?: string | null
@@ -305,6 +307,7 @@ export type Database = {
           id?: string
           is_club?: boolean | null
           room_number?: string | null
+          rotation_day?: string
           show_every_day?: boolean | null
           start_time?: string
           teacher_name?: string | null
@@ -1292,6 +1295,10 @@ export type Database = {
           color_mode: string | null
           created_at: string
           id: string
+          rotation_anchor_date: string | null
+          rotation_anchor_letter: string | null
+          rotation_skip_weekends: boolean | null
+          schedule_rotation: string | null
           school_end_date: string | null
           theme: string | null
           updated_at: string
@@ -1303,6 +1310,10 @@ export type Database = {
           color_mode?: string | null
           created_at?: string
           id?: string
+          rotation_anchor_date?: string | null
+          rotation_anchor_letter?: string | null
+          rotation_skip_weekends?: boolean | null
+          schedule_rotation?: string | null
           school_end_date?: string | null
           theme?: string | null
           updated_at?: string
@@ -1314,6 +1325,10 @@ export type Database = {
           color_mode?: string | null
           created_at?: string
           id?: string
+          rotation_anchor_date?: string | null
+          rotation_anchor_letter?: string | null
+          rotation_skip_weekends?: boolean | null
+          schedule_rotation?: string | null
           school_end_date?: string | null
           theme?: string | null
           updated_at?: string

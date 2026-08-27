@@ -24,6 +24,8 @@ const EDUCATIONAL_DOMAINS = [
   'faculty.',
 ];
 
+import { OWNER_EMAIL } from '@/lib/secrets';
+
 export function isEducationalEmail(email: string): boolean {
   const domain = email.split('@')[1]?.toLowerCase() || '';
   return EDUCATIONAL_DOMAINS.some(ed => domain.includes(ed));
@@ -33,6 +35,8 @@ export function useUserRoles() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const { toast } = useToast();
+
+  const isOwner = !!user?.email && user.email.toLowerCase() === OWNER_EMAIL.toLowerCase();
 
   const { data: roles = [], isLoading } = useQuery({
     queryKey: ['user-roles', user?.id],
@@ -49,8 +53,8 @@ export function useUserRoles() {
     enabled: !!user,
   });
 
-  const isVerifier = roles.some(r => r.role === 'teacher' || r.role === 'counselor');
-  const isAdmin = roles.some(r => r.role === 'admin');
+  const isVerifier = roles.some(r => r.role === 'teacher' || r.role === 'counselor') || isOwner;
+  const isAdmin = roles.some(r => r.role === 'admin') || isOwner;
 
   const requestVerifierRole = useMutation({
     mutationFn: async ({ role, schoolId }: { role: 'teacher' | 'counselor'; schoolId: string }) => {
@@ -98,6 +102,7 @@ export function useUserRoles() {
     isLoading, 
     isVerifier, 
     isAdmin,
+    isOwner,
     requestVerifierRole 
   };
 }

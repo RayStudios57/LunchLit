@@ -1,13 +1,16 @@
+import { useState } from 'react';
 import { TaskList } from './TaskList';
 import { ClassSchedule } from './ClassSchedule';
 import { HomeworkTracker } from './HomeworkTracker';
+import { RotationSettingsDialog } from './RotationSettingsDialog';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
-import { LogIn } from 'lucide-react';
+import { LogIn, RotateCw } from 'lucide-react';
 
 export function PlannerView() {
   const { user } = useAuth();
+  const [rotationOpen, setRotationOpen] = useState(false);
 
   if (!user) {
     return (
@@ -31,10 +34,26 @@ export function PlannerView() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="font-display text-2xl font-bold mb-1">Your Planner</h2>
-        <p className="text-muted-foreground">Manage your tasks, schedule, and homework</p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="font-display text-2xl font-bold mb-1">Your Planner</h2>
+          <p className="text-muted-foreground">Manage your tasks, schedule, and homework</p>
+        </div>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => setRotationOpen(true)}
+          className="gap-1.5"
+        >
+          <RotateCw className="h-4 w-4 text-primary" />
+          A/B Rotation
+        </Button>
       </div>
+
+      <RotationSettingsDialog
+        open={rotationOpen}
+        onOpenChange={setRotationOpen}
+      />
       
       <div className="grid lg:grid-cols-2 gap-6">
         <div className="space-y-6">

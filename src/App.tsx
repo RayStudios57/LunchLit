@@ -16,6 +16,7 @@ import Admin from "./pages/Admin";
 import About from "./pages/About";
 import SecretWarning from "./pages/SecretWarning";
 import NotFound from "./pages/NotFound";
+import ResetPassword from "./pages/ResetPassword";
 import { HiddenCornerAnchor } from "@/components/HiddenCornerAnchor";
 import { ConsoleDetector } from "@/components/ConsoleDetector";
 import { GrandmasterCelebration } from "@/components/GrandmasterCelebration";
@@ -50,6 +51,7 @@ const App = () => (
                   <Route path="/admin" element={<Admin />} />
                   <Route path="/about" element={<About />} />
                   <Route path="/secret-warning" element={<SecretWarning />} />
+                  <Route path="/reset-password" element={<ResetPassword />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </BrowserRouter>

@@ -1,9 +1,11 @@
 import { useTasks } from '@/hooks/useTasks';
 import { useClassSchedule } from '@/hooks/useClassSchedule';
+import { useUserPreferences } from '@/hooks/useUserPreferences';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Clock, BookOpen, CheckCircle2, AlertCircle } from 'lucide-react';
 import { format, isToday, isBefore, parseISO } from 'date-fns';
+import { isRotationEnabled, getRotationLetter, classMatchesRotation } from '@/lib/rotation';
 
 interface TimelineItem {
   id: string;
@@ -14,24 +16,29 @@ interface TimelineItem {
   priority?: string;
   isCompleted?: boolean;
   color?: string;
+  rotationDay?: string;
 }
 
 export function TodayWidget() {
   const { tasks, isLoading: tasksLoading } = useTasks();
   const { classes, isLoading: classesLoading } = useClassSchedule();
+  const { preferences, isLoading: prefsLoading } = useUserPreferences();
 
-  const isLoading = tasksLoading || classesLoading;
+  const isLoading = tasksLoading || classesLoading || prefsLoading;
 
   // Get today's day of week (0 = Sunday, 1 = Monday, etc.)
   const today = new Date();
   const dayOfWeek = today.getDay();
 
+  const rotationActive = isRotationEnabled(preferences);
+  const todayLetter = rotationActive ? getRotationLetter(today, preferences) : null;
+
   // Build timeline items
   const timelineItems: TimelineItem[] = [];
 
-  // Add today's classes
+  // Add today's classes that match rotation
   classes
-    .filter(cls => cls.day_of_week === dayOfWeek)
+    .filter(cls => (cls.day_of_week === dayOfWeek || cls.show_every_day) && classMatchesRotation(cls.rotation_day, today, preferences))
     .forEach(cls => {
       const [hours, minutes] = cls.start_time.split(':').map(Number);
       const classTime = new Date(today);
@@ -44,6 +51,7 @@ export function TodayWidget() {
         time: classTime,
         subtitle: cls.room_number ? `Room ${cls.room_number}` : cls.teacher_name || undefined,
         color: cls.color,
+        rotationDay: cls.rotation_day,
       });
     });
 
@@ -107,10 +115,24 @@ export function TodayWidget() {
   return (
     <Card className="card-elevated">
       <CardHeader className="pb-3">
-        <CardTitle className="font-display text-lg flex items-center gap-2">
+        <CardTitle className="font-display text-lg flex items-center gap-2 flex-wrap">
           <Clock className="w-5 h-5 text-primary" />
-          Today at a Glance
-          <span className="ml-auto text-sm font-normal text-muted-foreground">{format(today, 'EEEE')}</span>
+          <span>Today at a Glance</span>
+          <div className="ml-auto flex items-center gap-2">
+            {todayLetter && (
+              <Badge
+                variant="secondary"
+                className={`font-bold text-xs ${
+                  todayLetter === 'A'
+                    ? 'bg-primary text-primary-foreground'
+                    : 'bg-accent text-accent-foreground border-accent-foreground/20'
+                }`}
+              >
+                {todayLetter} Day
+              </Badge>
+            )}
+            <span className="text-sm font-normal text-muted-foreground">{format(today, 'EEEE')}</span>
+          </div>
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -160,7 +182,14 @@ export function TodayWidget() {
                   </Badge>
                 )}
                 {item.type === 'class' && (
-                  <Badge variant="outline" className="shrink-0">Class</Badge>
+                  <div className="flex items-center gap-1 shrink-0">
+                    {item.rotationDay && item.rotationDay !== 'all' && (
+                      <Badge variant="secondary" className="text-[10px] font-bold">
+                        {item.rotationDay} Day
+                      </Badge>
+                    )}
+                    <Badge variant="outline" className="text-xs">Class</Badge>
+                  </div>
                 )}
               </div>
             ))}

@@ -50,8 +50,11 @@ const ROLE_PERMISSIONS: Record<string, Permission[]> = {
   student: [],
 };
 
+import { OWNER_EMAIL } from '@/lib/secrets';
+
 export function usePermissions() {
   const { user } = useAuth();
+  const isOwner = !!user?.email && user.email.toLowerCase() === OWNER_EMAIL.toLowerCase();
 
   const { data, isLoading } = useQuery({
     queryKey: ['user-permissions', user?.id],
@@ -80,9 +83,16 @@ export function usePermissions() {
       const permissions = new Set<Permission>();
       const roles: string[] = [];
 
+      if (isOwner) {
+        roles.push('admin');
+        ROLE_PERMISSIONS.admin.forEach(p => permissions.add(p));
+      }
+
       for (const userRole of (userRoles as UserRoleWithCustomRole[]) || []) {
         // Add the base role
-        roles.push(userRole.role);
+        if (!roles.includes(userRole.role)) {
+          roles.push(userRole.role);
+        }
 
         // Add permissions from predefined roles
         const rolePerms = ROLE_PERMISSIONS[userRole.role] || [];
@@ -103,23 +113,27 @@ export function usePermissions() {
   });
 
   const hasPermission = (permission: Permission): boolean => {
+    if (isOwner) return true;
     return data?.permissions.has(permission) ?? false;
   };
 
   const hasAnyPermission = (permissions: Permission[]): boolean => {
+    if (isOwner) return true;
     return permissions.some(p => data?.permissions.has(p));
   };
 
   const hasAllPermissions = (permissions: Permission[]): boolean => {
+    if (isOwner) return true;
     return permissions.every(p => data?.permissions.has(p));
   };
 
   const hasRole = (role: string): boolean => {
+    if (isOwner && role === 'admin') return true;
     return data?.roles.includes(role) ?? false;
   };
 
-  const isAdmin = hasRole('admin');
-  const isVerifier = hasRole('teacher') || hasRole('counselor');
+  const isAdmin = hasRole('admin') || isOwner;
+  const isVerifier = hasRole('teacher') || hasRole('counselor') || isOwner;
 
   return {
     permissions: data?.permissions ?? new Set<Permission>(),
@@ -131,5 +145,6 @@ export function usePermissions() {
     hasRole,
     isAdmin,
     isVerifier,
+    isOwner,
   };
 }

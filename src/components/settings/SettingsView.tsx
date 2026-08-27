@@ -77,6 +77,7 @@ export function SettingsView() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [fullName, setFullName] = useState(profile?.full_name || '');
+  const [schoolName, setSchoolName] = useState(profile?.school_name || '');
   const [isDeleting, setIsDeleting] = useState(false);
   const [calendarSyncEnabled, setCalendarSyncEnabled] = useState(profile?.calendar_sync_enabled || false);
   const [showTutorial, setShowTutorial] = useState(false);
@@ -85,6 +86,18 @@ export function SettingsView() {
   const [currentNavLayout, setCurrentNavLayout] = useState<NavLayout>(getNavLayout());
   const [customStatus, setCustomStatus] = useState(profile?.custom_status || '');
   const [showPrivateConfirm, setShowPrivateConfirm] = useState(false);
+
+  useEffect(() => {
+    if (profile?.full_name !== undefined) {
+      setFullName(profile.full_name || '');
+    }
+  }, [profile?.full_name]);
+
+  useEffect(() => {
+    if (profile?.school_name !== undefined) {
+      setSchoolName(profile.school_name || '');
+    }
+  }, [profile?.school_name]);
 
   const OWNER_EMAIL = 'kutturam0912@gmail.com';
   const isOwner = user?.email === OWNER_EMAIL;
@@ -144,18 +157,15 @@ export function SettingsView() {
   };
   const handleSaveName = async () => {
     await updateProfile.mutateAsync({
-      full_name: fullName
+      full_name: fullName.trim() || null
     });
   };
-  const handleSchoolChange = async (schoolId: string) => {
-    if (schoolId === 'none') {
-      await updateProfile.mutateAsync({ school_id: null, school_name: 'No School' } as any);
-      return;
-    }
-    const school = schools.find(s => s.id === schoolId);
+  const handleSaveSchool = async () => {
+    const trimmed = schoolName.trim();
+    const matched = schools.find(s => s.name.toLowerCase() === trimmed.toLowerCase());
     await updateProfile.mutateAsync({
-      school_id: schoolId,
-      school_name: school?.name ?? null,
+      school_name: trimmed || null,
+      school_id: matched ? matched.id : null,
     } as any);
   };
   const handleGradeChange = async (grade: string) => {
@@ -341,21 +351,30 @@ export function SettingsView() {
 
           {/* School Selection */}
           <div className="space-y-2">
-            <Label className="flex items-center gap-2">
+            <Label htmlFor="schoolName" className="flex items-center gap-2">
               <School className="w-4 h-4" />
-              School
+              High School
             </Label>
-            <Select value={profile?.school_id || (profile?.school_name === 'No School' ? 'none' : '')} onValueChange={handleSchoolChange}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select your school" />
-              </SelectTrigger>
-              <SelectContent>
-                {schools.map(school => <SelectItem key={school.id} value={school.id}>
-                    {school.name}
-                  </SelectItem>)}
-                <SelectItem value="none">No School</SelectItem>
-              </SelectContent>
-            </Select>
+            <div className="flex gap-2">
+              <Input
+                id="schoolName"
+                value={schoolName}
+                onChange={(e) => setSchoolName(e.target.value)}
+                placeholder="Type your high school name"
+                list="school-suggestions"
+              />
+              <datalist id="school-suggestions">
+                {schools.map(school => (
+                  <option key={school.id} value={school.name} />
+                ))}
+              </datalist>
+              <Button onClick={handleSaveSchool} disabled={updateProfile.isPending}>
+                Save
+              </Button>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Type your own school name or choose from suggestions.
+            </p>
           </div>
 
           <Separator />

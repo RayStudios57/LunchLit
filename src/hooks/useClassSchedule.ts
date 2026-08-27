@@ -15,6 +15,9 @@ export interface ClassSchedule {
   start_time: string;
   end_time: string;
   color: string;
+  is_club?: boolean | null;
+  show_every_day?: boolean | null;
+  rotation_day?: 'all' | 'A' | 'B' | string;
   created_at: string;
   updated_at: string;
 }

@@ -10,6 +10,10 @@ export interface UserPreferences {
   school_end_date: string | null;
   use_theme_background: boolean;
   calendar_sync_enabled: boolean;
+  schedule_rotation?: string | null;
+  rotation_anchor_date?: string | null;
+  rotation_anchor_letter?: string | null;
+  rotation_skip_weekends?: boolean | null;
 }
 
 export function useUserPreferences() {
