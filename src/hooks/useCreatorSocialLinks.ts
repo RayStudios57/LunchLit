@@ -11,12 +11,12 @@ export interface SocialLink {
   display_order: number;
 }
 
-const OWNER_EMAIL = 'kutturam0912@gmail.com';
+import { isOwnerEmail } from '@/lib/secrets';
 
 export function useCreatorSocialLinks() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
-  const isOwner = user?.email === OWNER_EMAIL;
+  const isOwner = isOwnerEmail(user?.email);
 
   const { data: socialLinks = [], isLoading } = useQuery({
     queryKey: ['creator-social-links'],

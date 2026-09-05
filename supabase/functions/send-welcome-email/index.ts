@@ -29,40 +29,38 @@ serve(async (req) => {
       });
     }
 
-    // Check if it's the service role key (called from database trigger)
+    // Check if it's the service role key or anon key (called from client or database trigger)
     const isServiceRole = token === supabaseServiceKey;
+    const isAnonKey = token === Deno.env.get("SUPABASE_ANON_KEY") || token === Deno.env.get("SUPABASE_PUBLISHABLE_KEY");
 
-    if (!isServiceRole) {
-      // Verify it's a valid user JWT and they are an admin
-      const supabase = createClient(supabaseUrl, token, {
-        auth: { persistSession: false },
-      });
-      const { data: { user }, error: userError } = await supabase.auth.getUser(token);
-      if (userError || !user) {
-        return new Response(JSON.stringify({ error: "Unauthorized" }), {
-          status: 401,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
-
-      // Only admins can manually trigger welcome emails...atleast i hope...idk how to code :(
-      const adminClient = createClient(supabaseUrl, supabaseServiceKey);
-      const { data: isAdmin } = await adminClient.rpc("is_admin", { _user_id: user.id });
-      if (!isAdmin) {
-        return new Response(JSON.stringify({ error: "Forbidden" }), {
-          status: 403,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
-    }
-
-    const { email, name } = await req.json();
+    const body = await req.json();
+    const { email, name } = body;
 
     if (!email || typeof email !== "string" || email.length > 255 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return new Response(JSON.stringify({ error: "Valid email is required" }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
+    }
+
+    if (!isServiceRole && !isAnonKey) {
+      // Verify valid user JWT
+      const supabase = createClient(supabaseUrl, token, {
+        auth: { persistSession: false },
+      });
+      const { data: { user }, error: userError } = await supabase.auth.getUser(token);
+      
+      // If user is sending to someone else's email, check if they are an admin
+      if (user && user.email?.toLowerCase() !== email.toLowerCase()) {
+        const adminClient = createClient(supabaseUrl, supabaseServiceKey);
+        const { data: isAdmin } = await adminClient.rpc("is_admin", { _user_id: user.id });
+        if (!isAdmin) {
+          return new Response(JSON.stringify({ error: "Forbidden" }), {
+            status: 403,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+      }
     }
 
     const displayName = (typeof name === "string" ? name.slice(0, 100) : "Student").replace(/[<>"'&]/g, "");

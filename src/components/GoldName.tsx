@@ -1,6 +1,6 @@
 import { Crown } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { OWNER_EMAIL } from '@/lib/secrets';
+import { OWNER_EMAIL, isOwnerEmail } from '@/lib/secrets';
 
 interface GoldNameProps {
   name?: string | null;
@@ -19,7 +19,7 @@ interface GoldNameProps {
  */
 export function GoldName({ name, email, isMaster, showcaseBadge, className, crownSize = 16 }: GoldNameProps) {
   const display = name || 'Student';
-  const grandmaster = isMaster || email === OWNER_EMAIL || showcaseBadge === 'lunchlit_master';
+  const grandmaster = isMaster || isOwnerEmail(email) || showcaseBadge === 'lunchlit_master';
 
   if (!grandmaster) {
     return <span className={className}>{display}</span>;

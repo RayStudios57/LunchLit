@@ -1,5 +1,7 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { usePermissions } from '@/hooks/usePermissions';
+import { useAuth } from '@/contexts/AuthContext';
+import { isOwnerEmail } from '@/lib/secrets';
 
 interface PresentationModeContextType {
   isPresentationMode: boolean;
@@ -10,26 +12,29 @@ interface PresentationModeContextType {
 const PresentationModeContext = createContext<PresentationModeContextType | undefined>(undefined);
 
 export function PresentationModeProvider({ children }: { children: ReactNode }) {
-  const { isAdmin } = usePermissions();
+  const { user, loading: authLoading } = useAuth();
+  const { isAdmin, isLoading: permissionsLoading } = usePermissions();
+  const isOwner = isOwnerEmail(user?.email);
+  const canAccess = isOwner || isAdmin;
   const [isPresentationMode, setIsPresentationMode] = useState(false);
 
   // Load from localStorage on mount
   useEffect(() => {
-    if (isAdmin) {
+    if (canAccess) {
       const stored = localStorage.getItem('presentationMode');
       if (stored === 'true') {
         setIsPresentationMode(true);
       }
     }
-  }, [isAdmin]);
+  }, [canAccess]);
 
-  // Clear presentation mode if user is not admin
+  // Clear presentation mode only after auth/permissions load if user is not admin/owner
   useEffect(() => {
-    if (!isAdmin && isPresentationMode) {
+    if (!authLoading && !permissionsLoading && !canAccess && isPresentationMode) {
       setIsPresentationMode(false);
       localStorage.removeItem('presentationMode');
     }
-  }, [isAdmin, isPresentationMode]);
+  }, [canAccess, isPresentationMode, authLoading, permissionsLoading]);
 
   const togglePresentationMode = () => {
     const newValue = !isPresentationMode;
@@ -46,7 +51,7 @@ export function PresentationModeProvider({ children }: { children: ReactNode }) 
       value={{
         isPresentationMode,
         togglePresentationMode,
-        canAccessPresentationMode: isAdmin,
+        canAccessPresentationMode: canAccess,
       }}
     >
       {children}

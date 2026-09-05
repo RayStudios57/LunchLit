@@ -72,14 +72,25 @@ export function useProfile() {
   const uploadAvatar = async (file: File) => {
     if (!user) throw new Error('Not authenticated');
     
-    const fileExt = file.name.split('.').pop();
-    const fileName = `${user.id}/avatar.${fileExt}`;
+    const rawExt = file.name.split('.').pop()?.toLowerCase() || 'jpg';
+    const allowed = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+    const fileExt = allowed.includes(rawExt) 
+      ? rawExt 
+      : (file.type.includes('png') ? 'png' : file.type.includes('webp') ? 'webp' : 'jpg');
+    
+    const fileName = `${user.id}/avatar_${Date.now()}.${fileExt}`;
     
     const { error: uploadError } = await supabase.storage
       .from('avatars')
-      .upload(fileName, file, { upsert: true });
+      .upload(fileName, file, { 
+        upsert: true,
+        contentType: file.type || `image/${fileExt === 'jpg' ? 'jpeg' : fileExt}`,
+      });
     
-    if (uploadError) throw uploadError;
+    if (uploadError) {
+      console.error('Avatar upload error:', uploadError);
+      throw uploadError;
+    }
     
     const { data: { publicUrl } } = supabase.storage
       .from('avatars')

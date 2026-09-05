@@ -27,6 +27,7 @@ import { Camera, Sun, Moon, Monitor, Check, Palette, School, GraduationCap, User
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { Link } from 'react-router-dom';
+import { isOwnerEmail } from '@/lib/secrets';
 import { NotificationPreferencesCard } from './NotificationPreferencesCard';
 import { UserRolesCard } from './UserRolesCard';
 import { RedemptionCodeCard } from './RedemptionCodeCard';
@@ -99,8 +100,7 @@ export function SettingsView() {
     }
   }, [profile?.school_name]);
 
-  const OWNER_EMAIL = 'kutturam0912@gmail.com';
-  const isOwner = user?.email === OWNER_EMAIL;
+  const isOwner = isOwnerEmail(user?.email);
 
   const applyPublicChange = async (enabled: boolean) => {
     setIsPublic(enabled);
@@ -122,11 +122,14 @@ export function SettingsView() {
   };
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
     if (!file) return;
     if (!file.type.startsWith('image/')) {
       toast({
         title: 'Invalid file',
-        description: 'Please upload an image file',
+        description: 'Please upload an image file (JPG, PNG, WEBP, GIF)',
         variant: 'destructive'
       });
       return;
@@ -143,12 +146,14 @@ export function SettingsView() {
     try {
       await uploadAvatar(file);
       toast({
-        title: 'Avatar updated!'
+        title: 'Avatar updated!',
+        description: 'Your profile picture has been updated.',
       });
-    } catch (error) {
+    } catch (error: any) {
+      console.error('PFP upload failed:', error);
       toast({
         title: 'Upload failed',
-        description: 'Please try again',
+        description: error?.message || 'Could not upload image. Please try again.',
         variant: 'destructive'
       });
     } finally {
@@ -159,6 +164,10 @@ export function SettingsView() {
     await updateProfile.mutateAsync({
       full_name: fullName.trim() || null
     });
+    toast({
+      title: 'Name updated',
+      description: fullName.trim() ? `Saved name as "${fullName.trim()}"` : 'Name cleared',
+    });
   };
   const handleSaveSchool = async () => {
     const trimmed = schoolName.trim();
@@ -167,6 +176,10 @@ export function SettingsView() {
       school_name: trimmed || null,
       school_id: matched ? matched.id : null,
     } as any);
+    toast({
+      title: 'School saved',
+      description: trimmed ? `Your school is set to "${trimmed}"` : 'School name removed',
+    });
   };
   const handleGradeChange = async (grade: string) => {
     await updateProfile.mutateAsync({
@@ -269,7 +282,18 @@ export function SettingsView() {
           <div className="space-y-2">
             <Label htmlFor="fullName">Full Name</Label>
             <div className="flex gap-2">
-              <Input id="fullName" value={fullName} onChange={e => setFullName(e.target.value)} placeholder="Your name" />
+              <Input 
+                id="fullName" 
+                value={fullName} 
+                onChange={e => setFullName(e.target.value)} 
+                onKeyDown={e => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleSaveName();
+                  }
+                }}
+                placeholder="Your name" 
+              />
               <Button onClick={handleSaveName} disabled={updateProfile.isPending}>
                 Save
               </Button>
@@ -360,6 +384,12 @@ export function SettingsView() {
                 id="schoolName"
                 value={schoolName}
                 onChange={(e) => setSchoolName(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleSaveSchool();
+                  }
+                }}
                 placeholder="Type your high school name"
                 list="school-suggestions"
               />

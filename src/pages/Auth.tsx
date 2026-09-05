@@ -125,9 +125,18 @@ export default function Auth() {
             });
           }
         } else {
+          // Trigger welcome email
+          try {
+            supabase.functions.invoke('send-welcome-email', {
+              body: { email, name: fullName || email.split('@')[0] },
+            }).catch(e => console.warn('Welcome email note:', e));
+          } catch (e) {
+            console.warn('Welcome email note:', e);
+          }
+
           toast({
             title: 'Account created!',
-            description: 'You have successfully signed up.',
+            description: 'You have successfully signed up. Check your email for a welcome message!',
           });
         }
       }

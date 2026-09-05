@@ -24,7 +24,7 @@ const EDUCATIONAL_DOMAINS = [
   'faculty.',
 ];
 
-import { OWNER_EMAIL } from '@/lib/secrets';
+import { OWNER_EMAIL, isOwnerEmail } from '@/lib/secrets';
 
 export function isEducationalEmail(email: string): boolean {
   const domain = email.split('@')[1]?.toLowerCase() || '';
@@ -36,7 +36,7 @@ export function useUserRoles() {
   const queryClient = useQueryClient();
   const { toast } = useToast();
 
-  const isOwner = !!user?.email && user.email.toLowerCase() === OWNER_EMAIL.toLowerCase();
+  const isOwner = isOwnerEmail(user?.email);
 
   const { data: roles = [], isLoading } = useQuery({
     queryKey: ['user-roles', user?.id],

@@ -50,11 +50,11 @@ const ROLE_PERMISSIONS: Record<string, Permission[]> = {
   student: [],
 };
 
-import { OWNER_EMAIL } from '@/lib/secrets';
+import { OWNER_EMAIL, isOwnerEmail } from '@/lib/secrets';
 
 export function usePermissions() {
   const { user } = useAuth();
-  const isOwner = !!user?.email && user.email.toLowerCase() === OWNER_EMAIL.toLowerCase();
+  const isOwner = isOwnerEmail(user?.email);
 
   const { data, isLoading } = useQuery({
     queryKey: ['user-permissions', user?.id],

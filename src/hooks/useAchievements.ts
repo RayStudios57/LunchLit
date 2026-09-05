@@ -8,6 +8,7 @@ import { useEffect, useMemo } from 'react';
 import { toast } from 'sonner';
 import {
   OWNER_EMAIL,
+  isOwnerEmail,
   isCodeRedeemed,
   hasSeenSecretWarning,
   wasConsoleOpened,
@@ -165,7 +166,7 @@ export function useAchievements() {
   const { entries } = useBragSheet();
   const { logs, dayStreak } = useWorkouts();
 
-  const isOwner = user?.email === OWNER_EMAIL;
+  const isOwner = isOwnerEmail(user?.email);
 
   const { data: dbUnlocked = [], isLoading } = useQuery({
     queryKey: ['achievements', user?.id],

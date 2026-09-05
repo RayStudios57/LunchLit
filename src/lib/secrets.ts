@@ -80,6 +80,12 @@ export function wasConsoleOpened(): boolean {
 
 export const OWNER_EMAIL = 'kutturam0912@gmail.com';
 
+/** Checks whether a given email address belongs to the app owner */
+export function isOwnerEmail(email?: string | null): boolean {
+  if (!email) return false;
+  return email.trim().toLowerCase() === OWNER_EMAIL.toLowerCase();
+}
+
 /** A friendly, copyable friend code / UID derived from the user id */
 export function friendCodeFromUserId(userId?: string | null): string {
   if (!userId) return 'LIT-000000';
