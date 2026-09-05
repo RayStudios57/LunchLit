@@ -16,9 +16,12 @@ export function PresentationModeProvider({ children }: { children: ReactNode }) 
   const { isAdmin, isLoading: permissionsLoading } = usePermissions();
   const isOwner = isOwnerEmail(user?.email);
   const canAccess = isOwner || isAdmin;
-  const [isPresentationMode, setIsPresentationMode] = useState(false);
+  // Initialize from localStorage immediately so test mode persists across refreshes
+  const [isPresentationMode, setIsPresentationMode] = useState(() => {
+    return localStorage.getItem('presentationMode') === 'true';
+  });
 
-  // Load from localStorage on mount
+  // Re-check localStorage whenever access is granted (e.g. after auth loads)
   useEffect(() => {
     if (canAccess) {
       const stored = localStorage.getItem('presentationMode');
@@ -28,7 +31,7 @@ export function PresentationModeProvider({ children }: { children: ReactNode }) 
     }
   }, [canAccess]);
 
-  // Clear presentation mode only after auth/permissions load if user is not admin/owner
+  // Clear presentation mode only after auth/permissions are fully loaded and user truly lacks access
   useEffect(() => {
     if (!authLoading && !permissionsLoading && !canAccess && isPresentationMode) {
       setIsPresentationMode(false);
